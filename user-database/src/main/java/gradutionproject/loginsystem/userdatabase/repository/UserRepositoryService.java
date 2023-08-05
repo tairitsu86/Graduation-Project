@@ -3,7 +3,7 @@ package gradutionproject.loginsystem.userdatabase.repository;
 import gradutionproject.loginsystem.userdatabase.entity.User;
 
 public interface UserRepositoryService {
-    void addUser(String userDisplayName,String password);
+    void addUser(String userName, String password ,String userDisplayName);
 
     void alterUser(String username,User alterUser);
 
