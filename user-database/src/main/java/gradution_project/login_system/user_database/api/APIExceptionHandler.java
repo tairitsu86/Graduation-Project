@@ -6,7 +6,9 @@ import gradution_project.login_system.user_database.api.excpetion.UserLoginWithI
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+@RestControllerAdvice
 public class APIExceptionHandler {
     private String errorMessage;
     @ExceptionHandler(UserNotExistException.class)

@@ -22,7 +22,7 @@ public class UserDatabaseController {
                 ,userLoginDto.isKeepLogin()
         );
     }
-    @PostMapping("/users/new")
+    @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
     public void addUser(@RequestBody AddUserDto addUserDto){
         userRepositoryService.addUser(
