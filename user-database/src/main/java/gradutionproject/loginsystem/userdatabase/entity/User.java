@@ -30,7 +30,7 @@ public class User {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class UserData{
+    public static class UserDto {
         private String username;
         private String userDisplayName;
         private Permission permission;
