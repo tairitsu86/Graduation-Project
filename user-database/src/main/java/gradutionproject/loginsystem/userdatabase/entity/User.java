@@ -25,8 +25,14 @@ public class User {
     private String jsonWebToken;
     @Column
     private Permission permission;
+    static class UserData{
+        private String username;
+        private String userDisplayName;
+        private Permission permission;
+    }
+    enum Permission{
+        Admin,Normal,None;
+    }
 }
-enum Permission{
-    Admin,Normal,None;
-}
+
 
