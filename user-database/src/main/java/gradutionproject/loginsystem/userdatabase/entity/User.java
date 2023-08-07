@@ -25,6 +25,11 @@ public class User {
     private String jsonWebToken;
     @Column
     private Permission permission;
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
     public static class UserData{
         private String username;
         private String userDisplayName;

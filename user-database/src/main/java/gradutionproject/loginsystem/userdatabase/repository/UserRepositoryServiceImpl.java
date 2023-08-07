@@ -1,5 +1,6 @@
 package gradutionproject.loginsystem.userdatabase.repository;
 
+import gradutionproject.loginsystem.userdatabase.api.excpetion.UserLoginWithIncorrectAccountException;
 import gradutionproject.loginsystem.userdatabase.api.excpetion.UserNotExistException;
 import gradutionproject.loginsystem.userdatabase.api.excpetion.UsernameAlreadyExistException;
 import gradutionproject.loginsystem.userdatabase.entity.User;
@@ -43,8 +44,13 @@ public class UserRepositoryServiceImpl implements UserRepositoryService{
 
     @Override
     public User.UserData userLogin(String username, String password, boolean keepLogin) {
-
-        return null;
+        User user = checkUserExist(username);
+        if(!user.getPassword().equals(password)) throw new UserLoginWithIncorrectAccountException(username);
+        return User.UserData.builder()
+                .username(user.getUsername())
+                .userDisplayName(user.getUserDisplayName())
+                .permission(user.getPermission())
+                .build();
     }
 
     private User checkUserExist(String username){
