@@ -4,13 +4,13 @@ import gradution_project.login_system.user_database.api.excpetion.UserLoginWithI
 import gradution_project.login_system.user_database.api.excpetion.UserNotExistException;
 import gradution_project.login_system.user_database.api.excpetion.UsernameAlreadyExistException;
 import gradution_project.login_system.user_database.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserRepositoryServiceImpl implements UserRepositoryService{
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public void addUser(String username, String password , String userDisplayName) {
