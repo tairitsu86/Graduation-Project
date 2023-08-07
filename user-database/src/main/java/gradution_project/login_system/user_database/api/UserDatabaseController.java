@@ -7,11 +7,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController("/login")
 public class UserDatabaseController {
     @Autowired
     private UserRepositoryService userRepositoryService;
-    @PostMapping("")
+    @GetMapping("/")
+    @ResponseStatus(HttpStatus.OK)
+    public User.UserDto userLogin(@RequestBody UserLoginDto userLoginDto){
+        return userRepositoryService.userLogin(
+                userLoginDto.getUsername()
+                ,userLoginDto.getPassword()
+                ,userLoginDto.isKeepLogin()
+        );
+    }
+    @PostMapping("/users/new")
     @ResponseStatus(HttpStatus.CREATED)
     public void addUser(@RequestBody AddUserDto addUserDto){
         userRepositoryService.addUser(
@@ -20,36 +30,19 @@ public class UserDatabaseController {
                 ,addUserDto.getUserDisplayName()
         );
     }
-    @PatchMapping("")
+    @PatchMapping("/users/{username}/alter")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void alterUserDisplayName(@RequestBody AlterUserDisplayNameDto alterUserDisplayNameDto){
-        userRepositoryService.alterUserDisplayName(
-                alterUserDisplayNameDto.getUsername()
-                ,alterUserDisplayNameDto.getNewUserDisplayName()
-        );
+    public void alterUserData(@PathVariable String username, @RequestBody AlterUserDataDto alterUserDataDto){
+        if(alterUserDataDto.getNewPassword()!=null)
+            userRepositoryService.alterPassword(username, alterUserDataDto.getNewPassword());
+        if(alterUserDataDto.getNewUserDisplayName()!=null)
+            userRepositoryService.alterUserDisplayName(username, alterUserDataDto.getNewUserDisplayName());
     }
-    @PatchMapping("")
+
+    @PatchMapping("/users/{username}/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void alterPassword(@RequestBody AlterPasswordDto alterPasswordDto){
-        userRepositoryService.alterPassword(
-                alterPasswordDto.getUsername(),
-                alterPasswordDto.getNewPassword()
-        );
+    public void deleteUser(@PathVariable String username){
+        userRepositoryService.deleteUser(username);
     }
-    @PatchMapping("")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@RequestBody DeleteUserDto deleteUserDto){
-        userRepositoryService.deleteUser(
-                deleteUserDto.getUsername()
-        );
-    }
-    @GetMapping("/")
-    @ResponseStatus(HttpStatus.OK)
-    public User.UserDto userLogin(@RequestBody UserLoginDto userLoginDto){
-        return userRepositoryService.userLogin(
-                userLoginDto.getUsername(),
-                userLoginDto.getPassword(),
-                userLoginDto.isKeepLogin()
-        );
-    }
+
 }
