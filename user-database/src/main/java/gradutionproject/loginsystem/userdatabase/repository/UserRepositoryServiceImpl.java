@@ -11,11 +11,11 @@ public class UserRepositoryServiceImpl implements UserRepositoryService{
     private UserRepository userRepository;
 
     @Override
-    public void addUser(String userName, String password ,String userDisplayName) {
-        checkUserNotExist(userName);
+    public void addUser(String username, String password , String userDisplayName) {
+        checkUserNotExist(username);
         userRepository.save(
                 User.builder()
-                        .username(userName)
+                        .username(username)
                         .password(password)
                         .userDisplayName(userDisplayName)
                         .build()
