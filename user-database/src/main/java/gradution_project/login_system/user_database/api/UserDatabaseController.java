@@ -8,11 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 
-@RestController("/login")
+@RestController
+@RequestMapping("/login")
 public class UserDatabaseController {
     @Autowired
     private UserRepositoryService userRepositoryService;
-    @GetMapping("/")
+    @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
     public User.UserDto userLogin(@RequestBody UserLoginDto userLoginDto){
         return userRepositoryService.userLogin(
