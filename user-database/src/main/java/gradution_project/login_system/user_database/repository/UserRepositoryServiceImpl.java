@@ -5,7 +5,9 @@ import gradution_project.login_system.user_database.api.excpetion.UserNotExistEx
 import gradution_project.login_system.user_database.api.excpetion.UsernameAlreadyExistException;
 import gradution_project.login_system.user_database.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserRepositoryServiceImpl implements UserRepositoryService{
     @Autowired
     private UserRepository userRepository;
