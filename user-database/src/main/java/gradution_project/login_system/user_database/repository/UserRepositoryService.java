@@ -1,7 +1,9 @@
-package gradutionproject.loginsystem.userdatabase.repository;
+package gradution_project.login_system.user_database.repository;
 
-import gradutionproject.loginsystem.userdatabase.entity.User;
+import gradution_project.login_system.user_database.entity.User;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface UserRepositoryService {
     void addUser(String username, String password ,String userDisplayName);
 

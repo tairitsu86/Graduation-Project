@@ -1,8 +1,8 @@
-package gradutionproject.loginsystem.userdatabase.api;
+package gradution_project.login_system.user_database.api;
 
-import gradutionproject.loginsystem.userdatabase.api.excpetion.UserLoginWithIncorrectAccountException;
-import gradutionproject.loginsystem.userdatabase.api.excpetion.UserNotExistException;
-import gradutionproject.loginsystem.userdatabase.api.excpetion.UsernameAlreadyExistException;
+import gradution_project.login_system.user_database.api.excpetion.UserNotExistException;
+import gradution_project.login_system.user_database.api.excpetion.UsernameAlreadyExistException;
+import gradution_project.login_system.user_database.api.excpetion.UserLoginWithIncorrectAccountException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;

@@ -1,9 +1,9 @@
-package gradutionproject.loginsystem.userdatabase.repository;
+package gradution_project.login_system.user_database.repository;
 
-import gradutionproject.loginsystem.userdatabase.api.excpetion.UserLoginWithIncorrectAccountException;
-import gradutionproject.loginsystem.userdatabase.api.excpetion.UserNotExistException;
-import gradutionproject.loginsystem.userdatabase.api.excpetion.UsernameAlreadyExistException;
-import gradutionproject.loginsystem.userdatabase.entity.User;
+import gradution_project.login_system.user_database.api.excpetion.UserLoginWithIncorrectAccountException;
+import gradution_project.login_system.user_database.api.excpetion.UserNotExistException;
+import gradution_project.login_system.user_database.api.excpetion.UsernameAlreadyExistException;
+import gradution_project.login_system.user_database.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class UserRepositoryServiceImpl implements UserRepositoryService{
