@@ -1,5 +1,6 @@
 package gradutionproject.loginsystem.userdatabase.api;
 
+import gradutionproject.loginsystem.userdatabase.api.excpetion.UserLoginWithIncorrectAccountException;
 import gradutionproject.loginsystem.userdatabase.api.excpetion.UserNotExistException;
 import gradutionproject.loginsystem.userdatabase.api.excpetion.UsernameAlreadyExistException;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,12 @@ public class APIExceptionHandler {
     @ExceptionHandler(UsernameAlreadyExistException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public String userNotExistExceptionHandler(UsernameAlreadyExistException e){
+        return (errorMessage = e.toString());
+    }
+
+    @ExceptionHandler(UserLoginWithIncorrectAccountException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public String userLoginErrorExceptionHandler(UserLoginWithIncorrectAccountException e){
         return (errorMessage = e.toString());
     }
 
