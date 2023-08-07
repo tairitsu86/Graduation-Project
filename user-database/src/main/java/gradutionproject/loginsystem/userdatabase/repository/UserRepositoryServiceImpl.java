@@ -42,8 +42,8 @@ public class UserRepositoryServiceImpl implements UserRepositoryService{
     }
 
     @Override
-    public String userLogin(String username, String password, boolean keepLogin) {
-        //TODO
+    public User.UserData userLogin(String username, String password, boolean keepLogin) {
+
         return null;
     }
 

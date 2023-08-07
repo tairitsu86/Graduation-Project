@@ -1,6 +1,5 @@
 package gradutionproject.loginsystem.userdatabase.repository;
 
-import gradutionproject.loginsystem.userdatabase.api.excpetion.UserNotExistException;
 import gradutionproject.loginsystem.userdatabase.entity.User;
 
 public interface UserRepositoryService {
@@ -12,6 +11,6 @@ public interface UserRepositoryService {
 
     void deleteUser(String username);
 
-    String userLogin(String username,String password,boolean keepLogin);
+    User.UserData userLogin(String username,String password,boolean keepLogin);
 
 }

@@ -25,7 +25,7 @@ public class User {
     private String jsonWebToken;
     @Column
     private Permission permission;
-    static class UserData{
+    public static class UserData{
         private String username;
         private String userDisplayName;
         private Permission permission;
