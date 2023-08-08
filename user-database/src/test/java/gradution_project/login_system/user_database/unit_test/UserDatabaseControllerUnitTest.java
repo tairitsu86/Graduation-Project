@@ -1,4 +1,4 @@
-package gradution_project.login_system.user_database;
+package gradution_project.login_system.user_database.unit_test;
 
 import gradution_project.login_system.user_database.api.UserDatabaseController;
 import gradution_project.login_system.user_database.api.dto.AddUserDto;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @RequiredArgsConstructor
-public class ControllerStatelessUnitTest{
+public class UserDatabaseControllerUnitTest {
     @Mock
     private UserRepositoryService userRepositoryService;
     @Mock
