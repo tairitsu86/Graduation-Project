@@ -15,16 +15,14 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.MockMvc;
 
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@RequiredArgsConstructor
 public class UserDatabaseControllerUnitTest {
     @Mock
     private UserRepositoryService userRepositoryService;
@@ -36,9 +34,6 @@ public class UserDatabaseControllerUnitTest {
     private AddUserDto addUserDto;
     @Spy
     private AlterUserDataDto alterUserDataDto;
-    @Autowired
-    private MockMvc mvc;
-
 
     //SUT
     private UserDatabaseController userDatabaseController;
@@ -48,10 +43,10 @@ public class UserDatabaseControllerUnitTest {
         userDatabaseController = new UserDatabaseController(userRepositoryService);
     }
     @Test
-    public void userLogin_success(){
+    public void userLogin_happy_path_test(){
         //Given
-        userLoginDto.setUsername(RandomStringUtils.randomAlphabetic( 8 ));
-        userLoginDto.setPassword(RandomStringUtils.randomAlphabetic( 8 ));
+        userLoginDto.setUsername(randomAlphabetic( 8 ));
+        userLoginDto.setPassword(randomAlphabetic( 8 ));
         userLoginDto.setKeepLogin(false);
 
         when(userRepositoryService.userLogin(anyString(),anyString(),anyBoolean())).thenReturn(userDto);
@@ -63,18 +58,21 @@ public class UserDatabaseControllerUnitTest {
         ArgumentCaptor<String> captorPassword = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<Boolean> captorKeepLogin = ArgumentCaptor.forClass(Boolean.class);
         verify(userRepositoryService).userLogin(captorUsername.capture(),captorPassword.capture(),captorKeepLogin.capture());
+
         assertEquals(userLoginDto.getUsername(),captorUsername.getValue());
         assertEquals(userLoginDto.getPassword(),captorPassword.getValue());
         assertEquals(userLoginDto.isKeepLogin(), captorKeepLogin.getValue());
+
         verify(userRepositoryService,times(1)).userLogin(anyString(),anyString(),anyBoolean());
+
         assertEquals(result, userDto);
     }
     @Test
-    public void addUser_success(){
+    public void addUser_happy_path_test(){
         //Given
-        addUserDto.setUsername(RandomStringUtils.randomAlphabetic( 8 ));
-        addUserDto.setPassword(RandomStringUtils.randomAlphabetic( 8 ));
-        addUserDto.setUserDisplayName(RandomStringUtils.randomAlphabetic( 8 ));
+        addUserDto.setUsername(randomAlphabetic( 8 ));
+        addUserDto.setPassword(randomAlphabetic( 8 ));
+        addUserDto.setUserDisplayName(randomAlphabetic( 8 ));
 
         doNothing().when(userRepositoryService).addUser(anyString(),anyString(),anyString());
 
@@ -91,11 +89,11 @@ public class UserDatabaseControllerUnitTest {
         verify(userRepositoryService,times(1)).addUser(anyString(),anyString(),anyString());
     }
     @Test
-    public void alterUser_alter_both_password_and_displayName_success(){
+    public void alterUser_alter_both_password_and_displayName_happy_path_test(){
         //Given
-        String username = RandomStringUtils.randomAlphabetic( 8 );
-        alterUserDataDto.setNewPassword(RandomStringUtils.randomAlphabetic( 8 ));
-        alterUserDataDto.setNewUserDisplayName(RandomStringUtils.randomAlphabetic( 8 ));
+        String username = randomAlphabetic( 8 );
+        alterUserDataDto.setNewPassword(randomAlphabetic( 8 ));
+        alterUserDataDto.setNewUserDisplayName(randomAlphabetic( 8 ));
 
         doNothing().when(userRepositoryService).alterPassword(anyString(),anyString());
         doNothing().when(userRepositoryService).alterUserDisplayName(anyString(),anyString());
@@ -119,10 +117,10 @@ public class UserDatabaseControllerUnitTest {
         verify(userRepositoryService,times(1)).alterUserDisplayName(anyString(),anyString());
     }
     @Test
-    public void alterUser_alter_password_success(){
+    public void alterUser_alter_password_happy_path_test(){
         //Given
-        String username = RandomStringUtils.randomAlphabetic( 8 );
-        alterUserDataDto.setNewPassword(RandomStringUtils.randomAlphabetic( 8 ));
+        String username = randomAlphabetic( 8 );
+        alterUserDataDto.setNewPassword(randomAlphabetic( 8 ));
         alterUserDataDto.setNewUserDisplayName(null);
 
         doNothing().when(userRepositoryService).alterPassword(anyString(),anyString());
@@ -140,11 +138,11 @@ public class UserDatabaseControllerUnitTest {
         verify(userRepositoryService,times(0)).alterUserDisplayName(anyString(),anyString());
     }
     @Test
-    public void alterUser_alter_displayName_success(){
+    public void alterUser_alter_displayName_happy_path_test(){
         //Given
-        String username = RandomStringUtils.randomAlphabetic( 8 );
+        String username = randomAlphabetic( 8 );
         alterUserDataDto.setNewPassword(null);
-        alterUserDataDto.setNewUserDisplayName(RandomStringUtils.randomAlphabetic( 8 ));
+        alterUserDataDto.setNewUserDisplayName(randomAlphabetic( 8 ));
 
         doNothing().when(userRepositoryService).alterUserDisplayName(anyString(),anyString());
 
@@ -163,9 +161,9 @@ public class UserDatabaseControllerUnitTest {
     }
 
     @Test
-    public void alterUser_alter_nothing_success(){
+    public void alterUser_alter_nothing_happy_path_test(){
         //Given
-        String username = RandomStringUtils.randomAlphabetic( 8 );
+        String username = randomAlphabetic( 8 );
         alterUserDataDto.setNewPassword(null);
         alterUserDataDto.setNewUserDisplayName(null);
 
@@ -176,9 +174,9 @@ public class UserDatabaseControllerUnitTest {
         verify(userRepositoryService,times(0)).alterUserDisplayName(anyString(),anyString());
     }
     @Test
-    public void deleteUser_success(){
+    public void deleteUser_happy_path_test(){
         //Given
-        String username = RandomStringUtils.randomAlphabetic( 8 );
+        String username = randomAlphabetic( 8 );
         doNothing().when(userRepositoryService).deleteUser(anyString());
 
         //When

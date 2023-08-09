@@ -19,13 +19,13 @@ public class APIExceptionHandler {
 
     @ExceptionHandler(UsernameAlreadyExistException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public String userNotExistExceptionHandler(UsernameAlreadyExistException e){
+    public String usernameAlreadyExistExceptionHandler(UsernameAlreadyExistException e){
         return (errorMessage = e.toString());
     }
 
     @ExceptionHandler(UserLoginWithIncorrectAccountException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public String userLoginErrorExceptionHandler(UserLoginWithIncorrectAccountException e){
+    public String userLoginWithIncorrectAccountExceptionHandler(UserLoginWithIncorrectAccountException e){
         return (errorMessage = e.toString());
     }
 
