@@ -1,9 +1,10 @@
 package gradution_project.login_system.user_database.api.excpetion;
 
-
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @AllArgsConstructor
+@Getter
 public class UsernameAlreadyExistException extends RuntimeException{
     private String username;
 

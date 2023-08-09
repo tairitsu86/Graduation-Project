@@ -6,8 +6,6 @@ import gradution_project.login_system.user_database.api.dto.AlterUserDataDto;
 import gradution_project.login_system.user_database.api.dto.UserLoginDto;
 import gradution_project.login_system.user_database.entity.User;
 import gradution_project.login_system.user_database.repository.UserRepositoryService;
-import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,13 +15,15 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserDatabaseControllerUnitTest {
+    //SUT
+    private UserDatabaseController userDatabaseController;
     @Mock
     private UserRepositoryService userRepositoryService;
     @Mock
@@ -35,8 +35,7 @@ public class UserDatabaseControllerUnitTest {
     @Spy
     private AlterUserDataDto alterUserDataDto;
 
-    //SUT
-    private UserDatabaseController userDatabaseController;
+
 
     @BeforeEach
     public void setUp(){
@@ -54,6 +53,7 @@ public class UserDatabaseControllerUnitTest {
         //When
         User.UserDto result = userDatabaseController.userLogin(userLoginDto);
         //Then
+        //check parameters
         ArgumentCaptor<String> captorUsername = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> captorPassword = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<Boolean> captorKeepLogin = ArgumentCaptor.forClass(Boolean.class);
@@ -62,9 +62,9 @@ public class UserDatabaseControllerUnitTest {
         assertEquals(userLoginDto.getUsername(),captorUsername.getValue());
         assertEquals(userLoginDto.getPassword(),captorPassword.getValue());
         assertEquals(userLoginDto.isKeepLogin(), captorKeepLogin.getValue());
-
+        //check method call times
         verify(userRepositoryService,times(1)).userLogin(anyString(),anyString(),anyBoolean());
-
+        //check return/exception values
         assertEquals(result, userDto);
     }
     @Test
@@ -73,12 +73,11 @@ public class UserDatabaseControllerUnitTest {
         addUserDto.setUsername(randomAlphabetic( 8 ));
         addUserDto.setPassword(randomAlphabetic( 8 ));
         addUserDto.setUserDisplayName(randomAlphabetic( 8 ));
-
         doNothing().when(userRepositoryService).addUser(anyString(),anyString(),anyString());
-
         //When
         userDatabaseController.addUser(addUserDto);
         //Then
+        //check parameters
         ArgumentCaptor<String> captorUsername = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> captorPassword = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> captorUserDisplayName = ArgumentCaptor.forClass(String.class);
@@ -86,7 +85,9 @@ public class UserDatabaseControllerUnitTest {
         assertEquals(addUserDto.getUsername(),captorUsername.getValue());
         assertEquals(addUserDto.getPassword(),captorPassword.getValue());
         assertEquals(addUserDto.getUserDisplayName(), captorUserDisplayName.getValue());
+        //check method call times
         verify(userRepositoryService,times(1)).addUser(anyString(),anyString(),anyString());
+        //check return/exception values
     }
     @Test
     public void alterUser_alter_both_password_and_displayName_happy_path_test(){
@@ -94,13 +95,12 @@ public class UserDatabaseControllerUnitTest {
         String username = randomAlphabetic( 8 );
         alterUserDataDto.setNewPassword(randomAlphabetic( 8 ));
         alterUserDataDto.setNewUserDisplayName(randomAlphabetic( 8 ));
-
         doNothing().when(userRepositoryService).alterPassword(anyString(),anyString());
         doNothing().when(userRepositoryService).alterUserDisplayName(anyString(),anyString());
-
         //When
         userDatabaseController.alterUserData(username,alterUserDataDto);
         //Then
+        //check parameters
         ArgumentCaptor<String> captorUsername1 = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> captorUsername2 = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> captorPassword = ArgumentCaptor.forClass(String.class);
@@ -112,9 +112,10 @@ public class UserDatabaseControllerUnitTest {
         verify(userRepositoryService).alterUserDisplayName(captorUsername2.capture(),captorUserDisplayName.capture());
         assertEquals(username,captorUsername2.getValue());
         assertEquals(alterUserDataDto.getNewUserDisplayName(), captorUserDisplayName.getValue());
-
+        //check method call times
         verify(userRepositoryService,times(1)).alterPassword(anyString(),anyString());
         verify(userRepositoryService,times(1)).alterUserDisplayName(anyString(),anyString());
+        //check return/exception values
     }
     @Test
     public void alterUser_alter_password_happy_path_test(){
@@ -124,18 +125,19 @@ public class UserDatabaseControllerUnitTest {
         alterUserDataDto.setNewUserDisplayName(null);
 
         doNothing().when(userRepositoryService).alterPassword(anyString(),anyString());
-
         //When
         userDatabaseController.alterUserData(username,alterUserDataDto);
         //Then
+        //check parameters
         ArgumentCaptor<String> captorUsername = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> captorPassword = ArgumentCaptor.forClass(String.class);
         verify(userRepositoryService).alterPassword(captorUsername.capture(),captorPassword.capture());
         assertEquals(username,captorUsername.getValue());
         assertEquals(alterUserDataDto.getNewPassword(),captorPassword.getValue());
-
+        //check method call times
         verify(userRepositoryService,times(1)).alterPassword(anyString(),anyString());
         verify(userRepositoryService,times(0)).alterUserDisplayName(anyString(),anyString());
+        //check return/exception values
     }
     @Test
     public void alterUser_alter_displayName_happy_path_test(){
@@ -149,15 +151,17 @@ public class UserDatabaseControllerUnitTest {
         //When
         userDatabaseController.alterUserData(username,alterUserDataDto);
         //Then
+        //check parameters
         ArgumentCaptor<String> captorUsername = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> captorUserDisplayName = ArgumentCaptor.forClass(String.class);
 
         verify(userRepositoryService).alterUserDisplayName(captorUsername.capture(),captorUserDisplayName.capture());
         assertEquals(username,captorUsername.getValue());
         assertEquals(alterUserDataDto.getNewUserDisplayName(), captorUserDisplayName.getValue());
-
+        //check method call times
         verify(userRepositoryService,times(0)).alterPassword(anyString(),anyString());
         verify(userRepositoryService,times(1)).alterUserDisplayName(anyString(),anyString());
+        //check return/exception values
     }
 
     @Test
@@ -170,8 +174,11 @@ public class UserDatabaseControllerUnitTest {
         //When
         userDatabaseController.alterUserData(username,alterUserDataDto);
         //Then
+        //check parameters
+        //check method call times
         verify(userRepositoryService,times(0)).alterPassword(anyString(),anyString());
         verify(userRepositoryService,times(0)).alterUserDisplayName(anyString(),anyString());
+        //check return/exception values
     }
     @Test
     public void deleteUser_happy_path_test(){
@@ -182,10 +189,13 @@ public class UserDatabaseControllerUnitTest {
         //When
         userDatabaseController.deleteUser(username);
         //Then
+        //check parameters
         ArgumentCaptor<String> captorUsername = ArgumentCaptor.forClass(String.class);
         verify(userRepositoryService).deleteUser(captorUsername.capture());
         assertEquals(username,captorUsername.getValue());
+        //check method call times
         verify(userRepositoryService,times(1)).deleteUser(anyString());
+        //check return/exception values
     }
 
 

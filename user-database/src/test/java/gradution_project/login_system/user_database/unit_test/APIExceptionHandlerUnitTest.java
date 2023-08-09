@@ -11,11 +11,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class APIExceptionHandlerUnitTest {
+    //SUT
     private APIExceptionHandler apiExceptionHandler;
     @Mock
     private UserNotExistException userNotExistException;
@@ -37,6 +38,10 @@ public class APIExceptionHandlerUnitTest {
         //When
         String result = apiExceptionHandler.userNotExistExceptionHandler(userNotExistException);
         //Then
+        //check parameters
+
+        //check method call times
+        //check return/exception values
         assertEquals(result,errorMessage);
     }
 
@@ -48,6 +53,9 @@ public class APIExceptionHandlerUnitTest {
         //When
         String result = apiExceptionHandler.usernameAlreadyExistExceptionHandler(usernameAlreadyExistException);
         //Then
+        //check parameters
+        //check method call times
+        //check return/exception values
         assertEquals(result,errorMessage);
     }
 
@@ -59,6 +67,9 @@ public class APIExceptionHandlerUnitTest {
         //When
         String result = apiExceptionHandler.userLoginWithIncorrectAccountExceptionHandler(userLoginWithIncorrectAccountException);
         //Then
+        //check parameters
+        //check method call times
+        //check return/exception values
         assertEquals(result,errorMessage);
     }
 

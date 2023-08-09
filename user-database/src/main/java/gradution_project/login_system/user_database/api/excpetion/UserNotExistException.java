@@ -1,9 +1,11 @@
 package gradution_project.login_system.user_database.api.excpetion;
 
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @AllArgsConstructor
+@Getter
 public class UserNotExistException extends RuntimeException{
     private String username;
 

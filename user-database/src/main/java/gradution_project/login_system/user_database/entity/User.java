@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @AllArgsConstructor
@@ -26,6 +23,7 @@ public class User {
     @Column
     private String jsonWebToken;
     @Column
+    @Enumerated(EnumType.ORDINAL)
     private Permission permission;
 
     @Data
@@ -37,7 +35,7 @@ public class User {
         private String userDisplayName;
         private Permission permission;
     }
-    enum Permission{
+    public enum Permission{
         Admin,Normal,None;
     }
 }

@@ -14,39 +14,44 @@ public class UserRepositoryServiceImpl implements UserRepositoryService{
 
     @Override
     public void addUser(String username, String password , String userDisplayName) {
-        checkUserNotExist(username);
+        if(userRepository.existsById(username))
+            throw new UsernameAlreadyExistException(username);
         userRepository.save(
                 User.builder()
                         .username(username)
                         .password(password)
                         .userDisplayName(userDisplayName)
+                        .permission(User.Permission.Normal)
                         .build()
         );
     }
 
     @Override
     public void alterUserDisplayName(String username, String newUserDisplayName) {
-        User user = checkUserExist(username);
+        checkUserExist(username);
+        User user = userRepository.getReferenceById(username);
         user.setUserDisplayName(newUserDisplayName);
         userRepository.save(user);
     }
 
     @Override
     public void alterPassword(String username, String newPassword) {
-        User user = checkUserExist(username);
+        checkUserExist(username);
+        User user = userRepository.getReferenceById(username);
         user.setPassword(newPassword);
         userRepository.save(user);
     }
 
     @Override
     public void deleteUser(String username) {
-        User user = checkUserExist(username);
-        userRepository.delete(user);
+        userRepository.deleteById(username);
     }
 
     @Override
     public User.UserDto userLogin(String username, String password, boolean keepLogin) {
-        User user = checkUserExist(username);
+        if(!userRepository.existsById(username))
+            throw new UserLoginWithIncorrectAccountException(username);
+        User user = userRepository.getReferenceById(username);
         if(!user.getPassword().equals(password)) throw new UserLoginWithIncorrectAccountException(username);
         return User.UserDto.builder()
                 .username(user.getUsername())
@@ -55,14 +60,8 @@ public class UserRepositoryServiceImpl implements UserRepositoryService{
                 .build();
     }
 
-    private User checkUserExist(String username){
-        User user = userRepository.getReferenceById(username);
-        if(user==null) throw new UserNotExistException(username);
-        return user;
-    }
-
-    private void checkUserNotExist(String username){
-        User user = userRepository.getReferenceById(username);
-        if(user!=null) throw new UsernameAlreadyExistException(username);
+    public void checkUserExist(String username){
+        if(!userRepository.existsById(username))
+            throw new UserNotExistException(username);
     }
 }
