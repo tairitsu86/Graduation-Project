@@ -86,7 +86,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>user_database</finalName>
+		<finalName>user-database</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
