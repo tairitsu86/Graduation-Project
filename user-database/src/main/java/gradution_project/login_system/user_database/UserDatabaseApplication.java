@@ -1,4 +1,4 @@
-package gradutionproject.loginsystem.userdatabase;
+package gradution_project.login_system.user_database;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
