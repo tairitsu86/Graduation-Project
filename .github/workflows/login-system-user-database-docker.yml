@@ -46,6 +46,8 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       shell: bash
       run: |
+        ls 
+        ls -la target
         docker build -t graduation-project_login-system_user-database:latest .
         docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         docker tag graduation-project_login-system_user-database tairitsu86/graduation-project_login-system_user-database
