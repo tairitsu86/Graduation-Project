@@ -14,6 +14,10 @@ on:
   pull_request:
     branches: [ "develop-login-system-user-database" ]
 
+defaults:
+  run:
+    working-directory: ./user-database/
+
 jobs:
   build:
 
@@ -27,12 +31,6 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-        
-    - name: Move to correct folder
-      run: | 
-        ls -la
-        cd ./user-database/
-        ls -la
       
     - name: Build with Maven
       run: mvn -B clean package --file pom.xml
