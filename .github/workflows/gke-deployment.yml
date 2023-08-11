@@ -63,17 +63,25 @@ jobs:
       run: mvn -B clean package --file pom.xml
       
     # Build the Docker image
-    - name: Build
+    - name: Build image
       run: |-
         docker build \
           --tag "$REPOSITORY/$IMAGE:$GITHUB_SHA" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
-    # Push the Docker image to Google Container Registry
-    - name: Publish
-      run: |-
+          
+    # Push Docker image
+    - name: Push image
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      shell: bash
+      run: |
+        docker build -t graduation-project_login-system_user-database:latest .
+        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         docker push "$REPOSITORY/$IMAGE:$GITHUB_SHA"
+        
     # Set up kustomize
     - name: Set up Kustomize
       run: |-
