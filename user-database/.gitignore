@@ -1,4 +1,5 @@
 # Default ignored files
 /.idea/
 /target/
-
+secret.yaml
+configMap.yaml
