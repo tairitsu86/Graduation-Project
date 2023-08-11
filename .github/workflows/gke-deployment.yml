@@ -17,6 +17,11 @@ jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
+    env:
+      USER_DATABASE_IP_PORT: ${{ secrets.USER_DATABASE_IP_PORT }}
+      USER_DATABASE_DATABASENAME: ${{ secrets.USER_DATABASE_DATABASENAME }}
+      USER_DATABASE_USERNAME: ${{ secrets.USER_DATABASE_USERNAME }}
+      USER_DATABASE_PASSWORD: ${{ secrets.USER_DATABASE_PASSWORD }}
     defaults:
       run:
         working-directory: ./user-database
