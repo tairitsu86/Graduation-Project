@@ -27,22 +27,22 @@ spec:
         ports:
         - containerPort: 8080
         env:
-        - name: user-database-username
+        - name: USER_DATABASE_USERNAME
           valueFrom: 
             secretKeyRef:
               name: user-database-secret
               key: user-database-username
-        - name: user-database-password
+        - name: USER_DATABASE_PASSWORD
           valueFrom: 
             secretKeyRef:
               name: user-database-secret
               key: user-database-password 
-        - name: user-database-ip-port
+        - name: USER_DATABASE_IP_PORT
           valueFrom:
             configMapKeyRef:
               name: user-database-configmap
               key: user-database-ip-port
-        - name: user-database-databaseName
+        - name: USER_DATABASE_DATABASENAME
           valueFrom:
             configMapKeyRef:
               name: user-database-configmap
