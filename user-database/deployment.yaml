@@ -1,7 +1,6 @@
-apiVersion: apps/v1
+apiVersion: v1
 kind: Deployment
 metadata:
-  namespace: login-system
   name: user-database
   labels:
     app: user-database
@@ -17,7 +16,7 @@ spec:
     spec:
       containers:
       - name: user-database
-        image: tairitsu86/graduation-project_login-system_user-database:latest
+        image: REPOSITORY/IMAGE:TAG
         resources:
             requests:
               memory: "64Mi"
@@ -30,36 +29,37 @@ spec:
         env:
         - name: user-database-username
           valueFrom: 
-            secertKeyRef:
+            secretKeyRef:
               name: user-database-secret
               key: user-database-username
         - name: user-database-password
           valueFrom: 
-            secertKeyRef:
+            secretKeyRef:
               name: user-database-secret
               key: user-database-password 
         - name: user-database-ip-port
           valueFrom:
             configMapKeyRef:
-              name: user-database-configMap
+              name: user-database-configmap
               key: user-database-ip-port
         - name: user-database-databaseName
           valueFrom:
             configMapKeyRef:
-              name: user-database-configMap
+              name: user-database-configmap
               key: user-database-databaseName
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: login-system
   name: user-database-service
 spec:
   selector:
     app: user-database
+  type: LoadBalancer
   ports:
     - protocol: TCP
       port: 80
       targetPort: 8080
+      nodePort: 30000
 
 
