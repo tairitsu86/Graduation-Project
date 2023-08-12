@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: user-database
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: user-database
-        image: REPOSITORY/IMAGE:TAG
+        image: tairitsu86/graduation-project_login-system_user-database:latest
         resources:
             requests:
               memory: "64Mi"
