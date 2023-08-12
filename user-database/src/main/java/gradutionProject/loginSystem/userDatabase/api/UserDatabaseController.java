@@ -1,8 +1,8 @@
-package gradution_project.login_system.user_database.api;
+package gradutionProject.loginSystem.userDatabase.api;
 
+import gradutionProject.loginSystem.userDatabase.entity.User;
+import gradutionProject.loginSystem.userDatabase.repository.UserRepositoryService;
 import gradution_project.login_system.user_database.api.dto.*;
-import gradution_project.login_system.user_database.entity.User;
-import gradution_project.login_system.user_database.repository.UserRepositoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

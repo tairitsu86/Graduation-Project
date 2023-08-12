@@ -1,4 +1,4 @@
-package gradution_project.login_system.user_database.api.dto;
+package gradutionProject.loginSystem.userDatabase.api.dto;
 
 import lombok.Data;
 

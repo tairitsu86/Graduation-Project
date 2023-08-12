@@ -1,9 +1,9 @@
-package gradution_project.login_system.user_database.repository;
+package gradutionProject.loginSystem.userDatabase.repository;
 
-import gradution_project.login_system.user_database.api.excpetion.UserLoginWithIncorrectAccountException;
-import gradution_project.login_system.user_database.api.excpetion.UserNotExistException;
-import gradution_project.login_system.user_database.api.excpetion.UsernameAlreadyExistException;
-import gradution_project.login_system.user_database.entity.User;
+import gradutionProject.loginSystem.userDatabase.api.excpetion.UserLoginWithIncorrectAccountException;
+import gradutionProject.loginSystem.userDatabase.api.excpetion.UserNotExistException;
+import gradutionProject.loginSystem.userDatabase.api.excpetion.UsernameAlreadyExistException;
+import gradutionProject.loginSystem.userDatabase.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

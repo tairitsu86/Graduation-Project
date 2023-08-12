@@ -1,9 +1,9 @@
-package gradution_project.login_system.user_database.unit_test;
+package gradutionProject.loginSystem.userDatabase.unitTest;
 
-import gradution_project.login_system.user_database.api.APIExceptionHandler;
-import gradution_project.login_system.user_database.api.excpetion.UserLoginWithIncorrectAccountException;
-import gradution_project.login_system.user_database.api.excpetion.UserNotExistException;
-import gradution_project.login_system.user_database.api.excpetion.UsernameAlreadyExistException;
+import gradutionProject.loginSystem.userDatabase.api.APIExceptionHandler;
+import gradutionProject.loginSystem.userDatabase.api.excpetion.UserLoginWithIncorrectAccountException;
+import gradutionProject.loginSystem.userDatabase.api.excpetion.UserNotExistException;
+import gradutionProject.loginSystem.userDatabase.api.excpetion.UsernameAlreadyExistException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
