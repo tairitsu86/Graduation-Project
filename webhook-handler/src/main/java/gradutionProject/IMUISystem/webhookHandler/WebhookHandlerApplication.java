@@ -1,4 +1,4 @@
-package gradutionProject.IMUISystem.webhookhandler;
+package gradutionProject.IMUISystem.webhookHandler;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
