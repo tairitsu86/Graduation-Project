@@ -17,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-@ExtendWith(SpringExtension.class)
-@WebAppConfiguration
+//@ExtendWith(SpringExtension.class)
+//@WebAppConfiguration
 public class UserDatabaseControllerIntegrationTest {
 //    @Autowired
 //    private WebApplicationContext webApplicationContext;
