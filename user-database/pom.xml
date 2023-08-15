@@ -8,8 +8,8 @@
 		<version>2.7.14</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>gradution-project.login-system</groupId>
-	<artifactId>user-database</artifactId>
+	<groupId>gradutionProject.loginSystem</groupId>
+	<artifactId>userDatabase</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>user-database</name>
 	<description>The database of users</description>
