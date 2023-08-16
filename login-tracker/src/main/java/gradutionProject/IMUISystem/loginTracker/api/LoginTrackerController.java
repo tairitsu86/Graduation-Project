@@ -32,8 +32,7 @@ public class LoginTrackerController {
     public GetIMDataDto getIMData(@Valid @PathVariable String username){
         LoginUser loginUser = loginUserRepositoryService.getLoginUser(username);
         return GetIMDataDto.builder()
-                .IM(loginUser.getIM())
-                .IMUserId(loginUser.getIMUserId())
+                .imUserData(loginUser.getImUserData())
                 .build();
     }
 
