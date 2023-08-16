@@ -12,10 +12,19 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/login")
 public class UserDatabaseController {
     private final UserRepositoryService userRepositoryService;
-    @PostMapping("")
+    @GetMapping("/")
+    @ResponseStatus(HttpStatus.OK)
+    public String home(){
+        return "Hello! This is user database!";
+    }
+    @GetMapping("/users/{username}")
+    @ResponseStatus(HttpStatus.OK)
+    public User.UserDto getUserData(@Valid @PathVariable String username){
+        return userRepositoryService.getUserData(username);
+    }
+    @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
     public User.UserDto userLogin(@Valid @RequestBody UserLoginDto userLoginDto){
         return userRepositoryService.userLogin(

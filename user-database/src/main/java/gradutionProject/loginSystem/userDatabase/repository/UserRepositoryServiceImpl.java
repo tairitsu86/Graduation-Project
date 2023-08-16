@@ -48,6 +48,17 @@ public class UserRepositoryServiceImpl implements UserRepositoryService{
     }
 
     @Override
+    public User.UserDto getUserData(String username) {
+        checkUserExist(username);
+        User user = userRepository.getReferenceById(username);
+        return User.UserDto.builder()
+                .username(user.getUsername())
+                .userDisplayName(user.getUserDisplayName())
+                .permission(user.getPermission())
+                .build();
+    }
+
+    @Override
     public User.UserDto userLogin(String username, String password, boolean keepLogin) {
         if(!userRepository.existsById(username))
             throw new UserLoginWithIncorrectAccountException(username);

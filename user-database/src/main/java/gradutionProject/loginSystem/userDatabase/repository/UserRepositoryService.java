@@ -11,6 +11,8 @@ public interface UserRepositoryService {
 
     void deleteUser(String username);
 
+    User.UserDto getUserData(String username);
+
     User.UserDto userLogin(String username, String password, boolean keepLogin);
 
 }
