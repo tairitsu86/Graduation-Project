@@ -1,8 +1,3 @@
-line.bot:
-  channel-token: '${LINE_BOT_TOKEN}'
-  channel-secret: '${LINE_BOT_SECRET}'
-  handler.path: ${LINE_WEBHOOK}
-
 spring:
   datasourse:
     driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
@@ -15,9 +10,9 @@ jpa:
   properties:
     hibernate:
       format_sql: true
-#  rabbitmq:
-#    host: ${RABBITMQ_HOST}
-#    port: ${RABBITMQ_PORT}
-#  activemq:
-#    user: ${RABBITMQ_USERNAME}
-#    password: ${RABBITMQ_PASSWORD}
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+  activemq:
+    user: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
