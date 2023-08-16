@@ -18,35 +18,32 @@ spec:
       - name: user-database
         image: tairitsu86/graduation-project_login-system_user-database:latest
         resources:
-            requests:
-              memory: "64Mi"
-              cpu: "250m"
             limits:
               memory: "128Mi"
               cpu: "500m"
         ports:
         - containerPort: 8080
         env:
-        - name: USER_DATABASE_USERNAME
+        - name: DATABASE_USERNAME
           valueFrom: 
             secretKeyRef:
               name: user-database-secret
-              key: user-database-username
-        - name: USER_DATABASE_PASSWORD
+              key: database-username
+        - name: DATABASE_PASSWORD
           valueFrom: 
             secretKeyRef:
               name: user-database-secret
-              key: user-database-password 
-        - name: USER_DATABASE_IP_PORT
+              key: database-password
+        - name: DATABASE_IP_PORT
           valueFrom:
             configMapKeyRef:
               name: user-database-configmap
-              key: user-database-ip-port
-        - name: USER_DATABASE_DATABASENAME
+              key: database-ip-port
+        - name: DATABASE_NAME
           valueFrom:
             configMapKeyRef:
               name: user-database-configmap
-              key: user-database-databaseName
+              key: database-name
 ---
 apiVersion: v1
 kind: Service
