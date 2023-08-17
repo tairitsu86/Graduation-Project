@@ -21,7 +21,7 @@ public class LoginTrackerController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public String home(){
-        return "Hello! This is Login Tracker";
+        return "Hello! This is Login Tracker!";
     }
     @GetMapping("/{IMPlatform}/users/{IMUserId}")
     @ResponseStatus(HttpStatus.OK)
