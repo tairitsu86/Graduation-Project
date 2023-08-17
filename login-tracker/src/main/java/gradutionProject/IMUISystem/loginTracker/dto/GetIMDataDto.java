@@ -4,8 +4,10 @@ import gradutionProject.IMUISystem.loginTracker.entity.IMUserData;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
 public class GetIMDataDto {
-    private IMUserData imUserData;
+    private List<IMUserData> imUserDataList;
 }

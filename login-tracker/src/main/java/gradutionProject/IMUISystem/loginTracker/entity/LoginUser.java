@@ -8,9 +8,10 @@ import javax.persistence.*;
 @Data
 @Builder
 @Entity
+@Table(name = "LoginUser")
 public class LoginUser {
     @EmbeddedId
     private IMUserData imUserData;
-    @Column
+    @Column(name = "username",nullable = false)
     private String username;
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class LoginEventDto {
-    private String IM;
     private IMUserData imUserData;
+    private String username;
     private boolean isLogin;
 }

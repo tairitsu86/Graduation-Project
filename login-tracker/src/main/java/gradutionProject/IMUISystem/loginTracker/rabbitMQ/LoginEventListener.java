@@ -14,9 +14,9 @@ public class LoginEventListener {
     public void receive(LoginEventDto loginEventDto) {
         log.info("Login-event:",loginEventDto);
         if(loginEventDto.isLogin()){
-            loginUserRepositoryService.login(loginEventDto.getIM(),loginEventDto.getImUserData());
+            loginUserRepositoryService.login(loginEventDto.getImUserData(),loginEventDto.getUsername());
         }else{
-            loginUserRepositoryService.logout(loginEventDto.getIM(),loginEventDto.getImUserData());
+            loginUserRepositoryService.logout(loginEventDto.getImUserData());
         }
     }
 }
