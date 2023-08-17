@@ -4,8 +4,6 @@ import gradutionProject.IMUISystem.loginTracker.api.exception.LoginUserNotExistE
 import gradutionProject.IMUISystem.loginTracker.entity.IMUserData;
 import gradutionProject.IMUISystem.loginTracker.entity.LoginUser;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
