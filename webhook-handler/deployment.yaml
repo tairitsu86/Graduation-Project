@@ -19,7 +19,7 @@ spec:
         image: tairitsu86/graduation-project_im-ui-system_webhook-handler:latest
         resources:
             limits:
-              memory: "128Mi"
+              memory: "1024Mi"
               cpu: "500m"
         ports:
         - containerPort: 8080
@@ -70,8 +70,8 @@ spec:
   type: LoadBalancer
   ports:
     - protocol: TCP
-      port: 80
+      port: 8001
       targetPort: 8080
-      nodePort: 30000
+      nodePort: 30001
 
 
