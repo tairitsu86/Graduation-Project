@@ -1,11 +1,11 @@
-package gradution_project.login_system.user_database.unit_test;
+package gradutionProject.loginSystem.userDatabase.unitTest;
 
-import gradution_project.login_system.user_database.api.UserDatabaseController;
-import gradution_project.login_system.user_database.api.dto.AddUserDto;
-import gradution_project.login_system.user_database.api.dto.AlterUserDataDto;
-import gradution_project.login_system.user_database.api.dto.UserLoginDto;
-import gradution_project.login_system.user_database.entity.User;
-import gradution_project.login_system.user_database.repository.UserRepositoryService;
+import gradutionProject.loginSystem.userDatabase.api.UserDatabaseController;
+import gradutionProject.loginSystem.userDatabase.api.dto.AddUserDto;
+import gradutionProject.loginSystem.userDatabase.api.dto.AlterUserDataDto;
+import gradutionProject.loginSystem.userDatabase.api.dto.UserLoginDto;
+import gradutionProject.loginSystem.userDatabase.entity.User;
+import gradutionProject.loginSystem.userDatabase.repository.UserRepositoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

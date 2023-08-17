@@ -1,6 +1,6 @@
-package gradution_project.login_system.user_database.repository;
+package gradutionProject.loginSystem.userDatabase.repository;
 
-import gradution_project.login_system.user_database.entity.User;
+import gradutionProject.loginSystem.userDatabase.entity.User;
 
 public interface UserRepositoryService {
     void addUser(String username, String password ,String userDisplayName);
@@ -10,6 +10,8 @@ public interface UserRepositoryService {
     void alterPassword(String username,String newPassword);
 
     void deleteUser(String username);
+
+    User.UserDto getUserData(String username);
 
     User.UserDto userLogin(String username, String password, boolean keepLogin);
 

@@ -1,8 +1,8 @@
-package gradution_project.login_system.user_database.api;
+package gradutionProject.loginSystem.userDatabase.api;
 
-import gradution_project.login_system.user_database.api.dto.*;
-import gradution_project.login_system.user_database.entity.User;
-import gradution_project.login_system.user_database.repository.UserRepositoryService;
+import gradutionProject.loginSystem.userDatabase.entity.User;
+import gradutionProject.loginSystem.userDatabase.repository.UserRepositoryService;
+import gradutionProject.loginSystem.userDatabase.api.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +12,19 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/login")
 public class UserDatabaseController {
     private final UserRepositoryService userRepositoryService;
-    @PostMapping("")
+    @GetMapping("/")
+    @ResponseStatus(HttpStatus.OK)
+    public String home(){
+        return "Hello! This is user database!";
+    }
+    @GetMapping("/users/{username}")
+    @ResponseStatus(HttpStatus.OK)
+    public User.UserDto getUserData(@Valid @PathVariable String username){
+        return userRepositoryService.getUserData(username);
+    }
+    @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
     public User.UserDto userLogin(@Valid @RequestBody UserLoginDto userLoginDto){
         return userRepositoryService.userLogin(

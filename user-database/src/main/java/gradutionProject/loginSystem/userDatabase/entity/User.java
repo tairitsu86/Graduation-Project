@@ -1,4 +1,4 @@
-package gradution_project.login_system.user_database.entity;
+package gradutionProject.loginSystem.userDatabase.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

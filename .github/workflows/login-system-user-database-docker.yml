@@ -20,10 +20,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      USER_DATABASE_IP_PORT: ${{ secrets.USER_DATABASE_IP_PORT }}
-      USER_DATABASE_DATABASENAME: ${{ secrets.USER_DATABASE_DATABASENAME }}
-      USER_DATABASE_USERNAME: ${{ secrets.USER_DATABASE_USERNAME }}
-      USER_DATABASE_PASSWORD: ${{ secrets.USER_DATABASE_PASSWORD }}
+      DATABASE_IP_PORT: ${{ secrets.DATABASE_IP_PORT }}
+      DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+      DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
 
     steps:
     - uses: actions/checkout@v3

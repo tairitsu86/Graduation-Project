@@ -1,4 +1,4 @@
-package gradution_project.login_system.user_database;
+package gradutionProject.loginSystem.userDatabase;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

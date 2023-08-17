@@ -1,11 +1,11 @@
-package gradution_project.login_system.user_database.unit_test;
+package gradutionProject.loginSystem.userDatabase.unitTest;
 
-import gradution_project.login_system.user_database.api.excpetion.UserLoginWithIncorrectAccountException;
-import gradution_project.login_system.user_database.api.excpetion.UserNotExistException;
-import gradution_project.login_system.user_database.api.excpetion.UsernameAlreadyExistException;
-import gradution_project.login_system.user_database.entity.User;
-import gradution_project.login_system.user_database.repository.UserRepository;
-import gradution_project.login_system.user_database.repository.UserRepositoryServiceImpl;
+import gradutionProject.loginSystem.userDatabase.api.excpetion.UserLoginWithIncorrectAccountException;
+import gradutionProject.loginSystem.userDatabase.api.excpetion.UserNotExistException;
+import gradutionProject.loginSystem.userDatabase.api.excpetion.UsernameAlreadyExistException;
+import gradutionProject.loginSystem.userDatabase.entity.User;
+import gradutionProject.loginSystem.userDatabase.repository.UserRepository;
+import gradutionProject.loginSystem.userDatabase.repository.UserRepositoryServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
