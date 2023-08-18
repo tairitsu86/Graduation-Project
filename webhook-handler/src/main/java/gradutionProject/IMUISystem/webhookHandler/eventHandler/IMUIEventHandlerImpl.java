@@ -13,7 +13,7 @@ public class IMUIEventHandlerImpl implements IMUIEventHandler{
     private final MQEventPublisher mqEventPublisher;
 
     @Override
-    public void messageEventHandler(String IMPlatform,String IMUserId,String message) {
+    public void messageEventHandler(InstantMessagingPlatform IMPlatform,String IMUserId,String message) {
         mqEventPublisher.publishEvent(
                 MessageEvent.builder()
                         .message(message)
