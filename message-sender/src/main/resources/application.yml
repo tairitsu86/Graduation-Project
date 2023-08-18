@@ -1,7 +1,6 @@
 line.bot:
   channel-token: '${LINE_BOT_TOKEN}'
   channel-secret: '${LINE_BOT_SECRET}'
-  handler.path: ${LINE_WEBHOOK}
 spring:
   rabbitmq:
     host: ${RABBITMQ_HOST}
@@ -9,3 +8,5 @@ spring:
   activemq:
     user: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
+my_env:
+  loginTrackerUrl: ${LOGIN_TRACKER_URL}
