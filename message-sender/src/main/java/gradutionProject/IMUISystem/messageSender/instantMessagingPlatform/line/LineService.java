@@ -7,9 +7,10 @@ import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.model.response.BotApiResponse;
 import gradutionProject.IMUISystem.messageSender.instantMessagingPlatform.IMService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ExecutionException;
-
+@Service
 public class LineService implements IMService {
     @Autowired
     private LineMessagingClient lineMessagingClient;
