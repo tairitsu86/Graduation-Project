@@ -19,6 +19,7 @@ jobs:
       RABBITMQ_PORT: ${{ secrets.RABBITMQ_PORT }}
       RABBITMQ_USERNAME: ${{ secrets.RABBITMQ_USERNAME }}
       RABBITMQ_PASSWORD: ${{ secrets.RABBITMQ_PASSWORD }}
+      LOGIN_TRACKER_URL: ${{ secrets.LOGIN_TRACKER_URL }}
     
     steps:
     - uses: actions/checkout@v3
