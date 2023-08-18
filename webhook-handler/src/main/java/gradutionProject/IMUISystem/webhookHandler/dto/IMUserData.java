@@ -1,6 +1,6 @@
 package gradutionProject.IMUISystem.webhookHandler.dto;
 
-import gradutionProject.IMUISystem.webhookHandler.eventHandler.InstantMessagingPlatform;
+import gradutionProject.IMUISystem.webhookHandler.instantMessagingPlatform.InstantMessagingPlatform;
 import lombok.Builder;
 import lombok.Data;
 
