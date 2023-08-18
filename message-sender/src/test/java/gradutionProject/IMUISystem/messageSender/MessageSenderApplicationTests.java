@@ -1,4 +1,4 @@
-package gradutionProject.IMUISystem.messagesender;
+package gradutionProject.IMUISystem.messageSender;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
