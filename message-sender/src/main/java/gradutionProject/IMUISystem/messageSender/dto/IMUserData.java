@@ -1,5 +1,6 @@
 package gradutionProject.IMUISystem.messageSender.dto;
 
+import gradutionProject.IMUISystem.messageSender.instantMessagingPlatform.InstantMessagingPlatform;
 import lombok.Builder;
 import lombok.Data;
 
