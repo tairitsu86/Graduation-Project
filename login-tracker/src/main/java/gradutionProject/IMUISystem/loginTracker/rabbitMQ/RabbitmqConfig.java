@@ -14,9 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableRabbit
 public class RabbitmqConfig {
-    static final String topicExchangeName = "spring-boot-exchange";
-
-    static final String queueName = "IM-UI/Login-event";
+    public static final String queueName = "IM-UI/Login-event";
     @Bean
     public MessageConverter jsonMessageConverter(ObjectMapper objectMapper) {
         return new Jackson2JsonMessageConverter(objectMapper);

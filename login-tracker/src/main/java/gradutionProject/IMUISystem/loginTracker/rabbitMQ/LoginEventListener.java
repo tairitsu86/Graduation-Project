@@ -7,12 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+import static gradutionProject.IMUISystem.loginTracker.rabbitMQ.RabbitmqConfig.queueName;
+
 @Slf4j
 @RequiredArgsConstructor
 @Component
 public class LoginEventListener {
     private final LoginUserRepositoryService loginUserRepositoryService;
-    @RabbitListener(queues={"IM-UI/Login-event"})
+    @RabbitListener(queues={queueName})
     public void receive(LoginEventDto loginEventDto) {
         log.info(loginEventDto.toString());
         if(loginEventDto.getState().equalsIgnoreCase("LOGIN")){
@@ -21,4 +23,16 @@ public class LoginEventListener {
             loginUserRepositoryService.logout(loginEventDto.getImUserData());
         }
     }
+
+    /* test data
+    {
+      "imUserData": {
+        "platform": "LINE",
+        "userId": "123"
+      },
+      "username": "OAO",
+      "state": "LOGIN"
+    }
+    
+    */
 }
