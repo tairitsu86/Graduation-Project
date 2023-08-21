@@ -63,8 +63,7 @@ public class EventHandlerImpl implements EventHandler{
         }
         if(data.isEmpty()){
             restRequestService.sendEventRequest(
-                    imUserData,
-                    repositoryService.getCustomizeEvent(eventName),
+                    repositoryService.getAPIData(eventName),
                     askValue
             );
             return;
