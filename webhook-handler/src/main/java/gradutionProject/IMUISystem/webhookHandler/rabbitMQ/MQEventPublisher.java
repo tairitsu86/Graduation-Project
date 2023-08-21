@@ -1,8 +1,8 @@
 package gradutionProject.IMUISystem.webhookHandler.rabbitMQ;
 
-import gradutionProject.IMUISystem.webhookHandler.dto.MessageEvent;
+import gradutionProject.IMUISystem.webhookHandler.dto.MessageEventDto;
 
 public interface MQEventPublisher {
-    void publishEvent(MessageEvent event);
+    void publishEvent(MessageEventDto event);
 
 }
