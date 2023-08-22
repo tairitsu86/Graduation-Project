@@ -14,16 +14,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableRabbit
 public class RabbitmqConfig {
-    static final String topicExchangeName = "spring-boot-exchange";
+    static final String topicExchangeName = "webhook-handler-exchange";
 
-    static final String queueName = "IM-UI/User-event";
+    static final String userEventQueue = "IM-UI/User-event";
     @Bean
     public MessageConverter jsonMessageConverter(ObjectMapper objectMapper) {
         return new Jackson2JsonMessageConverter(objectMapper);
     }
     @Bean
     public Queue queue() {
-        return new Queue(queueName,false);
+        return new Queue(userEventQueue,false);
     }
     @Bean
     public TopicExchange exchange() {
@@ -31,7 +31,7 @@ public class RabbitmqConfig {
     }
     @Bean
     public Binding binding(Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with("im-ui.#");
+        return BindingBuilder.bind(queue).to(exchange).with(userEventQueue);
     }
 
 }
