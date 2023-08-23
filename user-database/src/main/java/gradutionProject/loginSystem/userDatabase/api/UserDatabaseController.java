@@ -33,7 +33,7 @@ public class UserDatabaseController {
                 ,userLoginDto.isKeepLogin()
         );
     }
-    @PostMapping("/new")
+    @PostMapping("/users/new")
     @ResponseStatus(HttpStatus.CREATED)
     public void addUser(@Valid @RequestBody AddUserDto addUserDto){
         userRepositoryService.addUser(
