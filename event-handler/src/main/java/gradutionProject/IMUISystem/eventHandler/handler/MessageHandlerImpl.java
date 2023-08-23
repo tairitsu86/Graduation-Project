@@ -17,23 +17,27 @@ public class MessageHandlerImpl implements MessageHandler{
 
     @Override
     public void checkUser(IMUserData imUserData, String message) {
+        if(message.trim().equalsIgnoreCase("EXIT")){
+            eventHandler.exitEvent(imUserData);
+            return;
+        }
         if(eventHandler.isUserInEvent(imUserData,message)) return;
         String username = restRequestService.getUsername(imUserData);
         if(username==null){
             eventHandler.menuEvent(
                     imUserData
+                    ,null
                     ,"Login or Sign up!"
-                    ,new ArrayList<String>(){{add("LOGIN");add("SIGN_UP");}}
+                    ,new ArrayList<>(){{add("LOGIN");add("SIGN_UP");}}
                     ,null);
             return;
         }
-
-        if(message.trim().equalsIgnoreCase("EXIT")){
-            eventHandler.exitEvent(imUserData);
+        if(message.startsWith("/START_EVENT ")){
+            eventHandler.event(imUserData,username,message.substring(13),null);
             return;
         }
 
-        eventHandler.defaultMenu(imUserData);
+        eventHandler.defaultMenu(imUserData,username);
     }
 
 

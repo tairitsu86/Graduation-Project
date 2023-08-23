@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -25,23 +27,27 @@ public class RestRequestServiceImpl implements RestRequestService {
     @Override
     public String getUsername(IMUserData imUserData) {
         List<IMUserData> imUserDataList = new ArrayList<>();
-        GetUsernameDto getUsernameDto = restTemplate.getForObject(
-                String.format("%s/%s/users/%s", LOGIN_TRACKER_URL, imUserData.getPlatform(),imUserData.getUserId())
-                ,GetUsernameDto.class
-        );
-        if(getUsernameDto==null||getUsernameDto.getUsername()==null)
+        try{
+            ResponseEntity<GetUsernameDto> response = restTemplate.getForEntity(
+                    String.format("%s/%s/users/%s", LOGIN_TRACKER_URL, imUserData.getPlatform(),imUserData.getUserId())
+                    ,GetUsernameDto.class
+            );
+            return response.getBody().getUsername();
+        }catch (HttpClientErrorException e){
             return null;
-        return getUsernameDto.getUsername();
+        }
     }
 
     @Override
-    public void sendEventRequest(APIData apiData, Map<String, String> variables) {
+    public void sendEventRequest(String username, APIData apiData, Map<String, String> variables) {
         String url = apiData.getUrlTemplate();
         String requestBody = apiData.getRequestBodyTemplate();
         if(requestBody==null) requestBody = "";
+        variables.put("USERNAME",username);
         for(String key:variables.keySet()){
-            url.replaceAll(key,variables.get(key));
-            requestBody.replaceAll(key,variables.get(key));
+            String replaceValue = String.format("${%s}",key);
+            url.replaceAll(replaceValue,variables.get(key));
+            requestBody.replaceAll(replaceValue,variables.get(key));
         }
         HttpMethod httpMethod;
         switch (apiData.getApiMethod()){
@@ -53,6 +59,10 @@ public class RestRequestServiceImpl implements RestRequestService {
             default -> {return;}
         }
         HttpEntity<String> httpEntity = new HttpEntity<>(requestBody);
-        restTemplate.exchange(url,httpMethod,httpEntity,String.class);
+        try{
+            restTemplate.exchange(url,httpMethod,httpEntity,String.class);
+        }catch (HttpClientErrorException e){
+            System.err.printf("Custom API Error,url[%s],body[%s],error type[%s]",url,requestBody,e.getMessage());
+        }
     }
 }

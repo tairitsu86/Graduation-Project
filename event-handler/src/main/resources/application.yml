@@ -10,9 +10,13 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        #maybe not a good choose?
+        enable_lazy_load_no_trans: true
   rabbitmq:
     host: ${RABBITMQ_HOST}
     port: ${RABBITMQ_PORT}
   activemq:
     user: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
+my_env:
+  loginTrackerUrl: ${LOGIN_TRACKER_URL}
