@@ -3,7 +3,7 @@ IF OBJECT_ID(N'customize_event', N'U') IS NULL
         CREATE TABLE [customize_event](
             [event_name] [varchar](255) NOT NULL,
             [api_method] [varchar](255) NULL,
-            [request_body_template] [varchar](255) NULL,
+            [request_body_template] [varchar](MAX) NULL,
             [url_template] [varchar](255) NULL,
             [description] [varchar](255) NULL,
             CONSTRAINT [customize_event_pk] PRIMARY KEY([event_name]),

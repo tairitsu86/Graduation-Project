@@ -1,6 +1,6 @@
 --Login
 INSERT INTO [customize_event] (event_name,[description],api_method,url_template,request_body_template)
-	SELECT 'LOGIN','Login','POST','http://user-database-service/login','{"username": "${USERNAME}","password": "${PASSWORD}","keepLogin": true}'
+	SELECT 'LOGIN','Login','POST','http://user-database-service/login','{"username": "${USERNAME}","password": "${PASSWORD}","fromPlatform": "${PLATFORM}","platformType":"Instant-Messaging","platformUserId":"${USER_ID}"}'
 	WHERE NOT EXISTS (SELECT 1 FROM [customize_event] WHERE event_name = 'LOGIN');
 
 INSERT INTO [customize_event_variables] (event_name,variable)

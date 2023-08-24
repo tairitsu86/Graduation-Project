@@ -37,12 +37,10 @@ public class RestRequestServiceImpl implements RestRequestService {
     }
 
     @Override
-    public boolean sendEventRequest(String username, APIData apiData, Map<String, String> variables) {
+    public boolean sendEventRequest(APIData apiData, Map<String, String> variables) {
         String url = apiData.getUrlTemplate();
         String requestBody = apiData.getRequestBodyTemplate();
         if(requestBody==null) requestBody = "";
-        if(username!=null)
-            variables.put("USERNAME",username);
         for(String key:variables.keySet()){
             String replaceValue = String.format("${%s}",key);
             url = url.replace(replaceValue,variables.get(key));

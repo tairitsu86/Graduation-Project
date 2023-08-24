@@ -39,12 +39,16 @@ public class EventHandlerImpl implements EventHandler{
         List<String> eventVariables = repositoryService.getEventVariables(eventName);
         variables.putAll(parameter);
         List<String> data = new ArrayList<>();
+        variables.put("PLATFORM",imUserData.getPlatform());
+        variables.put("USER_ID",imUserData.getUserId());
+        if(username!=null)
+            variables.put("USERNAME",username);
         for (String variable:eventVariables) {
             if(variables.containsKey(variable)) continue;
             data.add(variable);
         }
         if(data.isEmpty()){
-            if(sendRequest(username,eventName,variables))
+            if(sendRequest(eventName,variables))
                 sendMessage(imUserData,"Success");
             else
                 sendMessage(imUserData,"Error");
@@ -81,7 +85,7 @@ public class EventHandlerImpl implements EventHandler{
         userState.getVariables().put(userState.getData().get(0),message);
         userState.getData().remove(0);
         if(userState.getData().isEmpty()){
-            if(sendRequest(userState.getUsername(),userState.getEventName(),userState.getVariables())) {
+            if(sendRequest(userState.getEventName(),userState.getVariables())) {
                 sendMessage(imUserData, "Success");
             }else
                 sendMessage(imUserData,"Error");
@@ -92,10 +96,9 @@ public class EventHandlerImpl implements EventHandler{
         repositoryService.newUserState(userState);
         return true;
     }
-    public boolean sendRequest(String username,String eventName,Map<String,String> variables){
+    public boolean sendRequest(String eventName,Map<String,String> variables){
         return restRequestService.sendEventRequest(
-                username
-                ,repositoryService.getAPIData(eventName)
+                repositoryService.getAPIData(eventName)
                 ,variables
         );
     }

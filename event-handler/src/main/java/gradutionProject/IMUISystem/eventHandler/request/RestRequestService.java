@@ -7,5 +7,5 @@ import java.util.Map;
 
 public interface RestRequestService {
     String getUsername(IMUserData imUserData);
-    boolean sendEventRequest(String username,APIData apiData, Map<String,String> variables);
+    boolean sendEventRequest(APIData apiData, Map<String,String> variables);
 }
