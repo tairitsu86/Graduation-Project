@@ -34,6 +34,16 @@ spec:
             secretKeyRef:
               name: user-database-secret
               key: database-password
+        - name: RABBITMQ_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: user-database-secret
+              key: rabbitmq-username
+        - name: RABBITMQ_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: user-database-secret
+              key: rabbitmq-password
         - name: DATABASE_IP_PORT
           valueFrom:
             configMapKeyRef:
@@ -44,6 +54,16 @@ spec:
             configMapKeyRef:
               name: user-database-configmap
               key: database-name
+        - name: RABBITMQ_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: user-database-configmap
+              key: rabbitmq-ip
+        - name: RABBITMQ_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: user-database-configmap
+              key: rabbitmq-port
 ---
 apiVersion: v1
 kind: Service
