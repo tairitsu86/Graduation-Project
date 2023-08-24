@@ -44,7 +44,10 @@ public class EventHandlerImpl implements EventHandler{
             data.add(variable);
         }
         if(data.isEmpty()){
-            sendRequest(username,eventName,variables);
+            if(sendRequest(username,eventName,variables))
+                sendMessage(imUserData,"Success");
+            else
+                sendMessage(imUserData,"Error");
             return;
         }
         newUserState(imUserData,username,eventName,data,variables);
@@ -78,15 +81,19 @@ public class EventHandlerImpl implements EventHandler{
         userState.getVariables().put(userState.getData().get(0),message);
         userState.getData().remove(0);
         if(userState.getData().isEmpty()){
-            sendRequest(userState.getUsername(),userState.getEventName(),userState.getVariables());
+            if(sendRequest(userState.getUsername(),userState.getEventName(),userState.getVariables())) {
+                sendMessage(imUserData, "Success");
+            }else
+                sendMessage(imUserData,"Error");
+            repositoryService.removeUserState(imUserData);
             return true;
         }
         sendMessage(imUserData,String.format("Please Enter %s!",userState.getData().get(0)));
         repositoryService.newUserState(userState);
         return true;
     }
-    public void sendRequest(String username,String eventName,Map<String,String> variables){
-        restRequestService.sendEventRequest(
+    public boolean sendRequest(String username,String eventName,Map<String,String> variables){
+        return restRequestService.sendEventRequest(
                 username
                 ,repositoryService.getAPIData(eventName)
                 ,variables

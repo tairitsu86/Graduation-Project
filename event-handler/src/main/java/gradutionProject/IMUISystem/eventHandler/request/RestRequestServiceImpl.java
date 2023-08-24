@@ -5,9 +5,7 @@ import gradutionProject.IMUISystem.eventHandler.entity.APIData;
 import gradutionProject.IMUISystem.eventHandler.entity.IMUserData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -39,15 +37,16 @@ public class RestRequestServiceImpl implements RestRequestService {
     }
 
     @Override
-    public void sendEventRequest(String username, APIData apiData, Map<String, String> variables) {
+    public boolean sendEventRequest(String username, APIData apiData, Map<String, String> variables) {
         String url = apiData.getUrlTemplate();
         String requestBody = apiData.getRequestBodyTemplate();
         if(requestBody==null) requestBody = "";
-        variables.put("USERNAME",username);
+        if(username!=null)
+            variables.put("USERNAME",username);
         for(String key:variables.keySet()){
             String replaceValue = String.format("${%s}",key);
-            url.replaceAll(replaceValue,variables.get(key));
-            requestBody.replaceAll(replaceValue,variables.get(key));
+            url = url.replace(replaceValue,variables.get(key));
+            requestBody = requestBody.replace(replaceValue,variables.get(key));
         }
         HttpMethod httpMethod;
         switch (apiData.getApiMethod()){
@@ -56,13 +55,17 @@ public class RestRequestServiceImpl implements RestRequestService {
             case POST -> httpMethod = HttpMethod.POST;
             case PATCH -> httpMethod = HttpMethod.PATCH;
             case DELETE -> httpMethod = HttpMethod.DELETE;
-            default -> {return;}
+            default -> {return false;}
         }
-        HttpEntity<String> httpEntity = new HttpEntity<>(requestBody);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>(requestBody,headers);
         try{
-            restTemplate.exchange(url,httpMethod,httpEntity,String.class);
+            restTemplate.exchange(url,httpMethod,entity,String.class);
+            return true;
         }catch (HttpClientErrorException e){
-            System.err.printf("Custom API Error,url[%s],body[%s],error type[%s]",url,requestBody,e.getMessage());
+            System.err.printf("Custom API Error,url[%s],body[%s],error type[%s]\n",url,requestBody,e.getMessage());
+            return false;
         }
     }
 }
