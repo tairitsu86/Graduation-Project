@@ -5,5 +5,4 @@ import gradutionProject.IMUISystem.eventHandler.dto.SendingEventDto;
 
 public interface MQEventPublisher {
     void publishSendingEvent(SendingEventDto sendingEventDto);
-    void publishLoginEvent(LoginEventDto loginEventDto);
 }

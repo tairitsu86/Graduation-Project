@@ -16,9 +16,4 @@ public class MQEventPublisherImpl implements MQEventPublisher{
     public void publishSendingEvent(SendingEventDto sendingEventDto) {
         rabbitTemplate.convertAndSend(topicExchangeName, sendingEventQueue,sendingEventDto);
     }
-
-    @Override
-    public void publishLoginEvent(LoginEventDto loginEventDto) {
-        rabbitTemplate.convertAndSend(topicExchangeName, loginEventQueue,loginEventDto);
-    }
 }
