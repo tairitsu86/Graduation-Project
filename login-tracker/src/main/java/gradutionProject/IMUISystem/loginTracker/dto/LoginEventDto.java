@@ -5,7 +5,8 @@ import lombok.Data;
 
 @Data
 public class LoginEventDto {
-    private IMUserData imUserData;
     private String username;
-    private String state;
+    private String fromPlatform;
+    private String platformType;
+    private String platformUserId;
 }
