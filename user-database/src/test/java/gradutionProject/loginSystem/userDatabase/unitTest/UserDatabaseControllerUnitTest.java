@@ -46,9 +46,8 @@ public class UserDatabaseControllerUnitTest {
         //Given
         userLoginDto.setUsername(randomAlphabetic( 8 ));
         userLoginDto.setPassword(randomAlphabetic( 8 ));
-        userLoginDto.setKeepLogin(false);
 
-        when(userRepositoryService.userLogin(anyString(),anyString(),anyBoolean())).thenReturn(userDto);
+        when(userRepositoryService.userLogin(anyString(),anyString())).thenReturn(userDto);
 
         //When
         User.UserDto result = userDatabaseController.userLogin(userLoginDto);
@@ -57,13 +56,12 @@ public class UserDatabaseControllerUnitTest {
         ArgumentCaptor<String> captorUsername = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> captorPassword = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<Boolean> captorKeepLogin = ArgumentCaptor.forClass(Boolean.class);
-        verify(userRepositoryService).userLogin(captorUsername.capture(),captorPassword.capture(),captorKeepLogin.capture());
+        verify(userRepositoryService).userLogin(captorUsername.capture(),captorPassword.capture());
 
         assertEquals(userLoginDto.getUsername(),captorUsername.getValue());
         assertEquals(userLoginDto.getPassword(),captorPassword.getValue());
-        assertEquals(userLoginDto.isKeepLogin(), captorKeepLogin.getValue());
         //check method call times
-        verify(userRepositoryService,times(1)).userLogin(anyString(),anyString(),anyBoolean());
+        verify(userRepositoryService,times(1)).userLogin(anyString(),anyString());
         //check return/exception values
         assertEquals(result, userDto);
     }

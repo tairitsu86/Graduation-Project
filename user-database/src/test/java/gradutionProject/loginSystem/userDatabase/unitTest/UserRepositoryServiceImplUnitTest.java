@@ -241,7 +241,7 @@ public class UserRepositoryServiceImplUnitTest {
         when(user.getUserDisplayName()).thenReturn(userDisplayName);
         when(user.getPermission()).thenReturn(permission);
         //When
-        User.UserDto userDto = userRepositoryServiceImpl.userLogin(username,password,keepLogin);
+        User.UserDto userDto = userRepositoryServiceImpl.userLogin(username,password);
         //Then
         //check parameters
         ArgumentCaptor<String> captorUsername1 = ArgumentCaptor.forClass(String.class);
@@ -269,7 +269,7 @@ public class UserRepositoryServiceImplUnitTest {
         //When
         UserLoginWithIncorrectAccountException userLoginWithIncorrectAccountException
                 = assertThrows(UserLoginWithIncorrectAccountException.class,()->
-            userRepositoryServiceImpl.userLogin(username,password,keepLogin)
+            userRepositoryServiceImpl.userLogin(username,password)
         );
         //Then
         //check parameters
@@ -294,7 +294,7 @@ public class UserRepositoryServiceImplUnitTest {
         //When
         UserLoginWithIncorrectAccountException userLoginWithIncorrectAccountException
                 = assertThrows(UserLoginWithIncorrectAccountException.class,()->
-            userRepositoryServiceImpl.userLogin(username,password,keepLogin)
+            userRepositoryServiceImpl.userLogin(username,password)
         );
         //Then
         //check parameters
