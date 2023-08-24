@@ -1,6 +1,5 @@
 package gradutionProject.IMUISystem.eventHandler.rabbitMQ;
 
-import gradutionProject.IMUISystem.eventHandler.dto.LoginEventDto;
 import gradutionProject.IMUISystem.eventHandler.dto.SendingEventDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -14,6 +13,6 @@ public class MQEventPublisherImpl implements MQEventPublisher{
     private final RabbitTemplate rabbitTemplate;
     @Override
     public void publishSendingEvent(SendingEventDto sendingEventDto) {
-        rabbitTemplate.convertAndSend(topicExchangeName, sendingEventQueue,sendingEventDto);
+        rabbitTemplate.convertAndSend(topicExchange, sendingEventQueue,sendingEventDto);
     }
 }
