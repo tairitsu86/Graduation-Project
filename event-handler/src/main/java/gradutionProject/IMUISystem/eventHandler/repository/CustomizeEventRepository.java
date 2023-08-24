@@ -10,6 +10,6 @@ public interface CustomizeEventRepository extends JpaRepository<CustomizeEvent,S
     @Query(value = "SELECT event_name FROM [customize_event]",nativeQuery = true)
     List<String> getAllEventName();
 
-    @Query(value = "SELECT variables FROM [customize_event_variables] WHERE customize_event_event_name = ?1",nativeQuery = true)
+    @Query(value = "SELECT variable FROM [customize_event_variables] WHERE event_name = ?1",nativeQuery = true)
     List<String> getEventVariables(String eventName);
 }
