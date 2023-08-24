@@ -59,7 +59,7 @@ public class UserRepositoryServiceImpl implements UserRepositoryService{
     }
 
     @Override
-    public User.UserDto userLogin(String username, String password, boolean keepLogin) {
+    public User.UserDto userLogin(String username, String password) {
         if(!userRepository.existsById(username))
             throw new UserLoginWithIncorrectAccountException(username);
         User user = userRepository.getReferenceById(username);

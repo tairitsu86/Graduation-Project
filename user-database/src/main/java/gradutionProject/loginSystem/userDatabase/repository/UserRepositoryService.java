@@ -13,6 +13,6 @@ public interface UserRepositoryService {
 
     User.UserDto getUserData(String username);
 
-    User.UserDto userLogin(String username, String password, boolean keepLogin);
+    User.UserDto userLogin(String username, String password);
 
 }
