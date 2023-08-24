@@ -6,7 +6,6 @@ spring:
     password: ${DATABASE_PASSWORD}
   jpa:
     show-aql: true
-    hibernate.ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -16,3 +15,6 @@ spring:
   activemq:
     user: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
+  sql:
+    init:
+      mode: always
