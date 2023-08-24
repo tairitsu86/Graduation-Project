@@ -1,10 +1,11 @@
 package gradutionProject.loginSystem.userDatabase.unitTest;
 
 import gradutionProject.loginSystem.userDatabase.api.UserDatabaseController;
-import gradutionProject.loginSystem.userDatabase.api.dto.AddUserDto;
-import gradutionProject.loginSystem.userDatabase.api.dto.AlterUserDataDto;
-import gradutionProject.loginSystem.userDatabase.api.dto.UserLoginDto;
+import gradutionProject.loginSystem.userDatabase.dto.AddUserDto;
+import gradutionProject.loginSystem.userDatabase.dto.AlterUserDataDto;
+import gradutionProject.loginSystem.userDatabase.dto.UserLoginDto;
 import gradutionProject.loginSystem.userDatabase.entity.User;
+import gradutionProject.loginSystem.userDatabase.rabbitMQ.MQEventPublisher;
 import gradutionProject.loginSystem.userDatabase.repository.UserRepositoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -24,6 +24,8 @@ import static org.mockito.Mockito.*;
 public class UserDatabaseControllerUnitTest {
     //SUT
     private UserDatabaseController userDatabaseController;
+    @Mock
+    private MQEventPublisher mqEventPublisher;
     @Mock
     private UserRepositoryService userRepositoryService;
     @Mock
@@ -39,16 +41,15 @@ public class UserDatabaseControllerUnitTest {
 
     @BeforeEach
     public void setUp(){
-        userDatabaseController = new UserDatabaseController(userRepositoryService);
+        userDatabaseController = new UserDatabaseController(userRepositoryService,mqEventPublisher);
     }
     @Test
     public void userLogin_happy_path_test(){
         //Given
         userLoginDto.setUsername(randomAlphabetic( 8 ));
         userLoginDto.setPassword(randomAlphabetic( 8 ));
-        userLoginDto.setKeepLogin(false);
 
-        when(userRepositoryService.userLogin(anyString(),anyString(),anyBoolean())).thenReturn(userDto);
+        when(userRepositoryService.userLogin(anyString(),anyString())).thenReturn(userDto);
 
         //When
         User.UserDto result = userDatabaseController.userLogin(userLoginDto);
@@ -56,14 +57,12 @@ public class UserDatabaseControllerUnitTest {
         //check parameters
         ArgumentCaptor<String> captorUsername = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> captorPassword = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<Boolean> captorKeepLogin = ArgumentCaptor.forClass(Boolean.class);
-        verify(userRepositoryService).userLogin(captorUsername.capture(),captorPassword.capture(),captorKeepLogin.capture());
+        verify(userRepositoryService).userLogin(captorUsername.capture(),captorPassword.capture());
 
         assertEquals(userLoginDto.getUsername(),captorUsername.getValue());
         assertEquals(userLoginDto.getPassword(),captorPassword.getValue());
-        assertEquals(userLoginDto.isKeepLogin(), captorKeepLogin.getValue());
         //check method call times
-        verify(userRepositoryService,times(1)).userLogin(anyString(),anyString(),anyBoolean());
+        verify(userRepositoryService,times(1)).userLogin(anyString(),anyString());
         //check return/exception values
         assertEquals(result, userDto);
     }
