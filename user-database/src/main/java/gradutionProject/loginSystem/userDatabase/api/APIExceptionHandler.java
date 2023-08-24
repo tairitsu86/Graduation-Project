@@ -10,23 +10,22 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class APIExceptionHandler {
-    private String errorMessage;
     @ExceptionHandler(UserNotExistException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String userNotExistExceptionHandler(UserNotExistException e){
-        return (errorMessage = e.toString());
+        return e.toString();
     }
 
     @ExceptionHandler(UsernameAlreadyExistException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public String usernameAlreadyExistExceptionHandler(UsernameAlreadyExistException e){
-        return (errorMessage = e.toString());
+        return e.toString();
     }
 
     @ExceptionHandler(UserLoginWithIncorrectAccountException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public String userLoginWithIncorrectAccountExceptionHandler(UserLoginWithIncorrectAccountException e){
-        return (errorMessage = e.toString());
+        return e.toString();
     }
 
 }

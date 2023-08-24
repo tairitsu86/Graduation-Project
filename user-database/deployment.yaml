@@ -19,7 +19,7 @@ spec:
         image: tairitsu86/graduation-project_login-system_user-database:latest
         resources:
             limits:
-              memory: "128Mi"
+              memory: "1024Mi"
               cpu: "500m"
         ports:
         - containerPort: 8080
@@ -55,7 +55,7 @@ spec:
   type: LoadBalancer
   ports:
     - protocol: TCP
-      port: 80
+      port: 8000
       targetPort: 8080
       nodePort: 30000
 
