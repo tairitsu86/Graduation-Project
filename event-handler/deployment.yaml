@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-handler
+  labels:
+    app: event-handler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-handler
+  template:
+    metadata:
+      labels:
+        app: event-handler
+    spec:
+      containers:
+      - name: event-handler
+        image: tairitsu86/graduation-project_im-ui-system_event-handler:latest
+        resources:
+            limits:
+              memory: "1024Mi"
+              cpu: "500m"
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DATABASE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: event-handler-secret
+              key: database-username
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: event-handler-secret
+              key: database-password
+        - name: RABBITMQ_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: event-handler-secret
+              key: rabbitmq-username
+        - name: RABBITMQ_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: event-handler-secret
+              key: rabbitmq-password
+        - name: DATABASE_IP_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: event-handler-configmap
+              key: database-ip-port
+        - name: DATABASE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: event-handler-configmap
+              key: database-name
+        - name: RABBITMQ_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: event-handler-configmap
+              key: rabbitmq-ip
+        - name: RABBITMQ_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: event-handler-configmap
+              key: rabbitmq-port
+        - name: LOGIN_TRACKER_URL
+          valueFrom:
+            configMapKeyRef:
+              name: event-handler-configmap
+              key: login-tracker-url
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-handler-service
+spec:
+  selector:
+    app: event-handler
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8002
+      targetPort: 8080
+      nodePort: 30002
+
+

@@ -25,7 +25,6 @@ IF OBJECT_ID(N'user_state',N'U') IS NULL
         CREATE TABLE [user_state](
             [platform] [varchar](255) NOT NULL,
             [user_id] [varchar](255) NOT NULL,
-            [data] [varbinary](255) NULL,
             [event_name] [varchar](255) NOT NULL,
             [username] [varchar](255) NULL,
             CONSTRAINT [user_state_pk] PRIMARY KEY([platform],[user_id])
