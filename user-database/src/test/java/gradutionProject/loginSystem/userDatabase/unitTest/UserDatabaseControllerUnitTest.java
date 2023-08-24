@@ -1,9 +1,9 @@
 package gradutionProject.loginSystem.userDatabase.unitTest;
 
 import gradutionProject.loginSystem.userDatabase.api.UserDatabaseController;
-import gradutionProject.loginSystem.userDatabase.api.dto.AddUserDto;
-import gradutionProject.loginSystem.userDatabase.api.dto.AlterUserDataDto;
-import gradutionProject.loginSystem.userDatabase.api.dto.UserLoginDto;
+import gradutionProject.loginSystem.userDatabase.dto.AddUserDto;
+import gradutionProject.loginSystem.userDatabase.dto.AlterUserDataDto;
+import gradutionProject.loginSystem.userDatabase.dto.UserLoginDto;
 import gradutionProject.loginSystem.userDatabase.entity.User;
 import gradutionProject.loginSystem.userDatabase.repository.UserRepositoryService;
 import org.junit.jupiter.api.BeforeEach;
