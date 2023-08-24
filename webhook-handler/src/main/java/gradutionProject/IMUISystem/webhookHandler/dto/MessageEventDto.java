@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class MessageEvent extends Event {
+public class MessageEventDto{
     private String message;
     private IMUserData imUserData;
 }
