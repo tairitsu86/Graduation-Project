@@ -42,6 +42,6 @@ jobs:
     - name: Build and push
       uses: docker/build-push-action@v4
       with:
-        file: Dockerfile
+        file: login-tracker/Dockerfile
         push: true
         tags: tairitsu86/graduation-project_im-ui-system_login-tracker:latest
