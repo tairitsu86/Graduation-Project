@@ -12,12 +12,17 @@ import org.springframework.context.annotation.Configuration;
 @EnableRabbit
 public class RabbitmqConfig {
     public static final String loginEventQueue = "login-system/Login-event";
+    public static final String logoutEventQueue = "login-system/Logout-event";
     @Bean
     public MessageConverter jsonMessageConverter(ObjectMapper objectMapper) {
         return new Jackson2JsonMessageConverter(objectMapper);
     }
     @Bean
-    public Queue queue() {
+    public Queue loginEventqueue() {
         return new Queue(loginEventQueue,false);
+    }
+    @Bean
+    public Queue logoutEventQueuequeue() {
+        return new Queue(logoutEventQueue,false);
     }
 }
