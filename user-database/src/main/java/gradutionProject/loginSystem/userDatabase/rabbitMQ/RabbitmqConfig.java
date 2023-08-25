@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableRabbit
 public class RabbitmqConfig {
     public static final String loginEventQueue = "login-system/Login-event";
+    public static final String logoutEventQueue = "login-system/Logout-event";
     static final String topicExchange = "user-database-exchange";
     @Bean
     public MessageConverter jsonMessageConverter(ObjectMapper objectMapper) {
@@ -25,11 +26,19 @@ public class RabbitmqConfig {
         return new Queue(loginEventQueue,false);
     }
     @Bean
+    public Queue logoutEventQueue() {
+        return new Queue(logoutEventQueue,false);
+    }
+    @Bean
     public TopicExchange exchange() {
         return new TopicExchange(topicExchange);
     }
     @Bean
     public Binding bindingLoginEventQueue(TopicExchange exchange) {
         return BindingBuilder.bind(loginEventQueue()).to(exchange).with(loginEventQueue);
+    }
+    @Bean
+    public Binding bindingLogoutEventQueue(TopicExchange exchange) {
+        return BindingBuilder.bind(logoutEventQueue()).to(exchange).with(logoutEventQueue);
     }
 }
