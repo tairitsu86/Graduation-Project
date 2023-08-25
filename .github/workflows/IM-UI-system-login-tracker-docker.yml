@@ -37,24 +37,21 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-        
-    - name: Test with Maven
-      run: mvn -B test --file pom.xml
       
     - name: Build with Maven
       run: mvn -B clean package --file pom.xml
       
-
-
-    - name: Build and push Docker image
-      env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      shell: bash
-      run: |
-        ls 
-        ls -la target
-        docker build -t graduation-project_im-ui-system_login-tracker:latest .
-        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-        docker tag graduation-project_im-ui-system_login-tracker tairitsu86/graduation-project_im-ui-system_login-tracker
-        docker push tairitsu86/graduation-project_im-ui-system_login-tracker:latest
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+      
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        
+    - name: Build and push
+      uses: docker/build-push-action@v4
+      with:
+        push: true
+        tags: tairitsu86/graduation-project_im-ui-system_login-tracker:latest
