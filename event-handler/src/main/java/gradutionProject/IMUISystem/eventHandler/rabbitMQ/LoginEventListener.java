@@ -16,6 +16,12 @@ public class LoginEventListener {
     private final MessageHandler messageHandler;
     @RabbitListener(queues={userEventQueue})
     public void receive(MessageEventDto messageEventDto) {
+        if(messageEventDto==null||
+                messageEventDto.getImUserData()==null||
+                messageEventDto.getImUserData().getPlatform()==null||
+                messageEventDto.getImUserData().getUserId()==null||
+                messageEventDto.getMessage()==null
+        )return;
         log.info("Message event: "+messageEventDto.toString());
         messageHandler.checkUser(messageEventDto.getImUserData(),messageEventDto.getMessage());
     }
