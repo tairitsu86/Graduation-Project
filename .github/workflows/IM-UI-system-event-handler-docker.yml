@@ -1,13 +1,13 @@
-name: IM-UI-System Login-Tracker Docker build&push
+name: IM-UI-System Event-Handler Docker build&push
 
 on:
   push:
-    branches: [ "release-IM-UI-system-login-tracker" ]
+    branches: [ "release-IM-UI-system-event-handler" ]
 
 env:
   PROJECT_NAME: "graduation-project"
   SUB_SYSTEM_NAME: "im-ui-system"
-  SERVICE_NAME: "login-tracker"
+  SERVICE_NAME: "event-handler"
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
   DATABASE_IP_PORT: ${{ secrets.DATABASE_IP_PORT }}
