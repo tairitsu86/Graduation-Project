@@ -11,5 +11,4 @@ public class SendingEventDto {
     private List<IMUserData> imUserDataList;
     private List<String> usernameList;
     private String message;
-
 }
