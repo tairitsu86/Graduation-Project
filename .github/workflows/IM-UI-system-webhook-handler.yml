@@ -1,8 +1,8 @@
-name: IM-UI-System Webhook-Handler build&push
+name: IM-UI-System Webhook-Handler CI&CD
 
 on:
   push:
-    branches: [ "release-IM-UI-system-webhook-handler" ]
+    branches: [ "develop-IM-UI-system-webhook-handler","release-IM-UI-system-webhook-handler" ]
 
 env:
   PROJECT_NAME: "graduation-project"
@@ -34,13 +34,15 @@ jobs:
       run: |
         cd $SERVICE_NAME
         mvn -B test --file pom.xml
-      
+        
     - name: Build with Maven
+      if: startsWith(github.ref, 'refs/heads/release')
       run: |  
         cd $SERVICE_NAME
-        mvn -B clean package --file pom.xml
+        mvn -B clean package --file pom.xml -Dmaven.test.skip
       
     - name: Build and push Docker image
+      if: startsWith(github.ref, 'refs/heads/release')
       shell: bash
       run: |
         cd $SERVICE_NAME
