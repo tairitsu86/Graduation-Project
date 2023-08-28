@@ -1,0 +1,52 @@
+name: IM-UI-System Webhook-Handler CI&CD
+
+on:
+  push:
+    branches: [ "develop-IM-UI-system-webhook-handler","release-IM-UI-system-webhook-handler" ]
+
+env:
+  PROJECT_NAME: "graduation-project"
+  SUB_SYSTEM_NAME: "im-ui-system"
+  SERVICE_NAME: "webhook-handler"
+  LINE_BOT_TOKEN: ${{ secrets.LINE_BOT_TOKEN }}
+  LINE_BOT_SECRET: ${{ secrets.LINE_BOT_SECRET }}
+  LINE_WEBHOOK: ${{ secrets.LINE_WEBHOOK }}
+  RABBITMQ_HOST: ${{ secrets.RABBITMQ_HOST }}
+  RABBITMQ_PORT: ${{ secrets.RABBITMQ_PORT }}
+  RABBITMQ_USERNAME: ${{ secrets.RABBITMQ_USERNAME }}
+  RABBITMQ_PASSWORD: ${{ secrets.RABBITMQ_PASSWORD }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+        
+    - name: Test with Maven
+      run: |
+        cd $SERVICE_NAME
+        mvn -B test --file pom.xml
+        
+    - name: Build with Maven
+      if: startsWith(github.ref, 'refs/heads/release')
+      run: |  
+        cd $SERVICE_NAME
+        mvn -B clean package --file pom.xml -Dmaven.test.skip
+      
+    - name: Build and push Docker image
+      if: startsWith(github.ref, 'refs/heads/release')
+      shell: bash
+      run: |
+        cd $SERVICE_NAME
+        docker build -t ${PROJECT_NAME}_${SUB_SYSTEM_NAME}_${SERVICE_NAME}:latest .
+        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        docker tag ${PROJECT_NAME}_${SUB_SYSTEM_NAME}_${SERVICE_NAME} tairitsu86/${PROJECT_NAME}_${SUB_SYSTEM_NAME}_${SERVICE_NAME}
+        docker push tairitsu86/${PROJECT_NAME}_${SUB_SYSTEM_NAME}_${SERVICE_NAME}:latest
