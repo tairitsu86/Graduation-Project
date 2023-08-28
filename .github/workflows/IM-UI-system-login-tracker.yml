@@ -2,7 +2,7 @@ name: IM-UI-System Login-Tracker Docker build&push
 
 on:
   push:
-    branches: [ "release-IM-UI-system-login-tracker" ]
+    branches: [ "develop-IM-UI-system-login-tracker","release-IM-UI-system-login-tracker" ]
 
 env:
   PROJECT_NAME: "graduation-project"
@@ -37,13 +37,15 @@ jobs:
       run: |
         cd $SERVICE_NAME
         mvn -B test --file pom.xml
-      
+        
     - name: Build with Maven
+      if: startsWith(github.ref, 'refs/heads/release')
       run: |  
         cd $SERVICE_NAME
         mvn -B clean package --file pom.xml
       
     - name: Build and push Docker image
+      if: startsWith(github.ref, 'refs/heads/release')
       shell: bash
       run: |
         cd $SERVICE_NAME
