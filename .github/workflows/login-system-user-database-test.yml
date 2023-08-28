@@ -4,10 +4,6 @@ on:
   push:
     branches: [ "develop-login-system-user-database" ]
 
-defaults:
-  run:
-    working-directory: ./user-database/
-
 jobs:
   build:
     runs-on: ubuntu-latest
