@@ -4,15 +4,14 @@ on:
   push:
     branches: [ "develop-IM-UI-system-message-sender" ]
 
-defaults:
-  run:
-    working-directory: ./message-sender/
-
 jobs:
   build:
     runs-on: ubuntu-latest
     
     env:
+      PROJECT_NAME: "graduation-project"
+      SUB_SYSTEM_NAME: "im-ui-system"
+      SERVICE_NAME: "message-sender"
       LINE_BOT_TOKEN: ${{ secrets.LINE_BOT_TOKEN }}
       LINE_BOT_SECRET: ${{ secrets.LINE_BOT_SECRET }}
       RABBITMQ_HOST: ${{ secrets.RABBITMQ_HOST }}
@@ -31,4 +30,6 @@ jobs:
         cache: maven
       
     - name: Test with Maven
-      run: mvn -B test --file pom.xml
+      run: |
+        cd $SERVICE_NAME
+        mvn -B test --file pom.xml
