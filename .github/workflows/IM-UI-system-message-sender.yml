@@ -46,6 +46,6 @@ jobs:
       run: |
         cd $SERVICE_NAME
         docker build -t ${PROJECT_NAME}_${SUB_SYSTEM_NAME}_${SERVICE_NAME}:latest .
-        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
         docker tag ${PROJECT_NAME}_${SUB_SYSTEM_NAME}_${SERVICE_NAME} tairitsu86/${PROJECT_NAME}_${SUB_SYSTEM_NAME}_${SERVICE_NAME}
         docker push tairitsu86/${PROJECT_NAME}_${SUB_SYSTEM_NAME}_${SERVICE_NAME}:latest
