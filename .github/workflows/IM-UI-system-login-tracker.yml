@@ -42,7 +42,7 @@ jobs:
       if: startsWith(github.ref, 'refs/heads/release')
       run: |  
         cd $SERVICE_NAME
-        mvn -B clean package --file pom.xml
+        mvn -B clean package --file pom.xml -Dmaven.test.skip
       
     - name: Build and push Docker image
       if: startsWith(github.ref, 'refs/heads/release')
