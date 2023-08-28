@@ -39,16 +39,14 @@ jobs:
         cd $SERVICE_NAME
         mvn -B test --file pom.xml
         
-    - name: Stop workflow on develop branch
-      if: startsWith(github.ref, 'refs/heads/develop')
-      run: exit 0
-      
     - name: Build with Maven
+      if: startsWith(github.ref, 'refs/heads/release')
       run: |  
         cd $SERVICE_NAME
         mvn -B clean package --file pom.xml
       
     - name: Build and push Docker image
+      if: startsWith(github.ref, 'refs/heads/release')
       shell: bash
       run: |
         cd $SERVICE_NAME
