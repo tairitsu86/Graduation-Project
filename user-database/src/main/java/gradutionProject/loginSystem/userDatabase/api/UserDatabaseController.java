@@ -1,9 +1,6 @@
 package gradutionProject.loginSystem.userDatabase.api;
 
-import gradutionProject.loginSystem.userDatabase.dto.AddUserDto;
-import gradutionProject.loginSystem.userDatabase.dto.AlterUserDataDto;
-import gradutionProject.loginSystem.userDatabase.dto.LoginEventDto;
-import gradutionProject.loginSystem.userDatabase.dto.UserLoginDto;
+import gradutionProject.loginSystem.userDatabase.dto.*;
 import gradutionProject.loginSystem.userDatabase.entity.User;
 import gradutionProject.loginSystem.userDatabase.rabbitMQ.MQEventPublisher;
 import gradutionProject.loginSystem.userDatabase.repository.UserRepositoryService;
@@ -43,6 +40,17 @@ public class UserDatabaseController {
                 .build()
         );
         return userDto;
+    }
+    @DeleteMapping("/{platformType}/{platform}/users/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void userLogout(@PathVariable String platformType,@PathVariable String platform,@PathVariable String userId){
+        mqEventPublisher.publishLogoutEvent(
+                LogoutEventDto.builder()
+                        .platformType(platformType)
+                        .fromPlatform(platform)
+                        .platformUserId(userId)
+                        .build()
+        );
     }
     @PostMapping("/users/new")
     @ResponseStatus(HttpStatus.CREATED)
