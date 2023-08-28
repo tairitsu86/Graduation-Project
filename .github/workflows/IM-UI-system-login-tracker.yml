@@ -1,4 +1,4 @@
-name: IM-UI-System Login-Tracker Docker build&push
+name: IM-UI-System Login-Tracker CI&CD
 
 on:
   push:
