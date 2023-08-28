@@ -1,4 +1,4 @@
-name: IM-UI-System Event-Handler Docker build&push
+name: IM-UI-System Event-Handler CI&CD
 
 on:
   push:
