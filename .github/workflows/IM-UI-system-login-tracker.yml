@@ -1,4 +1,4 @@
-name: IM-UI-System Login-Tracker Docker build&push
+name: IM-UI-System Login-Tracker CI&CD
 
 on:
   push:
@@ -8,8 +8,6 @@ env:
   PROJECT_NAME: "graduation-project"
   SUB_SYSTEM_NAME: "im-ui-system"
   SERVICE_NAME: "login-tracker"
-  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
   DATABASE_IP_PORT: ${{ secrets.DATABASE_IP_PORT }}
   DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
   DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
@@ -50,6 +48,6 @@ jobs:
       run: |
         cd $SERVICE_NAME
         docker build -t ${PROJECT_NAME}_${SUB_SYSTEM_NAME}_${SERVICE_NAME}:latest .
-        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
         docker tag ${PROJECT_NAME}_${SUB_SYSTEM_NAME}_${SERVICE_NAME} tairitsu86/${PROJECT_NAME}_${SUB_SYSTEM_NAME}_${SERVICE_NAME}
         docker push tairitsu86/${PROJECT_NAME}_${SUB_SYSTEM_NAME}_${SERVICE_NAME}:latest
