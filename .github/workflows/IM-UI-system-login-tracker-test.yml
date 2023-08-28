@@ -1,26 +1,17 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
-
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
 name: IM-UI-System Login-Tracker Test
 
 on:
   push:
     branches: [ "develop-IM-UI-system-login-tracker" ]
 
-defaults:
-  run:
-    working-directory: ./login-tracker/
-
 jobs:
   build:
     runs-on: ubuntu-latest
     
     env:
+      PROJECT_NAME: "graduation-project"
+      SUB_SYSTEM_NAME: "im-ui-system"
+      SERVICE_NAME: "login-tracker"
       DATABASE_IP_PORT: ${{ secrets.DATABASE_IP_PORT }}
       DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
       DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
@@ -40,4 +31,6 @@ jobs:
         cache: maven
       
     - name: Test with Maven
-      run: mvn -B test --file pom.xml
+      run: |
+        cd $SERVICE_NAME
+        mvn -B test --file pom.xml
