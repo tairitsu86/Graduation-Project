@@ -13,7 +13,7 @@ INSERT INTO [customize_event_variables] (event_name,variable)
 
 ----Sign up
 --INSERT INTO [customize_event] (event_name,[description],api_method,url_template,request_body_template)
---VALUES('SIGN_UP','Sign up','POST','http://user-database-service/users/new',
+--VALUES('SIGN_UP','Sign up','POST','http://user-database-service:8000/users/new',
 --'{"username": "${USERNAME}","password": "${PASSWORD}","userDisplayName": "${USER_DISPLAY_NAME}"}'
 --);
 --INSERT INTO [customize_event_variables] (event_name,variable)
