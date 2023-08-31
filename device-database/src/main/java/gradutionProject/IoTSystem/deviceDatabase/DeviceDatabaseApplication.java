@@ -1,4 +1,4 @@
-package gradutionProject.IoTSystem.devicedatabase;
+package gradutionProject.IoTSystem.deviceDatabase;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
