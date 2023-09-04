@@ -25,11 +25,11 @@ public class Device {
     @Column(name = "owner")
     private String owner;
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "grant_permission_groups")
+    @CollectionTable(name = "grant_permission_groups", joinColumns = @JoinColumn(name = "device_id"))
     @Column(name = "grant_permission_group")
     private Set<String> grantPermissionGroup;
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "grant_permission_users")
+    @CollectionTable(name = "grant_permission_users", joinColumns = @JoinColumn(name = "device_id"))
     @Column(name = "grant_permission_user")
     private Set<String> grantPermissionUser;
 }

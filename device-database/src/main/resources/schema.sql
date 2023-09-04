@@ -13,7 +13,8 @@ IF OBJECT_ID(N'grant_permission_groups',N'U') IS NULL
 		CREATE TABLE [grant_permission_groups](
 			[device_id] [varchar](255) NOT NULL,
 			[grant_permission_group] [varchar](255) NOT NULL,
-			CONSTRAINT [grant_permission_groups_fk] FOREIGN KEY([device_id]) REFERENCES [device] ([device_id])
+			CONSTRAINT [grant_permission_groups_fk] FOREIGN KEY([device_id]) REFERENCES [device] ([device_id]),
+			CONSTRAINT [grant_permission_group_unique] UNIQUE([device_id],[grant_permission_group])
 		) ON [PRIMARY]
 	END;
 IF OBJECT_ID(N'grant_permission_users',N'U') IS NULL
@@ -21,7 +22,8 @@ IF OBJECT_ID(N'grant_permission_users',N'U') IS NULL
 		CREATE TABLE [grant_permission_users](
 			[device_id] [varchar](255) NOT NULL,
 			[grant_permission_user] [varchar](255) NOT NULL,
-			CONSTRAINT [grant_permission_users_fk] FOREIGN KEY([device_id]) REFERENCES [device] ([device_id])
+			CONSTRAINT [grant_permission_users_fk] FOREIGN KEY([device_id]) REFERENCES [device] ([device_id]),
+			CONSTRAINT [grant_permission_user_unique] UNIQUE([device_id],[grant_permission_user])
 		) ON [PRIMARY]
 	END;
 

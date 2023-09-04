@@ -1,9 +1,12 @@
 package gradutionProject.IoTSystem.deviceDatabase.api;
 
+import gradutionProject.IoTSystem.deviceDatabase.dto.GetDeviceDto;
+import gradutionProject.IoTSystem.deviceDatabase.dto.GetDevicesDto;
 import gradutionProject.IoTSystem.deviceDatabase.repository.DeviceRepositoryService;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,12 +18,13 @@ public class DeviceDatabaseController {
     }
 
     @GetMapping("/users/{username}/devices")
-    public void getDevices(@PathVariable String username){
-
+    public List<GetDevicesDto> getDevices(@PathVariable String username){
+        return deviceRepositoryService.getDevices(username);
     }
     @GetMapping("/users/{username}/devices/{deviceId}")
-    public void getDevice(@PathVariable String username,@PathVariable String deviceId){
-
+    public GetDeviceDto getDevice(@PathVariable String username, @PathVariable String deviceId){
+        //TODO add state and functions
+        return deviceRepositoryService.getDevice(username,deviceId);
     }
     @PostMapping("/users/{username}/devices/new")
     public void newDevice(@PathVariable String username){
@@ -34,6 +38,8 @@ public class DeviceDatabaseController {
     public void deleteDevice(@PathVariable String username,@PathVariable String deviceId){
 
     }
+
+
 
 
 
