@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Data
@@ -13,23 +15,31 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="device")
+@Table(name="devices")
 public class Device {
     @Id
     @Column(name = "device_id")
     private String deviceId;
+
     @Column(name = "device_name")
     private String deviceName;
+
     @Column(name = "device_description")
     private String deviceDescription;
-    @Column(name = "owner")
-    private String owner;
+
+    @Column(name = "device_owner")
+    private String deviceOwner;
+
+    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL)
+    private List<DeviceFunction> functions;
+
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "grant_permission_groups", joinColumns = @JoinColumn(name = "device_id"))
-    @Column(name = "grant_permission_group")
-    private Set<String> grantPermissionGroup;
+    @CollectionTable(name = "device_permission_groups", joinColumns = @JoinColumn(name = "device_id"))
+    @Column(name = "group_id")
+    private Set<String> groups;
+
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "grant_permission_users", joinColumns = @JoinColumn(name = "device_id"))
-    @Column(name = "grant_permission_user")
-    private Set<String> grantPermissionUser;
+    @CollectionTable(name = "device_permission_users", joinColumns = @JoinColumn(name = "device_id"))
+    @Column(name = "username")
+    private Set<String> users;
 }
