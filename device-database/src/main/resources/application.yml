@@ -22,3 +22,5 @@ spring:
   sql:
     init:
       mode: always
+my_env:
+  deviceConnectorUrl: ${DEVICE_CONNECTOR_URL}
