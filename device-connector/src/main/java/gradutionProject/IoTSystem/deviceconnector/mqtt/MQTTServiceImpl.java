@@ -4,8 +4,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MQTTServiceImpl implements MQTTService{
+
     @Override
-    public void deviceFunction(String deviceId, int functionId, String a) {
+    public void controlDevice(String deviceId, int functionId, String functionPara) {
 
     }
 }
