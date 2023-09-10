@@ -3,8 +3,19 @@ IF OBJECT_ID(N'device_info',N'U') IS NULL
 		CREATE TABLE [device_info](
 			[device_id] [varchar](255) NOT NULL,
 			[device_name] [varchar](255) NULL,
-			[owner] [varchar](255) NOT NULL,
+			[device_owner] [varchar](255) NOT NULL,
 			CONSTRAINT [device_info_pk] PRIMARY KEY(device_id)
+		)
+	END;
+
+IF OBJECT_ID(N'device_states',N'U') IS NULL
+	BEGIN
+		CREATE TABLE [device_states](
+			[device_id] [varchar](255) NOT NULL,
+			[state_name] [varchar](255) NOT NULL,
+			[state_value] [varchar](255) NULL,
+			CONSTRAINT [device_states_fk] FOREIGN KEY([device_id]) REFERENCES [device_info]([device_id]),
+			CONSTRAINT [device_states_pk] PRIMARY KEY([device_id],[state_name])
 		)
 	END;
 
