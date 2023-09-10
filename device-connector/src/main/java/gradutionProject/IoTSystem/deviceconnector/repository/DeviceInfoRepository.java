@@ -12,4 +12,7 @@ import java.util.List;
 public interface DeviceInfoRepository extends JpaRepository<DeviceInfo,String> {
     @Query(value = "SELECT * FROM device_functions WHERE device_id = '?1'",nativeQuery = true)
     List<DeviceFunction> getFunctions(String device_id);
+
+    @Query(value = "SELECT function_name FROM device_functions WHERE device_id = '?1'",nativeQuery = true)
+    List<String> getFunctionNames(String device_id);
 }
