@@ -12,7 +12,7 @@ import static gradutionProject.IMUISystem.eventHandler.rabbitMQ.RabbitmqConfig.u
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class LoginEventListener {
+public class MQEventListener {
     private final MessageHandler messageHandler;
     @RabbitListener(queues={userEventQueue})
     public void receive(MessageEventDto messageEventDto) {
