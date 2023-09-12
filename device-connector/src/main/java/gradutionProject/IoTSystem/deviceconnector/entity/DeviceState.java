@@ -1,9 +1,6 @@
 package gradutionProject.IoTSystem.deviceconnector.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,12 +13,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "device_states")
 public class DeviceState {
-    @Id
-    @Column(name = "device_id")
-    private String deviceId;
-
-    @Column(name = "state_name")
-    private String stateName;
+    @EmbeddedId
+    private DeviceStateId deviceStateId;
 
     @Column(name = "state_value")
     private String stateValue;
