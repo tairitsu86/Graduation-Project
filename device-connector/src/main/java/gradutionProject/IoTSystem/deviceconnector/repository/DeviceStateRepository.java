@@ -1,6 +1,5 @@
 package gradutionProject.IoTSystem.deviceconnector.repository;
 
-import gradutionProject.IoTSystem.deviceconnector.dto.DeviceFunction;
 import gradutionProject.IoTSystem.deviceconnector.dto.DeviceStateDto;
 import gradutionProject.IoTSystem.deviceconnector.entity.DeviceState;
 import gradutionProject.IoTSystem.deviceconnector.entity.DeviceStateId;

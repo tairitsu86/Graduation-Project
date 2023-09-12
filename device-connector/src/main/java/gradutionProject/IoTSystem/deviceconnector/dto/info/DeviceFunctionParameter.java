@@ -1,4 +1,4 @@
-package gradutionProject.IoTSystem.deviceconnector.dto;
+package gradutionProject.IoTSystem.deviceconnector.dto.info;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

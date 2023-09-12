@@ -1,5 +1,6 @@
 package gradutionProject.IoTSystem.deviceconnector.dto;
 
+import gradutionProject.IoTSystem.deviceconnector.dto.info.DeviceFunction;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DeviceInfo {
+public class DeviceInfoDto {
     private String deviceId;
     private String deviceName;
     private String deviceOwner;
