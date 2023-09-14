@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class DeviceStateDto {
+    private String deviceId;
     private String stateName;
     private String stateValue;
 }
