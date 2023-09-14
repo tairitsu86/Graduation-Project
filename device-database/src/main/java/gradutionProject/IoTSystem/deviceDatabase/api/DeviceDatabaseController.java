@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,21 +24,14 @@ public class DeviceDatabaseController {
     }
     @GetMapping("/users/{username}/devices/{deviceId}")
     public GetDeviceDto getDevice(@PathVariable String username, @PathVariable String deviceId){
-        //TODO add state and functions
         return deviceRepositoryService.getDevice(username,deviceId);
     }
-    @PostMapping("/users/{username}/devices/new")
-    public void newDevice(@PathVariable String username){
-
+    @GetMapping("/devices/new/id")
+    public String newDeviceId(){
+        return UUID.randomUUID().toString();
     }
-    @PatchMapping("/users/{username}/devices/{deviceId}/alter")
-    public void alterDevice(@PathVariable String username,@PathVariable String deviceId){
 
-    }
-    @DeleteMapping("/users/{username}/devices/{deviceId}/delete")
-    public void deleteDevice(@PathVariable String username,@PathVariable String deviceId){
 
-    }
 
 
 
