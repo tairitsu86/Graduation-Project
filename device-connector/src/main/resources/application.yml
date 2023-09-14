@@ -22,3 +22,7 @@ spring:
   sql:
     init:
       mode: always
+mqtt:
+  username: ${MQTT_USERNAME}
+  password: ${MQTT_PASSWORD}
+  host: ${MQTT_HOST}

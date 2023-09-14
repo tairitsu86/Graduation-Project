@@ -2,6 +2,7 @@ package graduationProject.IoTSystem.deviceConnector.mqtt;
 
 import lombok.RequiredArgsConstructor;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.annotation.IntegrationComponentScan;
@@ -22,9 +23,12 @@ import java.time.Instant;
 @IntegrationComponentScan(basePackages = "graduationProject.IoTSystem.deviceConnector.mqtt")
 @RequiredArgsConstructor
 public class MQTTConfig {
+    @Value("${mqtt.username}")
     private String username;
+    @Value("${mqtt.password}")
     private String password;
-    private String hostUrl = "tcp://127.0.0.1:1883";
+    @Value("${mqtt.host}")
+    private String host;
     private String clientId = "Device-Connector";
     public static final String TEST_TOPIC = "test";
     public static final String INFO_TOPIC = "info";
@@ -37,7 +41,7 @@ public class MQTTConfig {
         options.setCleanSession(false);
 //        options.setUserName(username);
 //        options.setPassword(password.toCharArray());
-        options.setServerURIs(new String[]{hostUrl});
+        options.setServerURIs(new String[]{host});
         options.setConnectionTimeout(10);
         options.setMaxInflight(50);
         options.setKeepAliveInterval(20);
