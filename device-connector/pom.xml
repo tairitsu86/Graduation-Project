@@ -8,7 +8,7 @@
 		<version>3.1.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>gradutionProject.IoTSystem</groupId>
+	<groupId>graduationProject.IoTSystem</groupId>
 	<artifactId>device-connector</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>device-connector</name>
@@ -33,6 +33,20 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+
+		<!--mqtt-->
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-integration -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-integration</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-mqtt</artifactId>
+		</dependency>
+
+
 		<!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
