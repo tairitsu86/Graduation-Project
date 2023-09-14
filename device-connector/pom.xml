@@ -126,7 +126,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>event-handler</finalName>
+		<finalName>device-connector</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
