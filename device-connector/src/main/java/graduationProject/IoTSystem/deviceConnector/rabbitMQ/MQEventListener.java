@@ -18,6 +18,6 @@ public class MQEventListener {
     public void receive(DeviceControlDto deviceControlDto) {
         if(deviceControlDto==null||deviceControlDto.getDeviceId()==null)return;
         log.info("Device control event: "+deviceControlDto.toString());
-        mqttService.controlDevice(deviceControlDto.getDeviceId(), deviceControlDto.getFunctionId(),deviceControlDto.getFunctionPara());
+        mqttService.controlDevice(deviceControlDto);
     }
 }
