@@ -6,6 +6,7 @@ import graduationProject.IoTSystem.deviceConnector.dto.DeviceInfoDto;
 import graduationProject.IoTSystem.deviceConnector.dto.DeviceStateDto;
 import graduationProject.IoTSystem.deviceConnector.entity.DeviceState;
 import graduationProject.IoTSystem.deviceConnector.entity.DeviceStateId;
+import graduationProject.IoTSystem.deviceConnector.rabbitMQ.MQEventPublisher;
 import graduationProject.IoTSystem.deviceConnector.repository.DeviceStateRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import static graduationProject.IoTSystem.deviceConnector.mqtt.MQTTConfig.*;
 public class MQTTMessageListener implements MessageHandler {
     private final ObjectMapper objectMapper;
     private final DeviceStateRepository deviceStateRepository;
+    private final MQEventPublisher mqEventPublisher;
 
     @Override
     public void handleMessage(Message<?> message) throws MessagingException {
@@ -32,8 +34,14 @@ public class MQTTMessageListener implements MessageHandler {
         switch (message.getHeaders().get("mqtt_receivedTopic").toString()){
             case TEST_TOPIC -> log.info("test topic!");
             case INFO_TOPIC -> {
-//                objectMapper.readValue();
-                //TODO send to device database
+                DeviceInfoDto deviceInfoDto;
+                try {
+                    deviceInfoDto = objectMapper.readValue(payload,DeviceInfoDto.class);
+                } catch (JsonProcessingException e) {
+                    log.info("Error mapping with :{}",payload);
+                    return;
+                }
+                mqEventPublisher.publishDeviceInfoEvent(deviceInfoDto);
             }
             case STATE_TOPIC-> {
                 DeviceStateDto deviceStateDto;
@@ -43,6 +51,7 @@ public class MQTTMessageListener implements MessageHandler {
                     log.info("Error mapping with :{}",payload);
                     return;
                 }
+                mqEventPublisher.publishDeviceStateEvent(deviceStateDto);
                 deviceStateRepository.save(DeviceState.mapByDto(deviceStateDto));
             }
         }

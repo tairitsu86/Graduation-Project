@@ -1,12 +1,12 @@
 package graduationProject.IoTSystem.deviceConnector.rabbitMQ;
 
+import graduationProject.IoTSystem.deviceConnector.dto.DeviceInfoDto;
 import graduationProject.IoTSystem.deviceConnector.dto.DeviceStateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
-import static graduationProject.IoTSystem.deviceConnector.rabbitMQ.RabbitmqConfig.DEVICE_STATE_QUEUE;
-import static graduationProject.IoTSystem.deviceConnector.rabbitMQ.RabbitmqConfig.MQ_EXCHANGE;
+import static graduationProject.IoTSystem.deviceConnector.rabbitMQ.RabbitmqConfig.*;
 
 
 @Service
@@ -16,5 +16,10 @@ public class MQEventPublisherImpl implements MQEventPublisher{
     @Override
     public void publishDeviceStateEvent(DeviceStateDto deviceStateDto) {
         rabbitTemplate.convertAndSend(MQ_EXCHANGE, DEVICE_STATE_QUEUE,deviceStateDto);
+    }
+
+    @Override
+    public void publishDeviceInfoEvent(DeviceInfoDto deviceInfoDto) {
+        rabbitTemplate.convertAndSend(MQ_EXCHANGE, DEVICE_INFO_QUEUE,deviceInfoDto);
     }
 }

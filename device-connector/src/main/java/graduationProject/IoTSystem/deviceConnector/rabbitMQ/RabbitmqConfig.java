@@ -14,12 +14,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableRabbit
 public class RabbitmqConfig {
+    public static final String DEVICE_INFO_QUEUE = "IoT/Device-info-event";
     public static final String DEVICE_STATE_QUEUE = "IoT/Device-state-event";
     public static final String DEVICE_CONTROL_QUEUE = "IoT/Device-control-event";
     public static final String MQ_EXCHANGE = "device-connector-exchange";
     @Bean
     public MessageConverter jsonMessageConverter(ObjectMapper objectMapper) {
         return new Jackson2JsonMessageConverter(objectMapper);
+    }
+    @Bean
+    public Queue deviceInfoQueue() {
+        return new Queue(DEVICE_INFO_QUEUE,false);
     }
     @Bean
     public Queue deviceStateQueue() {
@@ -34,12 +39,18 @@ public class RabbitmqConfig {
     public TopicExchange exchange() {
         return new TopicExchange(MQ_EXCHANGE);
     }
+
     @Bean
-    public Binding bindingUserEventQueue(TopicExchange exchange) {
+    public Binding bindingDeviceInfoQueue(TopicExchange exchange) {
+        return BindingBuilder.bind(deviceInfoQueue()).to(exchange).with(DEVICE_INFO_QUEUE);
+    }
+    @Bean
+    public Binding bindingDeviceStateQueue(TopicExchange exchange) {
         return BindingBuilder.bind(deviceStateQueue()).to(exchange).with(DEVICE_STATE_QUEUE);
     }
     @Bean
-    public Binding bindingSendingEventQueue(TopicExchange exchange) {
+    public Binding bindingDeviceControlQueue(TopicExchange exchange) {
         return BindingBuilder.bind(deviceControlQueue()).to(exchange).with(DEVICE_CONTROL_QUEUE);
     }
+
 }
