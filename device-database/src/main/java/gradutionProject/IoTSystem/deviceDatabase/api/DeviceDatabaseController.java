@@ -41,37 +41,6 @@ public class DeviceDatabaseController {
         return UUID.randomUUID().toString();
     }
 
-    @PostMapping("/users/{username}/devices/{deviceId}/functions/{functionId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void controlDevice(@PathVariable String username, @PathVariable String deviceId,@PathVariable int functionId,@RequestParam(required = false) String functionPara){
-        if(!deviceRepositoryService.checkPermission(username, deviceId)){
-            log.info("No permission!");
-            throw new NoPermissionException(username, deviceId);
-        }
-
-        mqEventPublisher.publishDeviceControl(
-                DeviceControlDto.builder()
-                        .deviceId(deviceId)
-                        .functionId(functionId)
-                        .functionPara(functionPara)
-                        .build()
-        );
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 
