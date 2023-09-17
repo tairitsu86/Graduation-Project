@@ -31,10 +31,10 @@ public class DeviceDatabaseController {
     public List<GetDevicesDto> getDevices(@PathVariable String username){
         return deviceRepositoryService.getDevices(username);
     }
-    @GetMapping("/users/{username}/devices/{deviceId}")
+    @GetMapping("/devices/{deviceId}")
     @ResponseStatus(HttpStatus.OK)
-    public GetDeviceDto getDevice(@PathVariable String username, @PathVariable String deviceId){
-        return deviceRepositoryService.getDevice(username,deviceId);
+    public GetDeviceDto getDevice(@PathVariable String deviceId){
+        return deviceRepositoryService.getDevice(deviceId);
     }
     @GetMapping("/devices/new/id")
     public String newDeviceId(){
