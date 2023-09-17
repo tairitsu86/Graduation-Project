@@ -31,8 +31,11 @@ public class MQEventListener {
             log.info("No permission!");
             return;
         }
+
         mqEventPublisher.publishDeviceControl(
                 DeviceControlDto.builder()
+                        .executor(userControlDto.getUsername())
+                        .functionType(deviceRepositoryService.getFunctionType(userControlDto.getDeviceId(), userControlDto.getFunctionId()))
                         .deviceId(userControlDto.getDeviceId())
                         .functionId(userControlDto.getFunctionId())
                         .functionPara(userControlDto.getFunctionPara())
