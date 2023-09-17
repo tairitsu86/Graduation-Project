@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import graduationProject.IoTSystem.deviceConnector.dto.DeviceInfoDto;
 import graduationProject.IoTSystem.deviceConnector.dto.DeviceStateDto;
+import graduationProject.IoTSystem.deviceConnector.dto.info.FunctionType;
 import graduationProject.IoTSystem.deviceConnector.entity.DeviceState;
 import graduationProject.IoTSystem.deviceConnector.entity.DeviceStateId;
 import graduationProject.IoTSystem.deviceConnector.rabbitMQ.MQEventPublisher;
@@ -51,6 +52,7 @@ public class MQTTMessageListener implements MessageHandler {
                     log.info("Error mapping with :{}",payload);
                     return;
                 }
+                deviceStateDto.setFunctionType(FunctionType.CONTROL);
                 mqEventPublisher.publishDeviceStateEvent(deviceStateDto);
                 deviceStateRepository.save(DeviceState.mapByDto(deviceStateDto));
             }
