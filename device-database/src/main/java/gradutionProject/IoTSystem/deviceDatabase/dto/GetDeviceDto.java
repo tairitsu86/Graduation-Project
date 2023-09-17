@@ -13,5 +13,5 @@ public class GetDeviceDto {
     private String deviceId;
     private String deviceName;
     private String deviceDescription;
-    private String owner;
+    private String deviceOwner;
 }
