@@ -1,13 +1,13 @@
-name: IM-UI-System Event-Handler CI&CD
+name: IoT-System Device-Database CI&CD
 
 on:
   push:
-    branches: [ "develop-IM-UI-system-event-handler","release-IM-UI-system-event-handler" ]
+    branches: [ "develop-IoT-system-device-database","release-IoT-system-device-database" ]
 
 env:
   PROJECT_NAME: "graduation-project"
-  SUB_SYSTEM_NAME: "im-ui-system"
-  SERVICE_NAME: "event-handler"
+  SUB_SYSTEM_NAME: "iot-system"
+  SERVICE_NAME: "device-database"
   DATABASE_IP_PORT: ${{ secrets.DATABASE_IP_PORT }}
   DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
   DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
@@ -16,7 +16,6 @@ env:
   RABBITMQ_PORT: ${{ secrets.RABBITMQ_PORT }}
   RABBITMQ_USERNAME: ${{ secrets.RABBITMQ_USERNAME }}
   RABBITMQ_PASSWORD: ${{ secrets.RABBITMQ_PASSWORD }}
-  LOGIN_TRACKER_URL: ${{ secrets.LOGIN_TRACKER_URL }}
 
 jobs:
   build:
