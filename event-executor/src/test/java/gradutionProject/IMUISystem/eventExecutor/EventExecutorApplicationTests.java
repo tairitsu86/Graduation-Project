@@ -1,4 +1,4 @@
-package gradutionProject.IMUISystem.eventexecutor;
+package gradutionProject.IMUISystem.eventExecutor;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: event-executor-configmap
+data:
+  database-ip-port: "140.136.151.74:1433"
+  database-name: "Demo"
+  rabbitmq-ip: "140.136.151.74"
+  rabbitmq-port: "5672"
+  login-tracker-url: "http://login-tracker-service:8002"
+

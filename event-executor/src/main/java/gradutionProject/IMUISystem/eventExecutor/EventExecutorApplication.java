@@ -1,4 +1,4 @@
-package gradutionProject.IMUISystem.eventexecutor;
+package gradutionProject.IMUISystem.eventExecutor;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
