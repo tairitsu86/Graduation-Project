@@ -17,19 +17,16 @@ public class APIData {
     @Id
     @Column(name = "event_name")
     private String eventName;
-    @Column(name = "url_template")
-    private String urlTemplate;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "api_method")
     private APIMethod apiMethod;
+
+    @Column(name = "url_template")
+    private String urlTemplate;
+
     @Column(name = "request_body_template")
     private String requestBodyTemplate;
-    @Column(name = "respond_template")
-    private String respondTemplate;
-    //TODO
-//    @Column(name = "")
-//    private String
-
 
     public enum APIMethod{
         GET,POST,PUT,PATCH,DELETE;
