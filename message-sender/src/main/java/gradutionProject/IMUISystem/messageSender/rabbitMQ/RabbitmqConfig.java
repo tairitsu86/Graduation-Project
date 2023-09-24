@@ -11,13 +11,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableRabbit
 public class RabbitmqConfig {
-    public static final String SENDING_EVENT_QUEUE = "IM-UI/Sending-event";
+    public static final String sendingEventQueue = "IM-UI/Sending-event";
     @Bean
     public MessageConverter jsonMessageConverter(ObjectMapper objectMapper) {
         return new Jackson2JsonMessageConverter(objectMapper);
     }
     @Bean
     public Queue queue() {
-        return new Queue(SENDING_EVENT_QUEUE,false);
+        return new Queue(sendingEventQueue,false);
     }
 }
