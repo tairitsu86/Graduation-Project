@@ -14,5 +14,6 @@ import java.util.Map;
 @Builder
 public class ExecuteEventDto {
     private String eventName;
+    private String executor;
     private Map<String,String> variables;
 }
