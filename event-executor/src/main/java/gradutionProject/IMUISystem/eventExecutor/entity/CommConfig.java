@@ -12,23 +12,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Embeddable
 @Entity
-@Table(name = "api_data")
-public class APIData {
+@Table(name = "communication_configuration")
+public class CommConfig {
     @Id
     @Column(name = "event_name")
     private String eventName;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "api_method")
-    private APIMethod apiMethod;
+    @Column(name = "method_type")
+    private MethodType methodType;
 
     @Column(name = "url_template")
     private String urlTemplate;
 
-    @Column(name = "request_body_template")
-    private String requestBodyTemplate;
+    @Column(name = "body_template")
+    private String bodyTemplate;
 
-    public enum APIMethod{
-        GET,POST,PUT,PATCH,DELETE;
-    }
+
 }
