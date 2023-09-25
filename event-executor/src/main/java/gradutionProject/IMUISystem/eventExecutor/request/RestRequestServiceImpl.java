@@ -21,11 +21,12 @@ public class RestRequestServiceImpl implements RestRequestService {
         String url = apiData.getUrlTemplate();
         String requestBody = apiData.getRequestBodyTemplate();
         if(requestBody==null) requestBody = "";
-        for(String key:variables.keySet()){
-            String replaceValue = String.format("${%s}",key);
-            url = url.replace(replaceValue,variables.get(key));
-            requestBody = requestBody.replace(replaceValue,variables.get(key));
-        }
+        if(variables!=null)
+            for(String key:variables.keySet()){
+                String replaceValue = String.format("${%s}",key);
+                url = url.replace(replaceValue,variables.get(key));
+                requestBody = requestBody.replace(replaceValue,variables.get(key));
+            }
         HttpMethod httpMethod;
         switch (apiData.getApiMethod()){
             case GET -> httpMethod = HttpMethod.GET;
