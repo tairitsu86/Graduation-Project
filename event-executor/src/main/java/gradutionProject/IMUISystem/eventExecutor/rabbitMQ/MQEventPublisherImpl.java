@@ -55,7 +55,7 @@ public class MQEventPublisherImpl implements MQEventPublisher{
 
         String message = notifyData.getRespondTemplate();
         for (String s:variables.keySet())
-            message = message.replaceAll(String.format("${%s}",s),variables.get(s));
+            message = message.replace(String.format("${%s}",s),variables.get(s));
         return message;
     }
 }
