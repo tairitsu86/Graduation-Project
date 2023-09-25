@@ -50,7 +50,7 @@ public class MQEventPublisherImpl implements MQEventPublisher{
                 }
                 default -> {continue;}
             }
-            variables.put(notifyVariable.getVariableName(),value);
+            variables.put(notifyVariable.getNotifyVariableId().getVariableName(),value);
         }
 
         String message = notifyData.getRespondTemplate();
