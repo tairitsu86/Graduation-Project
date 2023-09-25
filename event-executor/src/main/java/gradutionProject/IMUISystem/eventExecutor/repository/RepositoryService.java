@@ -7,6 +7,6 @@ import gradutionProject.IMUISystem.eventExecutor.entity.NotifyData;
 public interface RepositoryService {
     EventType getEventType(String eventName);
     APIData getApiDataByEventName(String eventName);
-
+    boolean isNotifyDataExist(String eventName);
     NotifyData getNotifyData(String eventName);
 }

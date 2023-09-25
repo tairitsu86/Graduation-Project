@@ -25,6 +25,11 @@ public class RepositoryServiceImpl implements RepositoryService{
     }
 
     @Override
+    public boolean isNotifyDataExist(String eventName) {
+        return notifyDataRepository.existsById(eventName);
+    }
+
+    @Override
     public NotifyData getNotifyData(String eventName) {
         if(!notifyDataRepository.existsById(eventName)) return null;
         return notifyDataRepository.getReferenceById(eventName);
