@@ -1,6 +1,7 @@
 package gradutionProject.IMUISystem.eventExecutor.rabbitMQ;
 
 import gradutionProject.IMUISystem.eventExecutor.dto.ExecuteEventDto;
+import gradutionProject.IMUISystem.eventExecutor.entity.CommConfig;
 import gradutionProject.IMUISystem.eventExecutor.repository.RepositoryService;
 import gradutionProject.IMUISystem.eventExecutor.request.RestRequestService;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +26,14 @@ public class MQEventListener {
     public void receive(ExecuteEventDto executeEventDto) {
         log.info("Execute event: {}", executeEventDto);
         try {
-            switch (repositoryService.getEventType(executeEventDto.getEventName())){
+            if(!repositoryService.isEventExist(executeEventDto.getEventName())) return;
+            CommConfig commConfig = repositoryService.getCommConfig(executeEventDto.getEventName());
+            switch (commConfig.getMethodType()){
                 case MQ -> {}
-                case API -> {
+                default -> {
                     ResponseEntity<String> response =
                             restRequestService.sendEventRequest(
-                                    repositoryService.getApiDataByEventName(
+                                    repositoryService.getCommConfig(
                                             executeEventDto.getEventName()
                                     ),
                                     executeEventDto.getVariables()
@@ -43,7 +46,6 @@ public class MQEventListener {
                             repositoryService.getNotifyData(executeEventDto.getEventName()),
                             response.getBody());
                 }
-                default -> {return;}
             }
 
         }catch (Exception e){

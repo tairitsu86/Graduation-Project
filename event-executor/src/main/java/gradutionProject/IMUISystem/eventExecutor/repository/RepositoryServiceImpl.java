@@ -1,7 +1,6 @@
 package gradutionProject.IMUISystem.eventExecutor.repository;
 
-import gradutionProject.IMUISystem.eventExecutor.entity.APIData;
-import gradutionProject.IMUISystem.eventExecutor.entity.EventType;
+import gradutionProject.IMUISystem.eventExecutor.entity.CommConfig;
 import gradutionProject.IMUISystem.eventExecutor.entity.NotifyData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,19 +8,18 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class RepositoryServiceImpl implements RepositoryService{
-    private final APIDataRepository apiDataRepository;
+    private final CommConfigRepository commConfigRepository;
     private final NotifyDataRepository notifyDataRepository;
 
     @Override
-    public EventType getEventType(String eventName) {
-        if(apiDataRepository.existsById(eventName)) return EventType.API;
-        return null;
+    public boolean isEventExist(String eventName) {
+        return commConfigRepository.existsById(eventName);
     }
 
     @Override
-    public APIData getApiDataByEventName(String eventName) {
-        if(!apiDataRepository.existsById(eventName)) return null;
-        return apiDataRepository.getReferenceById(eventName);
+    public CommConfig getCommConfig(String eventName) {
+        if(!commConfigRepository.existsById(eventName)) return null;
+        return commConfigRepository.getReferenceById(eventName);
     }
 
     @Override

@@ -1,21 +1,12 @@
-IF OBJECT_ID(N'api_data', N'U') IS NULL
+IF OBJECT_ID(N'communication_configuration', N'U') IS NULL
     BEGIN
-        CREATE TABLE [api_data](
+        CREATE TABLE [communication_configuration](
             [event_name] [varchar](255) NOT NULL,
-            [api_method] [varchar](255) NOT NULL,
+            [method_type] [varchar](255) NOT NULL,
             [url_template] [varchar](255) NOT NULL,
-            [request_body_template] [varchar](MAX) NULL,
-            CONSTRAINT [api_data_pk] PRIMARY KEY([event_name]),
-            CONSTRAINT [api_data_api_method_check] CHECK (([api_method]='DELETE' OR [api_method]='PATCH' OR [api_method]='PUT' OR [api_method]='POST' OR [api_method]='GET'))
-        )
-    END;
-IF OBJECT_ID(N'mq_data', N'U') IS NULL
-    BEGIN
-        CREATE TABLE [mq_data](
-            [event_name] [varchar](255) NOT NULL,
-            [event_body_template] [varchar](MAX) NULL,
-            [topic] [varchar](255) NOT NULL,
-            CONSTRAINT [mq_data_pk] PRIMARY KEY([event_name])
+            [body_template] [varchar](MAX) NULL,
+            CONSTRAINT [communication_configuration_pk] PRIMARY KEY([event_name]),
+            CONSTRAINT [communication_configuration_method_type_check] CHECK (([method_type]='DELETE' OR [method_type]='PATCH' OR [method_type]='PUT' OR [method_type]='POST' OR [method_type]='GET' OR [method_type]='MQ'))
         )
     END;
 IF OBJECT_ID(N'notify_data', N'U') IS NULL

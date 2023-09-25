@@ -1,7 +1,6 @@
 package gradutionProject.IMUISystem.eventExecutor.request;
 
-import gradutionProject.IMUISystem.eventExecutor.entity.APIData;
-import gradutionProject.IMUISystem.eventExecutor.rabbitMQ.MQEventPublisher;
+import gradutionProject.IMUISystem.eventExecutor.entity.CommConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -17,9 +16,9 @@ public class RestRequestServiceImpl implements RestRequestService {
     private final RestTemplate restTemplate;
 
     @Override
-    public ResponseEntity sendEventRequest(APIData apiData, Map<String, String> variables) {
-        String url = apiData.getUrlTemplate();
-        String requestBody = apiData.getRequestBodyTemplate();
+    public ResponseEntity sendEventRequest(CommConfig commConfig, Map<String, String> variables) {
+        String url = commConfig.getUrlTemplate();
+        String requestBody = commConfig.getBodyTemplate();
         if(requestBody==null) requestBody = "";
         if(variables!=null)
             for(String key:variables.keySet()){
@@ -28,7 +27,7 @@ public class RestRequestServiceImpl implements RestRequestService {
                 requestBody = requestBody.replace(replaceValue,variables.get(key));
             }
         HttpMethod httpMethod;
-        switch (apiData.getApiMethod()){
+        switch (commConfig.getMethodType()){
             case GET -> httpMethod = HttpMethod.GET;
             case PUT -> httpMethod = HttpMethod.PUT;
             case POST -> httpMethod = HttpMethod.POST;
