@@ -39,15 +39,15 @@ public class MQEventListener {
                     if(!repositoryService.isNotifyDataExist(executeEventDto.getEventName())) return;
 
                     mqEventPublisher.notifyUser(
-                            new ArrayList<String>(){{executeEventDto.getExecutor();}},
+                            new ArrayList<>(){{add(executeEventDto.getExecutor());}},
                             repositoryService.getNotifyData(executeEventDto.getEventName()),
                             response.getBody());
                 }
                 default -> {return;}
             }
 
-        }catch (NullPointerException e){
-            log.info("Some field be null!");
+        }catch (Exception e){
+            log.info("Something wrong with: {}!",e);
         }
     }
 }
