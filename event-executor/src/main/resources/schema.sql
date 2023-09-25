@@ -32,6 +32,7 @@ IF OBJECT_ID(N'notify_variable', N'U') IS NULL
             [event_name] [varchar](255) NOT NULL,
 			[variable_name] [varchar](255) NOT NULL,
             [notify_variable_type] [varchar](255) NOT NULL CONSTRAINT [notify_variable_type_check] CHECK([notify_variable_type] = 'SINGLE' OR [notify_variable_type] = 'ARRAY'),
+            [json_path] [varchar](255) NOT NULL,
             CONSTRAINT [notify_variable_pk] PRIMARY KEY([event_name],[variable_name]),
             CONSTRAINT [notify_variable_fk] FOREIGN KEY([event_name]) REFERENCES [notify_data]([event_name])
         )
