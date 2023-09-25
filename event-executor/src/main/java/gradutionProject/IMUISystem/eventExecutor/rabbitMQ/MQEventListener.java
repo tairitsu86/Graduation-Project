@@ -35,6 +35,9 @@ public class MQEventListener {
                                     ),
                                     executeEventDto.getVariables()
                             );
+
+                    if(!repositoryService.isNotifyDataExist(executeEventDto.getEventName())) return;
+
                     mqEventPublisher.notifyUser(
                             new ArrayList<String>(){{executeEventDto.getExecutor();}},
                             repositoryService.getNotifyData(executeEventDto.getEventName()),
