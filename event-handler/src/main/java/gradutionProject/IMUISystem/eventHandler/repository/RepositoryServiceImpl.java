@@ -1,7 +1,7 @@
 package gradutionProject.IMUISystem.eventHandler.repository;
 
-import gradutionProject.IMUISystem.eventHandler.api.exception.EventAlreadyExistException;
-import gradutionProject.IMUISystem.eventHandler.api.exception.EventNotExistException;
+import gradutionProject.IMUISystem.eventHandler.controller.exception.EventAlreadyExistException;
+import gradutionProject.IMUISystem.eventHandler.controller.exception.EventNotExistException;
 import gradutionProject.IMUISystem.eventHandler.entity.APIData;
 import gradutionProject.IMUISystem.eventHandler.entity.CustomizeEvent;
 import gradutionProject.IMUISystem.eventHandler.entity.IMUserData;
