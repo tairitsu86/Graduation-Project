@@ -1,4 +1,4 @@
-package gradutionProject.IMUISystem.eventExecutor.api;
+package gradutionProject.IMUISystem.eventExecutor.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
