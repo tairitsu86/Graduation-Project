@@ -26,7 +26,7 @@ public class MQEventListener {
     public void receive(ExecuteEventDto executeEventDto) {
         log.info("Execute event: {}", executeEventDto);
         try {
-            if(!repositoryService.isEventExist(executeEventDto.getEventName())) return;
+            if(!repositoryService.isCommConfigExist(executeEventDto.getEventName())) return;
             CommConfig commConfig = repositoryService.getCommConfig(executeEventDto.getEventName());
             switch (commConfig.getMethodType()){
                 case MQ -> {}
@@ -39,11 +39,11 @@ public class MQEventListener {
                                     executeEventDto.getVariables()
                             );
 
-                    if(!repositoryService.isNotifyDataExist(executeEventDto.getEventName())) return;
+                    if(!repositoryService.isNotifyConfigExist(executeEventDto.getEventName())) return;
 
                     mqEventPublisher.notifyUser(
                             new ArrayList<>(){{add(executeEventDto.getExecutor());}},
-                            repositoryService.getNotifyData(executeEventDto.getEventName()),
+                            repositoryService.getNotifyConfig(executeEventDto.getEventName()),
                             response.getBody());
                 }
             }

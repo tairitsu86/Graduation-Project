@@ -20,6 +20,6 @@ public class NotifyConfig {
     private String eventName;
     @Column(name = "respond_template")
     private String respondTemplate;
-    @OneToMany(mappedBy = "notifyData",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "notifyConfig",cascade = CascadeType.ALL)
     private List<NotifyVariable> notifyVariables;
 }

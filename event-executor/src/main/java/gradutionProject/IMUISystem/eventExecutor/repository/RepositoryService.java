@@ -4,8 +4,14 @@ import gradutionProject.IMUISystem.eventExecutor.entity.CommConfig;
 import gradutionProject.IMUISystem.eventExecutor.entity.NotifyConfig;
 
 public interface RepositoryService {
-    boolean isEventExist(String eventName);
+
+    void newCommConfig(CommConfig commConfig);
+    void deleteCommConfig(String eventName);
+    boolean isCommConfigExist(String eventName);
     CommConfig getCommConfig(String eventName);
-    boolean isNotifyDataExist(String eventName);
-    NotifyConfig getNotifyData(String eventName);
+
+    void newNotifyConfig(NotifyConfig notifyConfig);
+    void deleteNotifyConfig(String eventName);
+    boolean isNotifyConfigExist(String eventName);
+    NotifyConfig getNotifyConfig(String eventName);
 }
