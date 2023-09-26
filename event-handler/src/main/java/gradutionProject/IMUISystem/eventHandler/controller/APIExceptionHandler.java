@@ -1,7 +1,7 @@
-package gradutionProject.IMUISystem.eventHandler.api;
+package gradutionProject.IMUISystem.eventHandler.controller;
 
-import gradutionProject.IMUISystem.eventHandler.api.exception.EventAlreadyExistException;
-import gradutionProject.IMUISystem.eventHandler.api.exception.EventNotExistException;
+import gradutionProject.IMUISystem.eventHandler.controller.exception.EventAlreadyExistException;
+import gradutionProject.IMUISystem.eventHandler.controller.exception.EventNotExistException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
