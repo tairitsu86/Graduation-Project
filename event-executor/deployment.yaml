@@ -64,11 +64,6 @@ spec:
             configMapKeyRef:
               name: event-executor-configmap
               key: rabbitmq-port
-        - name: LOGIN_TRACKER_URL
-          valueFrom:
-            configMapKeyRef:
-              name: event-executor-configmap
-              key: login-tracker-url
 ---
 apiVersion: v1
 kind: Service
@@ -80,8 +75,8 @@ spec:
   type: LoadBalancer
   ports:
     - protocol: TCP
-      port: 8004
+      port: 8007
       targetPort: 8080
-      nodePort: 30004
+      nodePort: 30007
 
 
