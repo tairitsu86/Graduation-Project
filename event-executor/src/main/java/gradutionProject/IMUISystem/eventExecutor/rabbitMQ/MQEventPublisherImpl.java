@@ -2,7 +2,7 @@ package gradutionProject.IMUISystem.eventExecutor.rabbitMQ;
 
 import com.jayway.jsonpath.JsonPath;
 import gradutionProject.IMUISystem.eventExecutor.dto.SendingEventDto;
-import gradutionProject.IMUISystem.eventExecutor.entity.NotifyData;
+import gradutionProject.IMUISystem.eventExecutor.entity.NotifyConfig;
 import gradutionProject.IMUISystem.eventExecutor.entity.NotifyVariable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -25,18 +25,18 @@ public class MQEventPublisherImpl implements MQEventPublisher{
     }
 
     @Override
-    public void notifyUser(List<String> users, NotifyData notifyData, String json) {
+    public void notifyUser(List<String> users, NotifyConfig notifyConfig, String json) {
         publishSendingEvent(
                 SendingEventDto.builder()
                         .usernameList(users)
-                        .message(getMessage(notifyData,json))
+                        .message(getMessage(notifyConfig,json))
                         .build());
     }
 
-    public String getMessage(NotifyData notifyData, String json){
+    public String getMessage(NotifyConfig notifyConfig, String json){
         Map<String,String> variables = new HashMap<>();
         String value;
-        for(NotifyVariable notifyVariable:notifyData.getNotifyVariables()){
+        for(NotifyVariable notifyVariable: notifyConfig.getNotifyVariables()){
             switch (notifyVariable.getNotifyVariableType()){
                 case ARRAY -> {
                     value = "";
@@ -53,7 +53,7 @@ public class MQEventPublisherImpl implements MQEventPublisher{
             variables.put(notifyVariable.getNotifyVariableId().getVariableName(),value);
         }
 
-        String message = notifyData.getRespondTemplate();
+        String message = notifyConfig.getRespondTemplate();
         for (String s:variables.keySet())
             message = message.replace(String.format("${%s}",s),variables.get(s));
         return message;

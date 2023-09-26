@@ -14,4 +14,11 @@ public class EventHandlerController {
         return "Hello! This is event executor!";
     }
 
+    @PostMapping("/comm/config/new")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void newCommConfig(){
+        //TODO
+    }
+
+
 }

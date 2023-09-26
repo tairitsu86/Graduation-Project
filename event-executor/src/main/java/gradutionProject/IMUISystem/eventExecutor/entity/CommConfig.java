@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Embeddable
 @Entity
-@Table(name = "communication_configuration")
+@Table(name = "communication_config")
 public class CommConfig {
     @Id
     @Column(name = "event_name")

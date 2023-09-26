@@ -13,8 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "notify_data")
-public class NotifyData {
+@Table(name = "notify_config")
+public class NotifyConfig {
     @Id
     @Column(name = "event_name")
     private String eventName;

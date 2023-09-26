@@ -1,7 +1,7 @@
 package gradutionProject.IMUISystem.eventExecutor.repository;
 
 import gradutionProject.IMUISystem.eventExecutor.entity.CommConfig;
-import gradutionProject.IMUISystem.eventExecutor.entity.NotifyData;
+import gradutionProject.IMUISystem.eventExecutor.entity.NotifyConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +28,7 @@ public class RepositoryServiceImpl implements RepositoryService{
     }
 
     @Override
-    public NotifyData getNotifyData(String eventName) {
+    public NotifyConfig getNotifyData(String eventName) {
         if(!notifyDataRepository.existsById(eventName)) return null;
         return notifyDataRepository.getReferenceById(eventName);
     }

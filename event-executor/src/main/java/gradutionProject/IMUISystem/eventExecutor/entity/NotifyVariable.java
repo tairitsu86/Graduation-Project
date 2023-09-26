@@ -18,7 +18,7 @@ public class NotifyVariable {
 
     @ManyToOne
     @JoinColumn(name = "event_name", insertable=false, updatable=false)
-    private NotifyData notifyData;
+    private NotifyConfig notifyConfig;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "notify_variable_type")
