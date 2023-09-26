@@ -1,5 +1,7 @@
 package gradutionProject.IMUISystem.eventExecutor.controller;
 
+import gradutionProject.IMUISystem.eventExecutor.entity.CommConfig;
+import gradutionProject.IMUISystem.eventExecutor.entity.NotifyConfig;
 import gradutionProject.IMUISystem.eventExecutor.repository.RepositoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,8 +22,8 @@ public class EventHandlerController {
 
     @PostMapping("/events/{eventName}/comm/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public void newCommConfig(@PathVariable String eventName){
-        //TODO
+    public void newCommConfig(@PathVariable String eventName, @RequestBody CommConfig commConfig){
+        repositoryService.newCommConfig(commConfig);
     }
 
     @PatchMapping("/events/{eventName}/comm/alter")
@@ -33,13 +35,13 @@ public class EventHandlerController {
     @DeleteMapping("/events/{eventName}/comm/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCommConfig(@PathVariable String eventName){
-        //TODO
+        repositoryService.deleteCommConfig(eventName);
     }
 
     @PostMapping("/events/{eventName}/notify/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public void newNotifyConfig(@PathVariable String eventName){
-        //TODO
+    public void newNotifyConfig(@PathVariable String eventName,@RequestBody NotifyConfig notifyConfig){
+        repositoryService.newNotifyConfig(notifyConfig);
     }
 
     @PatchMapping("/events/{eventName}/notify/alter")
@@ -51,7 +53,7 @@ public class EventHandlerController {
     @DeleteMapping("/events/{eventName}/notify/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteNotifyConfig(@PathVariable String eventName){
-        //TODO
+        repositoryService.deleteNotifyConfig(eventName);
     }
 
 
