@@ -1,4 +1,4 @@
-package gradutionProject.IMUISystem.loginTracker.api.exception;
+package gradutionProject.IMUISystem.loginTracker.controller.exception;
 
 import gradutionProject.IMUISystem.loginTracker.entity.IMUserData;
 import lombok.AllArgsConstructor;

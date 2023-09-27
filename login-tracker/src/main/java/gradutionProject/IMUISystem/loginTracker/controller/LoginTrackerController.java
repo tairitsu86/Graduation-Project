@@ -1,4 +1,4 @@
-package gradutionProject.IMUISystem.loginTracker.api;
+package gradutionProject.IMUISystem.loginTracker.controller;
 
 import gradutionProject.IMUISystem.loginTracker.dto.GetIMDataDto;
 import gradutionProject.IMUISystem.loginTracker.dto.GetUsernameDto;

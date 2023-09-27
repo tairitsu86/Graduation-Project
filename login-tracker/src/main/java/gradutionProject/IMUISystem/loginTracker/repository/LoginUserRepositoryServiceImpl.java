@@ -1,6 +1,6 @@
 package gradutionProject.IMUISystem.loginTracker.repository;
 
-import gradutionProject.IMUISystem.loginTracker.api.exception.LoginUserNotExistException;
+import gradutionProject.IMUISystem.loginTracker.controller.exception.LoginUserNotExistException;
 import gradutionProject.IMUISystem.loginTracker.entity.IMUserData;
 import gradutionProject.IMUISystem.loginTracker.entity.LoginUser;
 import lombok.RequiredArgsConstructor;
