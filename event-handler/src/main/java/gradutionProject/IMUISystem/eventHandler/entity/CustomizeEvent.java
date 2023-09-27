@@ -26,6 +26,4 @@ public class CustomizeEvent{
     @CollectionTable(name = "customize_event_variables", joinColumns = @JoinColumn(name = "event_name"),uniqueConstraints = {@UniqueConstraint(columnNames = {"event_name", "variable"})})
     @Column(name = "variable")
     private List<String> variables;
-    @Embedded
-    private APIData apiData;
 }

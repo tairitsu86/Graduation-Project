@@ -1,17 +1,21 @@
 package gradutionProject.IMUISystem.eventHandler.controller;
 
-import gradutionProject.IMUISystem.eventHandler.dto.AlterEventDto;
-import gradutionProject.IMUISystem.eventHandler.dto.NewEventDto;
+import gradutionProject.IMUISystem.eventHandler.controller.exception.EventAlreadyExistException;
+import gradutionProject.IMUISystem.eventHandler.dto.CustomizeEventDto;
 import gradutionProject.IMUISystem.eventHandler.entity.CustomizeEvent;
 import gradutionProject.IMUISystem.eventHandler.repository.RepositoryService;
+import gradutionProject.IMUISystem.eventHandler.request.RestRequestService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class EventHandlerController {
     private final RepositoryService repositoryService;
+    private final RestRequestService restRequestService;
     @GetMapping("/")
     public String home(){
         return "Hello! This is event handler!";
@@ -23,12 +27,13 @@ public class EventHandlerController {
     }
     @PostMapping("/events/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public void newEvent(@RequestBody NewEventDto newEventDto){
+    public void newEvent(@RequestBody CustomizeEventDto customizeEventDto){
+        restRequestService.newCommConfig(customizeEventDto.getCommConfigDto());
+        restRequestService.newNotifyConfig(customizeEventDto.getNotifyConfigDto());
         repositoryService.newEvent(CustomizeEvent.builder()
-                .eventName(newEventDto.getEventName())
-                .apiData(newEventDto.getApiData())
-                .description(newEventDto.getDescription())
-                .variables(newEventDto.getVariables())
+                .eventName(customizeEventDto.getEventName())
+                .description(customizeEventDto.getDescription())
+                .variables(customizeEventDto.getVariables())
                 .build()
         );
     }
@@ -47,19 +52,11 @@ public class EventHandlerController {
       }
     }
     */
-    @PatchMapping("events/{eventName}/alter")
-    @ResponseStatus(HttpStatus.OK)
-    public void alterEvent(@PathVariable String eventName, @RequestBody AlterEventDto alterEventDto){
-        repositoryService.alterEvent(
-                eventName
-                ,alterEventDto.getDescription()
-                ,alterEventDto.getApiData()
-                ,alterEventDto.getVariables()
-        );
-    }
     @DeleteMapping("events/{eventName}/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEvent(@PathVariable String eventName){
+        restRequestService.deleteCommConfig(eventName);
+        restRequestService.deleteCommConfig(eventName);
         repositoryService.deleteEvent(eventName);
     }
 }

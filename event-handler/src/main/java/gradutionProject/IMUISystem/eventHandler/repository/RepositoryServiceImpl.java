@@ -2,7 +2,6 @@ package gradutionProject.IMUISystem.eventHandler.repository;
 
 import gradutionProject.IMUISystem.eventHandler.controller.exception.EventAlreadyExistException;
 import gradutionProject.IMUISystem.eventHandler.controller.exception.EventNotExistException;
-import gradutionProject.IMUISystem.eventHandler.entity.APIData;
 import gradutionProject.IMUISystem.eventHandler.entity.CustomizeEvent;
 import gradutionProject.IMUISystem.eventHandler.entity.IMUserData;
 import gradutionProject.IMUISystem.eventHandler.entity.UserState;
@@ -50,12 +49,6 @@ public class RepositoryServiceImpl implements RepositoryService{
     }
 
     @Override
-    public APIData getAPIData(String eventName) {
-        if(!customizeEventRepository.existsById(eventName)) return null;
-        return customizeEventRepository.getReferenceById(eventName).getApiData();
-    }
-
-    @Override
     public List<String> getAllEvent() {
         return customizeEventRepository.getAllEventName();
     }
@@ -72,18 +65,6 @@ public class RepositoryServiceImpl implements RepositoryService{
         customizeEventRepository.save(customizeEvent);
     }
 
-
-    @Override
-    public void alterEvent(String eventName, String description, APIData apiData, List<String> variables) {
-        CustomizeEvent event = getEvent(eventName);
-        if(description!=null)
-            event.setDescription(description);
-        if(apiData!=null)
-            event.setApiData(apiData);
-        if(variables!=null)
-            event.setVariables(variables);
-        customizeEventRepository.save(event);
-    }
 
     @Override
     public void deleteEvent(String eventName) {

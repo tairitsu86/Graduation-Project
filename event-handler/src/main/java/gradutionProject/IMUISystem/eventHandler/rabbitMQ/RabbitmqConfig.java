@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitmqConfig {
     public static final String userEventQueue = "IM-UI/User-event";
     public static final String sendingEventQueue = "IM-UI/Sending-event";
+    public static final String executeEventQueue = "IM-UI/Execute-event";
     static final String topicExchange = "event-handler-exchange";
     @Bean
     public MessageConverter jsonMessageConverter(ObjectMapper objectMapper) {
@@ -29,6 +30,10 @@ public class RabbitmqConfig {
     public Queue sendingEventQueue() {
         return new Queue(sendingEventQueue,false);
     }
+    @Bean
+    public Queue executeEventQueue() {
+        return new Queue(executeEventQueue,false);
+    }
 
     @Bean
     public TopicExchange exchange() {
@@ -41,5 +46,9 @@ public class RabbitmqConfig {
     @Bean
     public Binding bindingSendingEventQueue(TopicExchange exchange) {
         return BindingBuilder.bind(sendingEventQueue()).to(exchange).with(sendingEventQueue);
+    }
+    @Bean
+    public Binding bindingExecuteEventQueue(TopicExchange exchange) {
+        return BindingBuilder.bind(executeEventQueue()).to(exchange).with(executeEventQueue);
     }
 }

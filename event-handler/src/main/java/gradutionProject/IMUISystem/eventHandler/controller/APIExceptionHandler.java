@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class APIExceptionHandler {
     @ExceptionHandler(EventNotExistException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String eventNotExistExceptionHandler(EventNotExistException e){
+    public String exceptionHandler(EventNotExistException e){
         return e.toString();
     }
     @ExceptionHandler(EventAlreadyExistException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public String eventAlreadyExistExceptionHandler(EventAlreadyExistException e){
+    public String exceptionHandler(EventAlreadyExistException e){
         return e.toString();
     }
 }
