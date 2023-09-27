@@ -1,4 +1,4 @@
-package gradutionProject.loginSystem.userDatabase.api;
+package gradutionProject.loginSystem.userDatabase.controller;
 
 import gradutionProject.loginSystem.userDatabase.dto.*;
 import gradutionProject.loginSystem.userDatabase.entity.User;

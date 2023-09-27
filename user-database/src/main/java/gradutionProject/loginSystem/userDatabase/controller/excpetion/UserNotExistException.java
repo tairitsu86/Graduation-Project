@@ -1,4 +1,4 @@
-package gradutionProject.loginSystem.userDatabase.api.excpetion;
+package gradutionProject.loginSystem.userDatabase.controller.excpetion;
 
 
 import lombok.AllArgsConstructor;
