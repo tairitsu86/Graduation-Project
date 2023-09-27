@@ -12,9 +12,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "notify_variable")
+@IdClass(NotifyVariableId.class)
 public class NotifyVariable {
-    @EmbeddedId
-    private NotifyVariableId notifyVariableId;
+    
+    @Id
+    @Column(name = "event_name")
+    private String eventName;
+
+    @Id
+    @Column(name = "variable_name")
+    private String variableName;
 
     @ManyToOne
     @JoinColumn(name = "event_name", insertable=false, updatable=false)

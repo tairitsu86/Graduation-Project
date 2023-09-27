@@ -23,6 +23,7 @@ public class EventHandlerController {
     @PostMapping("/events/{eventName}/comm/new")
     @ResponseStatus(HttpStatus.CREATED)
     public void newCommConfig(@PathVariable String eventName, @RequestBody CommConfig commConfig){
+        commConfig.setEventName(eventName);
         repositoryService.newCommConfig(commConfig);
     }
 
@@ -41,6 +42,7 @@ public class EventHandlerController {
     @PostMapping("/events/{eventName}/notify/new")
     @ResponseStatus(HttpStatus.CREATED)
     public void newNotifyConfig(@PathVariable String eventName,@RequestBody NotifyConfig notifyConfig){
+        notifyConfig.setEventName(eventName);
         repositoryService.newNotifyConfig(notifyConfig);
     }
 
