@@ -12,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NotifyConfigDto {
-    private String eventName;
     private String respondTemplate;
     private List<NotifyVariable> notifyVariables;
 }

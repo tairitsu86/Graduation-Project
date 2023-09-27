@@ -13,11 +13,11 @@ public interface RestRequestService {
 
     void signUp(AddUserDto addUserDto);
 
-    void newCommConfig(CommConfigDto commConfigDto);
+    void newCommConfig(String eventName, CommConfigDto commConfigDto);
 
     void deleteCommConfig(String eventName);
 
-    void newNotifyConfig(NotifyConfigDto notifyConfigDto);
+    void newNotifyConfig(String eventName,NotifyConfigDto notifyConfigDto);
 
     void deleteNotifyConfig(String eventName);
 

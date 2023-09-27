@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommConfigDto {
-    private String eventName;
     private MethodType methodType;
     private String urlTemplate;
     private String bodyTemplate;

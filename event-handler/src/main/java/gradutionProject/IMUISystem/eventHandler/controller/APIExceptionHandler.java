@@ -2,6 +2,7 @@ package gradutionProject.IMUISystem.eventHandler.controller;
 
 import gradutionProject.IMUISystem.eventHandler.controller.exception.EventAlreadyExistException;
 import gradutionProject.IMUISystem.eventHandler.controller.exception.EventNotExistException;
+import gradutionProject.IMUISystem.eventHandler.controller.exception.HttpApiException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -17,6 +18,11 @@ public class APIExceptionHandler {
     @ExceptionHandler(EventAlreadyExistException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public String exceptionHandler(EventAlreadyExistException e){
+        return e.toString();
+    }
+    @ExceptionHandler(HttpApiException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public String exceptionHandler(HttpApiException e){
         return e.toString();
     }
 }

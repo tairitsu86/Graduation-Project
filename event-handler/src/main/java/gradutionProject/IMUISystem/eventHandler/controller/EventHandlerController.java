@@ -28,8 +28,8 @@ public class EventHandlerController {
     @PostMapping("/events/new")
     @ResponseStatus(HttpStatus.CREATED)
     public void newEvent(@RequestBody CustomizeEventDto customizeEventDto){
-        restRequestService.newCommConfig(customizeEventDto.getCommConfigDto());
-        restRequestService.newNotifyConfig(customizeEventDto.getNotifyConfigDto());
+        restRequestService.newCommConfig(customizeEventDto.getEventName(), customizeEventDto.getCommConfigDto());
+        restRequestService.newNotifyConfig(customizeEventDto.getEventName(), customizeEventDto.getNotifyConfigDto());
         repositoryService.newEvent(CustomizeEvent.builder()
                 .eventName(customizeEventDto.getEventName())
                 .description(customizeEventDto.getDescription())
