@@ -20,7 +20,7 @@ public class MQEventListener {
             log.info("Message event: {}",messageEventDto);
             eventHandler.newMessage(messageEventDto.getImUserData(),messageEventDto.getMessage());
         }catch (Exception e){
-            log.info("Something wrong with: {}!",e);
+            log.info("Something wrong with: {}",e);
         }
     }
 }

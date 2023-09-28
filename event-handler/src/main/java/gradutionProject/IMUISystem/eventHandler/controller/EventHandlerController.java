@@ -1,6 +1,5 @@
 package gradutionProject.IMUISystem.eventHandler.controller;
 
-import gradutionProject.IMUISystem.eventHandler.controller.exception.EventAlreadyExistException;
 import gradutionProject.IMUISystem.eventHandler.dto.CustomizeEventDto;
 import gradutionProject.IMUISystem.eventHandler.entity.CustomizeEvent;
 import gradutionProject.IMUISystem.eventHandler.repository.RepositoryService;
@@ -22,8 +21,15 @@ public class EventHandlerController {
     }
     @GetMapping("/events/{eventName}")
     @ResponseStatus(HttpStatus.OK)
-    public CustomizeEvent getEvent(@PathVariable String eventName){
-        return repositoryService.getEvent(eventName);
+    public CustomizeEventDto getEvent(@PathVariable String eventName){
+        CustomizeEvent event = repositoryService.getEvent(eventName);
+        return CustomizeEventDto.builder()
+                .eventName(event.getEventName())
+                .description(event.getDescription())
+                .variables(event.getVariables())
+                .commConfigDto(restRequestService.getCommConfig(eventName))
+                .notifyConfigDto(restRequestService.getNotifyConfig(eventName))
+                .build();
     }
     @PostMapping("/events/new")
     @ResponseStatus(HttpStatus.CREATED)
@@ -56,7 +62,7 @@ public class EventHandlerController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEvent(@PathVariable String eventName){
         restRequestService.deleteCommConfig(eventName);
-        restRequestService.deleteCommConfig(eventName);
+        restRequestService.deleteNotifyConfig(eventName);
         repositoryService.deleteEvent(eventName);
     }
 }

@@ -81,6 +81,18 @@ public class RestRequestServiceImpl implements RestRequestService {
     }
 
     @Override
+    public CommConfigDto getCommConfig(String eventName) {
+        try{
+            ResponseEntity<CommConfigDto> response = restTemplate.getForEntity(String.format("%s/events/%s/comm",EVENT_EXECUTOR_URL,eventName),CommConfigDto.class);
+            if(!response.getStatusCode().is2xxSuccessful()) throw new HttpApiException(response.getBody().toString());
+            return response.getBody();
+        }catch (HttpClientErrorException e){
+            log.info("getCommConfig Error: {}",e);
+        }
+        return null;
+    }
+
+    @Override
     public void newNotifyConfig(String eventName,NotifyConfigDto notifyConfigDto) {
         try{
             ResponseEntity<String> response = restTemplate.postForEntity(String.format("%s/events/%s/notify/new",EVENT_EXECUTOR_URL),notifyConfigDto,String.class);
@@ -97,5 +109,17 @@ public class RestRequestServiceImpl implements RestRequestService {
         }catch (HttpClientErrorException e){
             log.info("deleteNotifyConfig Error: {}",e);
         }
+    }
+
+    @Override
+    public NotifyConfigDto getNotifyConfig(String eventName) {
+        try{
+            ResponseEntity<NotifyConfigDto> response = restTemplate.getForEntity(String.format("%s/events/%s/notify",EVENT_EXECUTOR_URL,eventName),NotifyConfigDto.class);
+            if(!response.getStatusCode().is2xxSuccessful()) throw new HttpApiException(response.getBody().toString());
+            return response.getBody();
+        }catch (HttpClientErrorException e){
+            log.info("getNotifyConfig Error: {}",e);
+        }
+        return null;
     }
 }

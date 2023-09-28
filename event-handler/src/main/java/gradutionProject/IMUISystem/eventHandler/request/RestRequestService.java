@@ -14,9 +14,13 @@ public interface RestRequestService {
 
     void deleteCommConfig(String eventName);
 
+    CommConfigDto getCommConfig(String eventName);
+
     void newNotifyConfig(String eventName,NotifyConfigDto notifyConfigDto);
 
     void deleteNotifyConfig(String eventName);
+
+    NotifyConfigDto getNotifyConfig(String eventName);
 
 
 }
