@@ -1,6 +1,6 @@
 package gradutionProject.IMUISystem.eventHandler.request;
 
-import gradutionProject.IMUISystem.eventHandler.dto.AddUserDto;
+import gradutionProject.IMUISystem.eventHandler.dto.SignUpDto;
 import gradutionProject.IMUISystem.eventHandler.dto.CommConfigDto;
 import gradutionProject.IMUISystem.eventHandler.dto.LoginEventDto;
 import gradutionProject.IMUISystem.eventHandler.entity.IMUserData;
@@ -11,7 +11,7 @@ public interface RestRequestService {
 
     void login(LoginEventDto loginEventDto);
 
-    void signUp(AddUserDto addUserDto);
+    void signUp(SignUpDto signUpDto);
 
     void newCommConfig(String eventName, CommConfigDto commConfigDto);
 
