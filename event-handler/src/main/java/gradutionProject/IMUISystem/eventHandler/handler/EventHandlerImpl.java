@@ -2,6 +2,8 @@ package gradutionProject.IMUISystem.eventHandler.handler;
 
 import gradutionProject.IMUISystem.eventHandler.dto.ExecuteEventDto;
 import gradutionProject.IMUISystem.eventHandler.dto.SendingEventDto;
+import gradutionProject.IMUISystem.eventHandler.dto.UserLoginDto;
+import gradutionProject.IMUISystem.eventHandler.dto.UserSignUpDto;
 import gradutionProject.IMUISystem.eventHandler.entity.IMUserData;
 import gradutionProject.IMUISystem.eventHandler.entity.UserState;
 import gradutionProject.IMUISystem.eventHandler.rabbitMQ.MQEventPublisher;
@@ -62,7 +64,7 @@ public class EventHandlerImpl implements EventHandler{
 
     @Override
     public void loginOrSignUpEvent(IMUserData imUserData) {
-
+        menuEvent(imUserData, null, "Login or Sign up!",new ArrayList<>(){{add("LOGIN");add("SIGN_UP");}},null);
     }
 
     @Override
@@ -80,12 +82,12 @@ public class EventHandlerImpl implements EventHandler{
             if(variables.containsKey(variable)) continue;
             data.add(variable);
         }
-//        if(data.isEmpty()&&username!=null){
-//
-//            return;
-//        }
+        if(data.isEmpty()){
+            executeEvent(eventName, variables);
+            return;
+        }
         newUserState(imUserData,username,eventName,data,variables);
-//        sendMessage(imUserData,String.format("Please Enter %s!",data.get(0)));
+        sendMessage(imUserData,String.format("Please Enter %s!",data.get(0)));
     }
 
     @Override
@@ -95,25 +97,32 @@ public class EventHandlerImpl implements EventHandler{
 
     public void continueUserEvent(IMUserData imUserData, String message){
         UserState userState = repositoryService.getUserState(imUserData);
-        if(userState.getEventName().equals("MENU")){
-            int index;
-            try{
-                index = Integer.parseInt(message);
-            }catch (NumberFormatException e){
-                sendMessage(imUserData,"Please enter one number!");
-                return;
-            }
-            if(index>=userState.getData().size()||index<0){
-                sendMessage(imUserData,String.format("The number should in range [0~%d]!",userState.getData().size()-1));
-                return;
-            }
-            newUserEvent(imUserData, userState.getUsername(), userState.getData().get(index),userState.getVariables());
+        switch(userState.getEventName()){
+            case "MENU" -> continueMenuEvent(userState, imUserData, message);
+            default -> continueCustomEvent(userState, imUserData, message);
+        }
+    }
+
+    public void continueMenuEvent(UserState userState, IMUserData imUserData, String message){
+        int index;
+        try{
+            index = Integer.parseInt(message);
+        }catch (NumberFormatException e){
+            sendMessage(imUserData,"Please enter one number!");
             return;
         }
+        if(index>=userState.getData().size()||index<0){
+            sendMessage(imUserData,String.format("The number should in range [0~%d]!",userState.getData().size()-1));
+            return;
+        }
+        newUserEvent(imUserData, userState.getUsername(), userState.getData().get(index),userState.getVariables());
+    }
+
+    public void continueCustomEvent(UserState userState, IMUserData imUserData, String message){
         userState.getVariables().put(userState.getData().get(0),message);
         userState.getData().remove(0);
         if(userState.getData().isEmpty()){
-            executeEvent(userState.getEventName(), userState.getUsername(), userState.getVariables());
+            executeEvent(userState.getEventName(), userState.getVariables());
             repositoryService.removeUserState(imUserData);
             return;
         }
@@ -121,14 +130,32 @@ public class EventHandlerImpl implements EventHandler{
         repositoryService.newUserState(userState);
     }
 
-    public void executeEvent(String eventName, String executor, Map<String,String> variables){
-        mqEventPublisher.publishExecuteEvent(
-                ExecuteEventDto.builder()
-                        .eventName(eventName)
-                        .executor(executor)
-                        .variables(variables)
-                        .build()
-        );
+    public void executeEvent(String eventName, Map<String,String> variables){
+        switch (eventName){
+            case "LOGIN" -> restRequestService.login(
+                    UserLoginDto.builder()
+                            .fromPlatform(variables.get("PLATFORM"))
+                            .platformType("IM")
+                            .platformUserId(variables.get("USER_ID"))
+                            .username(variables.get("USERNAME"))
+                            .password(variables.get("PASSWORD"))
+                            .build()
+            );
+            case "SIGN_UP" -> restRequestService.signUp(
+                    UserSignUpDto.builder()
+                            .userDisplayName(variables.get("USER_DISPLAY_NAME"))
+                            .username(variables.get("USERNAME"))
+                            .password(variables.get("PASSWORD"))
+                            .build()
+            );
+            default -> mqEventPublisher.publishExecuteEvent(
+                    ExecuteEventDto.builder()
+                            .eventName(eventName)
+                            .executor(variables.get("USERNAME"))
+                            .variables(variables)
+                            .build()
+            );
+        }
     }
     public void sendMessage(IMUserData imUserData,String message){
         mqEventPublisher.publishSendingEvent(SendingEventDto.builder()
