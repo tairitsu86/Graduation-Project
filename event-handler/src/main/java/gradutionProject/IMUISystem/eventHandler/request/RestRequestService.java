@@ -5,6 +5,7 @@ import gradutionProject.IMUISystem.eventHandler.entity.IMUserData;
 
 public interface RestRequestService {
     String getUsername(IMUserData imUserData);
+    IMUserData getIMUserData(String username);
 
     String login(UserLoginDto userLoginDto);
 

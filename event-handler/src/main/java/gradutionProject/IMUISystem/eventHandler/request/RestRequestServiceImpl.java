@@ -29,12 +29,27 @@ public class RestRequestServiceImpl implements RestRequestService {
     @Override
     public String getUsername(IMUserData imUserData) {
         try{
-            ResponseEntity<GetUsernameDto> response = restTemplate.getForEntity(
+            ResponseEntity<LoginUserDto> response = restTemplate.getForEntity(
                     String.format("%s/%s/users/%s", LOGIN_TRACKER_URL, imUserData.getPlatform(),imUserData.getUserId())
-                    ,GetUsernameDto.class
+                    ,LoginUserDto.class
             );
             return response.getBody().getUsername();
         }catch (HttpClientErrorException e){
+            log.info("getUsername got error: {}",e);
+            return null;
+        }
+    }
+
+    @Override
+    public IMUserData getIMUserData(String username) {
+        try{
+            ResponseEntity<LoginUserDto> response = restTemplate.getForEntity(
+                    String.format("%s/users/%s", LOGIN_TRACKER_URL, username)
+                    ,LoginUserDto.class
+            );
+            return response.getBody().getImUserData();
+        }catch (HttpClientErrorException e){
+            log.info("getIMUserData got error: {}",e);
             return null;
         }
     }
