@@ -8,6 +8,7 @@ import gradutionProject.IMUISystem.eventHandler.entity.UserState;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,7 +45,6 @@ public class RepositoryServiceImpl implements RepositoryService{
     @Override
     public List<String> getEventVariables(String eventName) {
         if(!customizeEventRepository.existsById(eventName)) return null;
-//        return customizeEventRepository.getReferenceById(eventName).getVariables();
         return customizeEventRepository.getEventVariables(eventName);
     }
 
@@ -55,6 +55,8 @@ public class RepositoryServiceImpl implements RepositoryService{
 
     @Override
     public CustomizeEvent getEvent(String eventName) {
+        if(eventName.equals("LOGIN")) return createLoginBean();
+        if(eventName.equals("SIGN_UP")) return createSignUpBean();
         if(!customizeEventRepository.existsById(eventName)) throw new EventNotExistException(eventName);
         return customizeEventRepository.getReferenceById(eventName);
     }
@@ -69,5 +71,21 @@ public class RepositoryServiceImpl implements RepositoryService{
     @Override
     public void deleteEvent(String eventName) {
         customizeEventRepository.deleteById(eventName);
+    }
+
+    public CustomizeEvent createLoginBean(){
+        return CustomizeEvent.builder()
+                .eventName("LOGIN")
+                .description("")
+                .variables(new ArrayList<>(){{add("USERNAME");add("PASSWORD");}})
+                .build();
+    }
+
+    public CustomizeEvent createSignUpBean(){
+        return CustomizeEvent.builder()
+                .eventName("SIGN_UP")
+                .description("")
+                .variables(new ArrayList<>(){{add("USER_DISPLAY_NAME");add("USERNAME");add("PASSWORD");}})
+                .build();
     }
 }
