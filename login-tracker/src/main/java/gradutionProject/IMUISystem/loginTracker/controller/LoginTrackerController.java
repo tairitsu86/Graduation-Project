@@ -1,17 +1,11 @@
 package gradutionProject.IMUISystem.loginTracker.controller;
 
-import gradutionProject.IMUISystem.loginTracker.dto.GetIMDataDto;
-import gradutionProject.IMUISystem.loginTracker.dto.GetUsernameDto;
-import gradutionProject.IMUISystem.loginTracker.entity.IMUserData;
 import gradutionProject.IMUISystem.loginTracker.entity.LoginUser;
 import gradutionProject.IMUISystem.loginTracker.repository.LoginUserRepositoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,19 +19,13 @@ public class LoginTrackerController {
     }
     @GetMapping("/{IMPlatform}/users/{IMUserId}")
     @ResponseStatus(HttpStatus.OK)
-    public GetUsernameDto getUsername(@Valid @PathVariable String IMPlatform, @Valid @PathVariable String IMUserId){
-        LoginUser loginUser = loginUserRepositoryService.getLoginUser(IMPlatform,IMUserId);
-        return GetUsernameDto.builder()
-                .Username(loginUser.getUsername())
-                .build();
+    public LoginUser getLoginUser(@Valid @PathVariable String IMPlatform, @Valid @PathVariable String IMUserId){
+        return loginUserRepositoryService.getLoginUser(IMPlatform,IMUserId);
     }
     @GetMapping("/users/{username}")
     @ResponseStatus(HttpStatus.OK)
-    public GetIMDataDto getIMData(@Valid @PathVariable String username){
-        LoginUser loginUser = loginUserRepositoryService.getLoginUser(username);
-        return GetIMDataDto.builder()
-                .imUserData(loginUser.getImUserData())
-                .build();
+    public LoginUser getLoginUser(@Valid @PathVariable String username){
+        return loginUserRepositoryService.getLoginUser(username);
     }
 
 }
