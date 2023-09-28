@@ -49,9 +49,9 @@ public class RestRequestServiceImpl implements RestRequestService {
     }
 
     @Override
-    public void signUp(SignUpDto signUpDto) {
+    public void signUp(UserSignUpDto userSignUpDto) {
         try{
-            restTemplate.postForEntity(String.format("%s/users/new",USER_DATABASE_URL), signUpDto,String.class);
+            restTemplate.postForEntity(String.format("%s/users/new",USER_DATABASE_URL), userSignUpDto,String.class);
         }catch (HttpClientErrorException e){
             log.info("Sign up Error: {}",e);
         }
