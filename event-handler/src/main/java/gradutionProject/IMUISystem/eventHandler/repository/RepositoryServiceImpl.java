@@ -50,7 +50,10 @@ public class RepositoryServiceImpl implements RepositoryService{
 
     @Override
     public List<String> getAllEvent() {
-        return customizeEventRepository.getAllEventName();
+        List<String> allEvent = customizeEventRepository.getAllEventName();
+        allEvent.add("LOGIN");
+        allEvent.add("SIGN_UP");
+        return allEvent;
     }
 
     @Override
