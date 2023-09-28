@@ -16,13 +16,13 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class RestRequestServiceImpl implements RestRequestService {
     @Value("${my_env.loginTrackerUrl}")
-    private final String LOGIN_TRACKER_URL;
+    private String LOGIN_TRACKER_URL;
 
     @Value("${my_env.eventExecutorUrl}")
-    private final String EVENT_EXECUTOR_URL;
+    private String EVENT_EXECUTOR_URL;
 
     @Value("${my_env.userDatabaseUrl}")
-    private final String USER_DATABASE_URL;
+    private String USER_DATABASE_URL;
 
     private final RestTemplate restTemplate;
 
