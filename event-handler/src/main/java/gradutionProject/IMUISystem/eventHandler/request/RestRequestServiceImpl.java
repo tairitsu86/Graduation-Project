@@ -40,9 +40,9 @@ public class RestRequestServiceImpl implements RestRequestService {
     }
 
     @Override
-    public void login(LoginEventDto loginEventDto) {
+    public void login(UserLoginDto userLoginDto) {
         try{
-            restTemplate.postForEntity(String.format("%s/login",USER_DATABASE_URL),loginEventDto,String.class);
+            restTemplate.postForEntity(String.format("%s/login",USER_DATABASE_URL),userLoginDto,String.class);
         }catch (HttpClientErrorException e){
             log.info("Login Error: {}",e);
         }
