@@ -115,6 +115,7 @@ public class EventHandlerImpl implements EventHandler{
             sendMessage(imUserData,String.format("The number should in range [0~%d]!",userState.getData().size()-1));
             return;
         }
+        repositoryService.removeUserState(imUserData);
         newUserEvent(imUserData, userState.getUsername(), userState.getData().get(index),userState.getVariables());
     }
 
@@ -140,7 +141,7 @@ public class EventHandlerImpl implements EventHandler{
                     restRequestService.login(
                             UserLoginDto.builder()
                                     .fromPlatform(variables.get("PLATFORM"))
-                                    .platformType("IM")
+                                    .platformType("Instant-Messaging")
                                     .platformUserId(variables.get("USER_ID"))
                                     .username(variables.get("USERNAME"))
                                     .password(variables.get("PASSWORD"))

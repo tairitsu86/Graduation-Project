@@ -5,6 +5,7 @@ import gradutionProject.IMUISystem.eventHandler.controller.exception.EventNotExi
 import gradutionProject.IMUISystem.eventHandler.entity.CustomizeEvent;
 import gradutionProject.IMUISystem.eventHandler.entity.IMUserData;
 import gradutionProject.IMUISystem.eventHandler.entity.UserState;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,23 @@ import java.util.List;
 public class RepositoryServiceImpl implements RepositoryService{
     private final CustomizeEventRepository customizeEventRepository;
     private final UserStateRepository userStateRepository;
+    @PostConstruct
+    public void init() {
+        customizeEventRepository.save(
+                CustomizeEvent.builder()
+                        .eventName("LOGIN")
+                        .description("")
+                        .variables(new ArrayList<>(){{add("USERNAME");add("PASSWORD");}})
+                        .build()
+        );
+        customizeEventRepository.save(
+                CustomizeEvent.builder()
+                        .eventName("SIGN_UP")
+                        .description("")
+                        .variables(new ArrayList<>(){{add("USER_DISPLAY_NAME");add("USERNAME");add("PASSWORD");}})
+                        .build()
+        );
+    }
     @Override
     public boolean isUserHaveState(IMUserData imUserData) {
         return userStateRepository.existsById(imUserData);
@@ -50,16 +68,11 @@ public class RepositoryServiceImpl implements RepositoryService{
 
     @Override
     public List<String> getAllEvent() {
-        List<String> allEvent = customizeEventRepository.getAllEventName();
-        allEvent.add("LOGIN");
-        allEvent.add("SIGN_UP");
-        return allEvent;
+        return customizeEventRepository.getAllEventName();
     }
 
     @Override
     public CustomizeEvent getEvent(String eventName) {
-        if(eventName.equals("LOGIN")) return createLoginBean();
-        if(eventName.equals("SIGN_UP")) return createSignUpBean();
         if(!customizeEventRepository.existsById(eventName)) throw new EventNotExistException(eventName);
         return customizeEventRepository.getReferenceById(eventName);
     }
@@ -76,19 +89,4 @@ public class RepositoryServiceImpl implements RepositoryService{
         customizeEventRepository.deleteById(eventName);
     }
 
-    public CustomizeEvent createLoginBean(){
-        return CustomizeEvent.builder()
-                .eventName("LOGIN")
-                .description("")
-                .variables(new ArrayList<>(){{add("USERNAME");add("PASSWORD");}})
-                .build();
-    }
-
-    public CustomizeEvent createSignUpBean(){
-        return CustomizeEvent.builder()
-                .eventName("SIGN_UP")
-                .description("")
-                .variables(new ArrayList<>(){{add("USER_DISPLAY_NAME");add("USERNAME");add("PASSWORD");}})
-                .build();
-    }
 }
