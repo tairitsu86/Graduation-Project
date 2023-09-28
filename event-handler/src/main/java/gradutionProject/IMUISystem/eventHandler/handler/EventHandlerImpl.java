@@ -132,21 +132,33 @@ public class EventHandlerImpl implements EventHandler{
 
     public void executeEvent(String eventName, Map<String,String> variables){
         switch (eventName){
-            case "LOGIN" -> restRequestService.login(
-                    UserLoginDto.builder()
-                            .fromPlatform(variables.get("PLATFORM"))
-                            .platformType("IM")
-                            .platformUserId(variables.get("USER_ID"))
-                            .username(variables.get("USERNAME"))
-                            .password(variables.get("PASSWORD"))
-                            .build()
+            case "LOGIN" -> sendMessage(
+                    IMUserData.builder()
+                            .platform(variables.get("PLATFORM"))
+                            .userId(variables.get("USER_ID"))
+                            .build(),
+                    restRequestService.login(
+                            UserLoginDto.builder()
+                                    .fromPlatform(variables.get("PLATFORM"))
+                                    .platformType("IM")
+                                    .platformUserId(variables.get("USER_ID"))
+                                    .username(variables.get("USERNAME"))
+                                    .password(variables.get("PASSWORD"))
+                                    .build()
+                    )
             );
-            case "SIGN_UP" -> restRequestService.signUp(
-                    UserSignUpDto.builder()
-                            .userDisplayName(variables.get("USER_DISPLAY_NAME"))
-                            .username(variables.get("USERNAME"))
-                            .password(variables.get("PASSWORD"))
-                            .build()
+            case "SIGN_UP" -> sendMessage(
+                    IMUserData.builder()
+                            .platform(variables.get("PLATFORM"))
+                            .userId(variables.get("USER_ID"))
+                            .build(),
+                    restRequestService.signUp(
+                            UserSignUpDto.builder()
+                                    .userDisplayName(variables.get("USER_DISPLAY_NAME"))
+                                    .username(variables.get("USERNAME"))
+                                    .password(variables.get("PASSWORD"))
+                                    .build()
+                    )
             );
             default -> mqEventPublisher.publishExecuteEvent(
                     ExecuteEventDto.builder()

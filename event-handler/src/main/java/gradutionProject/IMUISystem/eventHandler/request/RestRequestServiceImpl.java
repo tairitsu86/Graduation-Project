@@ -40,21 +40,25 @@ public class RestRequestServiceImpl implements RestRequestService {
     }
 
     @Override
-    public void login(UserLoginDto userLoginDto) {
+    public String login(UserLoginDto userLoginDto) {
         try{
-            restTemplate.postForEntity(String.format("%s/login",USER_DATABASE_URL),userLoginDto,String.class);
+            ResponseEntity<String> response = restTemplate.postForEntity(String.format("%s/login",USER_DATABASE_URL),userLoginDto,String.class);
+            if(response.getStatusCode().is2xxSuccessful()) return "Login success!";
         }catch (HttpClientErrorException e){
             log.info("Login Error: {}",e);
         }
+        return "Something go wrong, please try again after few minutes!";
     }
 
     @Override
-    public void signUp(UserSignUpDto userSignUpDto) {
+    public String signUp(UserSignUpDto userSignUpDto) {
         try{
-            restTemplate.postForEntity(String.format("%s/users/new",USER_DATABASE_URL), userSignUpDto,String.class);
+            ResponseEntity<String> response = restTemplate.postForEntity(String.format("%s/users/new",USER_DATABASE_URL), userSignUpDto,String.class);
+            if(response.getStatusCode().is2xxSuccessful()) return "Sign up success! Now you can login!";
         }catch (HttpClientErrorException e){
             log.info("Sign up Error: {}",e);
         }
+        return "Something go wrong, please try again after few minutes!";
     }
 
     @Override

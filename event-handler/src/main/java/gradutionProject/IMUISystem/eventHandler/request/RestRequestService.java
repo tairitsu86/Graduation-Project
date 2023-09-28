@@ -6,9 +6,9 @@ import gradutionProject.IMUISystem.eventHandler.entity.IMUserData;
 public interface RestRequestService {
     String getUsername(IMUserData imUserData);
 
-    void login(UserLoginDto userLoginDto);
+    String login(UserLoginDto userLoginDto);
 
-    void signUp(UserSignUpDto userSignUpDto);
+    String signUp(UserSignUpDto userSignUpDto);
 
     void newCommConfig(String eventName, CommConfigDto commConfigDto);
 
