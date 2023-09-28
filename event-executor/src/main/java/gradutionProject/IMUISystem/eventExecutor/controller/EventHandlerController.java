@@ -20,6 +20,12 @@ public class EventHandlerController {
         return "Hello! This is event executor!";
     }
 
+    @GetMapping("/events/{eventName}/comm")
+    @ResponseStatus(HttpStatus.OK)
+    public CommConfig getCommConfig(@PathVariable String eventName){
+        return repositoryService.getCommConfig(eventName);
+    }
+
     @PostMapping("/events/{eventName}/comm/new")
     @ResponseStatus(HttpStatus.CREATED)
     public void newCommConfig(@PathVariable String eventName, @RequestBody CommConfig commConfig){
@@ -37,6 +43,12 @@ public class EventHandlerController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCommConfig(@PathVariable String eventName){
         repositoryService.deleteCommConfig(eventName);
+    }
+
+    @GetMapping("/events/{eventName}/notify")
+    @ResponseStatus(HttpStatus.OK)
+    public NotifyConfig getNotifyConfig(@PathVariable String eventName){
+        return repositoryService.getNotifyConfig(eventName);
     }
 
     @PostMapping("/events/{eventName}/notify/new")
