@@ -1,6 +1,6 @@
-package graduationProject.IoTSystem.deviceConnector.api;
+package graduationProject.IoTSystem.deviceConnector.controller;
 
-import graduationProject.IoTSystem.deviceConnector.api.exception.DeviceStateNotFoundException;
+import graduationProject.IoTSystem.deviceConnector.controller.exception.DeviceStateNotFoundException;
 import graduationProject.IoTSystem.deviceConnector.dto.DeviceStateDto;
 import graduationProject.IoTSystem.deviceConnector.repository.DeviceStateRepository;
 import lombok.RequiredArgsConstructor;
