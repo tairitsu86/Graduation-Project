@@ -1,6 +1,7 @@
 package gradutionProject.IMUISystem.eventExecutor.rabbitMQ;
 
 import com.jayway.jsonpath.JsonPath;
+import gradutionProject.IMUISystem.eventExecutor.dto.CommConfigDto;
 import gradutionProject.IMUISystem.eventExecutor.dto.SendingEventDto;
 import gradutionProject.IMUISystem.eventExecutor.entity.NotifyConfig;
 import gradutionProject.IMUISystem.eventExecutor.entity.NotifyVariable;
@@ -32,6 +33,12 @@ public class MQEventPublisherImpl implements MQEventPublisher{
                         .message(getMessage(notifyConfig,json))
                         .build());
     }
+
+    @Override
+    public void publishCustomEvent(CommConfigDto commConfigDto) {
+        rabbitTemplate.convertAndSend(topicExchange, commConfigDto.getUrl(), commConfigDto.getBody());
+    }
+
 
     public String getMessage(NotifyConfig notifyConfig, String json){
         Map<String,String> variables = new HashMap<>();
