@@ -1,11 +1,14 @@
 package gradutionProject.IMUISystem.eventExecutor.rabbitMQ;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import gradutionProject.IMUISystem.eventExecutor.dto.CommConfigDto;
 import gradutionProject.IMUISystem.eventExecutor.dto.SendingEventDto;
 import gradutionProject.IMUISystem.eventExecutor.entity.NotifyConfig;
 import gradutionProject.IMUISystem.eventExecutor.entity.NotifyVariable;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +21,10 @@ import static gradutionProject.IMUISystem.eventExecutor.rabbitMQ.RabbitmqConfig.
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MQEventPublisherImpl implements MQEventPublisher{
     private final RabbitTemplate rabbitTemplate;
+    private final ObjectMapper objectMapper;
 
     public void publishSendingEvent(SendingEventDto sendingEventDto) {
         rabbitTemplate.convertAndSend(topicExchange, sendingEventQueue,sendingEventDto);
@@ -36,7 +41,12 @@ public class MQEventPublisherImpl implements MQEventPublisher{
 
     @Override
     public void publishCustomEvent(CommConfigDto commConfigDto) {
-        rabbitTemplate.convertAndSend(topicExchange, commConfigDto.getUrl(), commConfigDto.getBody());
+        try {
+            Map<String, Object> jsonMap = objectMapper.readValue(commConfigDto.getBody(), new TypeReference<Map<String, Object>>() {});
+            rabbitTemplate.convertAndSend(topicExchange, commConfigDto.getUrl(), jsonMap);
+        } catch (Exception e) {
+            log.info("publishCustomEvent convert json to Map<String,Object> got error: {}",e);
+        }
     }
 
 
