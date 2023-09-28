@@ -34,12 +34,9 @@ public class LoginTrackerController {
     @GetMapping("/users/{username}")
     @ResponseStatus(HttpStatus.OK)
     public GetIMDataDto getIMData(@Valid @PathVariable String username){
-        List<LoginUser> loginUsers = loginUserRepositoryService.getLoginUser(username);
-        List<IMUserData> imUserDataList = new ArrayList<>();
-        for (LoginUser loginUser:loginUsers)
-            imUserDataList.add(loginUser.getImUserData());
+        LoginUser loginUser = loginUserRepositoryService.getLoginUser(username);
         return GetIMDataDto.builder()
-                .imUserDataList(imUserDataList)
+                .imUserData(loginUser.getImUserData())
                 .build();
     }
 

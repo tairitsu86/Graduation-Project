@@ -5,10 +5,10 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class LoginUserNotExistException extends RuntimeException {
-    private IMUserData imUserData;
+    private String user;
 
     @Override
     public String toString() {
-        return String.format("IM platform [%s], IM user id [%s], didn't exist in login tracker!",imUserData.getPlatform(),imUserData.getUserId());
+        return String.format("User [%s], didn't exist in login tracker!",user);
     }
 }

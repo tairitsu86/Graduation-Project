@@ -6,7 +6,6 @@ import gradutionProject.IMUISystem.loginTracker.entity.LoginUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,12 +18,14 @@ public class LoginUserRepositoryServiceImpl implements LoginUserRepositoryServic
                 .userId(IMUserId)
                 .build();
         if(!loginUserRepository.existsById(id))
-            throw new LoginUserNotExistException(id);
+            throw new LoginUserNotExistException(id.toString());
         return loginUserRepository.getReferenceById(id);
     }
 
     @Override
-    public List<LoginUser> getLoginUser(String username) {
+    public LoginUser getLoginUser(String username) {
+        if(!loginUserRepository.existsByUsername(username))
+            throw new LoginUserNotExistException(username);
         return loginUserRepository.findByUsername(username);
     }
 
