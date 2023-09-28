@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: device-database
-        image: tairitsu86/graduation-project_im-ui-system_device-database:latest
+        image: tairitsu86/graduation-project_iot-system_device-database:latest
         resources:
             limits:
               memory: "1024Mi"
