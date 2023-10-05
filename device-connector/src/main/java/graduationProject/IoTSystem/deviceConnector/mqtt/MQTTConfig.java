@@ -31,8 +31,8 @@ public class MQTTConfig {
     private String host;
     private String clientId = "Device-Connector";
     public static final String TEST_TOPIC = "test";
-    public static final String INFO_TOPIC = "info";
-    public static final String STATE_TOPIC = "state";
+    public static final String INFO_TOPIC = "devices/info";
+    public static final String STATE_TOPIC = "devices/state";
 
     private final MQTTMessageListener mqttMessageListener;
     @Bean

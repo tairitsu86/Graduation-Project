@@ -1,21 +1,19 @@
 package graduationProject.IoTSystem.deviceConnector.entity;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DeviceStateId  implements Serializable {
-    @Column(name = "device_id")
+public class DeviceStateHistoryId implements Serializable {
     private String deviceId;
-
-    @Column(name = "state_name")
     private String stateName;
+    private Timestamp alterTime;
 }
