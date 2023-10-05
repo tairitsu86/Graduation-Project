@@ -17,13 +17,14 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitmqConfig {
     public static final String DEVICE_INFO_QUEUE = "IoT-System.Device-Info";
     public static final String DEVICE_CONTROL_QUEUE = "IoT-System.Device-Control";
-    public static final String DEVICE_STATE_QUEUE = "IoT-System.Device-State";
     public static final String IoT_DBC_EXCHANGE = "IoT-System_Device-base-communication_Exchange";
     public static final String SYS_NTF_EXCHANGE = "System_Notification_Exchange";
     @Bean
     public MessageConverter jsonMessageConverter(ObjectMapper objectMapper) {
         return new Jackson2JsonMessageConverter(objectMapper);
     }
+
+
 
     @Bean("IoT_DBC")
     public TopicExchange exchangeIoT_DBC() {
@@ -52,15 +53,5 @@ public class RabbitmqConfig {
     public TopicExchange exchangeSYS_NTF() {
         return new TopicExchange(SYS_NTF_EXCHANGE);
     }
-    @Bean
-    public Queue deviceStateQueue() {
-        return new Queue(DEVICE_STATE_QUEUE,false);
-    }
-
-    @Bean
-    public Binding bindingDeviceStateQueue(@Qualifier("SYS_NTF") TopicExchange exchange) {
-        return BindingBuilder.bind(deviceStateQueue()).to(exchange).with(DEVICE_STATE_QUEUE);
-    }
-
 
 }

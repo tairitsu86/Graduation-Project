@@ -6,7 +6,6 @@ import graduationProject.IoTSystem.deviceConnector.dto.DeviceInfoDto;
 import graduationProject.IoTSystem.deviceConnector.dto.DeviceStateDto;
 import graduationProject.IoTSystem.deviceConnector.dto.info.FunctionType;
 import graduationProject.IoTSystem.deviceConnector.entity.DeviceState;
-import graduationProject.IoTSystem.deviceConnector.entity.DeviceStateId;
 import graduationProject.IoTSystem.deviceConnector.rabbitMQ.MQEventPublisher;
 import graduationProject.IoTSystem.deviceConnector.repository.DeviceStateRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,6 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import static graduationProject.IoTSystem.deviceConnector.mqtt.MQTTConfig.*;
 

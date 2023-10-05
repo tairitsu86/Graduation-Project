@@ -12,22 +12,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
+@IdClass(DeviceStateId.class)
 @Table(name = "device_states")
 public class DeviceState {
-    @EmbeddedId
-    private DeviceStateId deviceStateId;
+    @Id
+    @Column(name = "device_id")
+    private String deviceId;
+    @Id
+    @Column(name = "state_name")
+    private String stateName;
 
     @Column(name = "state_value")
     private String stateValue;
 
     public static DeviceState mapByDto(DeviceStateDto dto){
         return DeviceState.builder()
-                .deviceStateId(
-                        DeviceStateId.builder()
-                                .deviceId(dto.getDeviceId())
-                                .stateName(dto.getStateName())
-                                .build()
-                )
+                .deviceId(dto.getDeviceId())
+                .stateName(dto.getStateName())
                 .stateValue(dto.getStateValue())
                 .build();
     }
