@@ -11,8 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
-import static gradutionProject.IMUISystem.eventHandler.rabbitMQ.RabbitmqConfig.customizeEventQueue;
-import static gradutionProject.IMUISystem.eventHandler.rabbitMQ.RabbitmqConfig.userEventQueue;
+import static gradutionProject.IMUISystem.eventHandler.rabbitMQ.RabbitmqConfig.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,7 +20,7 @@ public class MQEventListener {
     private final EventHandler eventHandler;
     private final RepositoryService repositoryService;
     private final RestRequestService restRequestService;
-    @RabbitListener(queues={userEventQueue})
+    @RabbitListener(queues={IM_USER_MESSAGE_QUEUE})
     public void receive(MessageEventDto messageEventDto) {
         try{
             log.info("Message event: {}",messageEventDto);
@@ -31,7 +30,7 @@ public class MQEventListener {
         }
     }
 
-    @RabbitListener(queues={customizeEventQueue})
+    @RabbitListener(queues={NEW_EVENT_QUEUE})
     public void receive(NewCustomizeEventDto newCustomizeEventDto) {
         try{
             log.info("Message event: {}",newCustomizeEventDto);
