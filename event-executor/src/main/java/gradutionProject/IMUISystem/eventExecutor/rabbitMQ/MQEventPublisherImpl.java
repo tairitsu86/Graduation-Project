@@ -1,10 +1,14 @@
 package gradutionProject.IMUISystem.eventExecutor.rabbitMQ;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import gradutionProject.IMUISystem.eventExecutor.dto.CommConfigDto;
 import gradutionProject.IMUISystem.eventExecutor.dto.SendingEventDto;
 import gradutionProject.IMUISystem.eventExecutor.entity.NotifyConfig;
 import gradutionProject.IMUISystem.eventExecutor.entity.NotifyVariable;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
@@ -12,16 +16,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static gradutionProject.IMUISystem.eventExecutor.rabbitMQ.RabbitmqConfig.sendingEventQueue;
-import static gradutionProject.IMUISystem.eventExecutor.rabbitMQ.RabbitmqConfig.topicExchange;
+import static gradutionProject.IMUISystem.eventExecutor.rabbitMQ.RabbitmqConfig.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MQEventPublisherImpl implements MQEventPublisher{
     private final RabbitTemplate rabbitTemplate;
+    private final ObjectMapper objectMapper;
 
     public void publishSendingEvent(SendingEventDto sendingEventDto) {
-        rabbitTemplate.convertAndSend(topicExchange, sendingEventQueue,sendingEventDto);
+        rabbitTemplate.convertAndSend(IMUI_IBC_EXCHANGE, SEND_MESSAGE_QUEUE,sendingEventDto);
     }
 
     @Override
@@ -32,6 +37,17 @@ public class MQEventPublisherImpl implements MQEventPublisher{
                         .message(getMessage(notifyConfig,json))
                         .build());
     }
+
+    @Override
+    public void publishCustomEvent(CommConfigDto commConfigDto) {
+        try {
+            Map<String, Object> jsonMap = objectMapper.readValue(commConfigDto.getBody(), new TypeReference<Map<String, Object>>() {});
+            rabbitTemplate.convertAndSend(SYS_SVC_EXCHANGE, commConfigDto.getUrl(), jsonMap);
+        } catch (Exception e) {
+            log.info("publishCustomEvent convert json to Map<String,Object> got error: {}",e);
+        }
+    }
+
 
     public String getMessage(NotifyConfig notifyConfig, String json){
         Map<String,String> variables = new HashMap<>();
