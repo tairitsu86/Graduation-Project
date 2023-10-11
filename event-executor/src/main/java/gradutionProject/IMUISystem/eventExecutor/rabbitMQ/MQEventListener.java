@@ -12,8 +12,10 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import static gradutionProject.IMUISystem.eventExecutor.rabbitMQ.RabbitmqConfig.EXECUTE_EVENT_QUEUE;
+import static gradutionProject.IMUISystem.eventExecutor.rabbitMQ.RabbitmqConfig.NOTIFY_USER_QUEUE;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -44,6 +46,15 @@ public class MQEventListener {
                 }
             }
 
+        }catch (Exception e){
+            log.info("Something wrong with: {}",e);
+        }
+    }
+    @RabbitListener(queues={NOTIFY_USER_QUEUE})
+    public void receive(Map<String,Object> notifyEvent) {
+        log.info("Execute event: {}", notifyEvent);
+        try {
+            notifyEvent.get("");
         }catch (Exception e){
             log.info("Something wrong with: {}",e);
         }

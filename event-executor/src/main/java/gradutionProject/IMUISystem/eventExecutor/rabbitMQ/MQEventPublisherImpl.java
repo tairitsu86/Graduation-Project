@@ -16,8 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static gradutionProject.IMUISystem.eventExecutor.rabbitMQ.RabbitmqConfig.SENDING_EVENT_QUEUE;
-import static gradutionProject.IMUISystem.eventExecutor.rabbitMQ.RabbitmqConfig.MQ_EXCHANGE;
+import static gradutionProject.IMUISystem.eventExecutor.rabbitMQ.RabbitmqConfig.*;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +26,7 @@ public class MQEventPublisherImpl implements MQEventPublisher{
     private final ObjectMapper objectMapper;
 
     public void publishSendingEvent(SendingEventDto sendingEventDto) {
-        rabbitTemplate.convertAndSend(MQ_EXCHANGE, SENDING_EVENT_QUEUE,sendingEventDto);
+        rabbitTemplate.convertAndSend(IMUI_IBC_EXCHANGE, SEND_MESSAGE_QUEUE,sendingEventDto);
     }
 
     @Override
@@ -43,7 +42,7 @@ public class MQEventPublisherImpl implements MQEventPublisher{
     public void publishCustomEvent(CommConfigDto commConfigDto) {
         try {
             Map<String, Object> jsonMap = objectMapper.readValue(commConfigDto.getBody(), new TypeReference<Map<String, Object>>() {});
-            rabbitTemplate.convertAndSend(MQ_EXCHANGE, commConfigDto.getUrl(), jsonMap);
+            rabbitTemplate.convertAndSend(SYS_SVC_EXCHANGE, commConfigDto.getUrl(), jsonMap);
         } catch (Exception e) {
             log.info("publishCustomEvent convert json to Map<String,Object> got error: {}",e);
         }
