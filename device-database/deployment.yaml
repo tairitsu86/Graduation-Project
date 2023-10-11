@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: device-database
-        image: tairitsu86/graduation-project_im-ui-system_device-database:latest
+        image: tairitsu86/graduation-project_iot-system_device-database:latest
         resources:
             limits:
               memory: "1024Mi"
@@ -75,8 +75,8 @@ spec:
   type: LoadBalancer
   ports:
     - protocol: TCP
-      port: 8004
+      port: 8006
       targetPort: 8080
-      nodePort: 30004
+      nodePort: 30006
 
 

@@ -5,8 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
-import static gradutionProject.IoTSystem.deviceDatabase.rabbitMQ.RabbitmqConfig.DEVICE_CONTROL_QUEUE;
-import static gradutionProject.IoTSystem.deviceDatabase.rabbitMQ.RabbitmqConfig.MQ_EXCHANGE;
+import static gradutionProject.IoTSystem.deviceDatabase.rabbitMQ.RabbitmqConfig.*;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +14,6 @@ public class MQEventPublisherImpl implements MQEventPublisher{
 
     @Override
     public void publishDeviceControl(DeviceControlDto deviceControlDto) {
-        rabbitTemplate.convertAndSend(MQ_EXCHANGE, DEVICE_CONTROL_QUEUE, deviceControlDto);
+        rabbitTemplate.convertAndSend(IoT_DBC_EXCHANGE, DEVICE_CONTROL_QUEUE, deviceControlDto);
     }
 }
