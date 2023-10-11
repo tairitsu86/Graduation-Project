@@ -16,11 +16,11 @@ public class MQEventPublisherImpl implements MQEventPublisher{
 
     @Override
     public void publishLoginEvent(LoginEventDto loginEventDto) {
-        rabbitTemplate.convertAndSend(topicExchange,loginEventQueue,loginEventDto);
+        rabbitTemplate.convertAndSend(LOGIN_UA_EXCHANGE, LOGIN_LOG_QUEUE,loginEventDto);
     }
 
     @Override
     public void publishLogoutEvent(LogoutEventDto logoutEventDto) {
-        rabbitTemplate.convertAndSend(topicExchange,logoutEventQueue,logoutEventDto);
+        rabbitTemplate.convertAndSend(LOGIN_UA_EXCHANGE, LOGOUT_LOG_QUEUE,logoutEventDto);
     }
 }
