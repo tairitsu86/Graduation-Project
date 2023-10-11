@@ -20,6 +20,7 @@ public class RabbitmqConfig {
     public static final String USER_CONTROL_QUEUE = "IoT-System.User-Control";
     public static final String IoT_DBC_EXCHANGE = "IoT-System_Device-base-communication_Exchange";
     public static final String IoT_UBC_EXCHANGE = "IoT-System_User-base-communication_Exchange";
+    public static final String SYS_SVC_EXCHANGE = "System_Service_Exchange";
     @Bean
     public MessageConverter jsonMessageConverter(ObjectMapper objectMapper) {
         return new Jackson2JsonMessageConverter(objectMapper);
@@ -46,6 +47,8 @@ public class RabbitmqConfig {
         return BindingBuilder.bind(deviceControlQueue()).to(exchange).with(DEVICE_CONTROL_QUEUE);
     }
 
+
+
     @Bean("IoT_UBC")
     public TopicExchange exchangeIoT_UBC() {
         return new TopicExchange(IoT_UBC_EXCHANGE);
@@ -55,7 +58,17 @@ public class RabbitmqConfig {
         return new Queue(USER_CONTROL_QUEUE,false);
     }
     @Bean
-    public Binding bindingUserControlQueue(TopicExchange exchange) {
+    public Binding bindingUserControlQueue(@Qualifier("IoT_UBC") TopicExchange exchange) {
+        return BindingBuilder.bind(userControlQueue()).to(exchange).with(USER_CONTROL_QUEUE);
+    }
+
+
+    @Bean("SYS_SVC")
+    public TopicExchange exchangeSYS_SVC() {
+        return new TopicExchange(SYS_SVC_EXCHANGE);
+    }
+    @Bean
+    public Binding bindingUserControlService(@Qualifier("SYS_SVC") TopicExchange exchange) {
         return BindingBuilder.bind(userControlQueue()).to(exchange).with(USER_CONTROL_QUEUE);
     }
 }
