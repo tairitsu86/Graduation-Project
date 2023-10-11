@@ -1,4 +1,4 @@
-package gradutionProject.IMUISystem.eventHandler.api.exception;
+package gradutionProject.IMUISystem.eventHandler.controller.exception;
 
 import lombok.AllArgsConstructor;
 

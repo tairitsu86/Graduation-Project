@@ -1,69 +1,138 @@
 package gradutionProject.IMUISystem.eventHandler.request;
 
-import gradutionProject.IMUISystem.eventHandler.dto.GetUsernameDto;
-import gradutionProject.IMUISystem.eventHandler.entity.APIData;
+import gradutionProject.IMUISystem.eventHandler.controller.exception.HttpApiException;
+import gradutionProject.IMUISystem.eventHandler.dto.*;
 import gradutionProject.IMUISystem.eventHandler.entity.IMUserData;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class RestRequestServiceImpl implements RestRequestService {
     @Value("${my_env.loginTrackerUrl}")
     private String LOGIN_TRACKER_URL;
 
+    @Value("${my_env.eventExecutorUrl}")
+    private String EVENT_EXECUTOR_URL;
+
+    @Value("${my_env.userDatabaseUrl}")
+    private String USER_DATABASE_URL;
+
     private final RestTemplate restTemplate;
 
     @Override
     public String getUsername(IMUserData imUserData) {
-        List<IMUserData> imUserDataList = new ArrayList<>();
         try{
-            ResponseEntity<GetUsernameDto> response = restTemplate.getForEntity(
+            ResponseEntity<LoginUserDto> response = restTemplate.getForEntity(
                     String.format("%s/%s/users/%s", LOGIN_TRACKER_URL, imUserData.getPlatform(),imUserData.getUserId())
-                    ,GetUsernameDto.class
+                    ,LoginUserDto.class
             );
             return response.getBody().getUsername();
         }catch (HttpClientErrorException e){
+            log.info("getUsername got error: {}",e);
             return null;
         }
     }
 
     @Override
-    public boolean sendEventRequest(APIData apiData, Map<String, String> variables) {
-        String url = apiData.getUrlTemplate();
-        String requestBody = apiData.getRequestBodyTemplate();
-        if(requestBody==null) requestBody = "";
-        for(String key:variables.keySet()){
-            String replaceValue = String.format("${%s}",key);
-            url = url.replace(replaceValue,variables.get(key));
-            requestBody = requestBody.replace(replaceValue,variables.get(key));
-        }
-        HttpMethod httpMethod;
-        switch (apiData.getApiMethod()){
-            case GET -> httpMethod = HttpMethod.GET;
-            case PUT -> httpMethod = HttpMethod.PUT;
-            case POST -> httpMethod = HttpMethod.POST;
-            case PATCH -> httpMethod = HttpMethod.PATCH;
-            case DELETE -> httpMethod = HttpMethod.DELETE;
-            default -> {return false;}
-        }
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> entity = new HttpEntity<>(requestBody,headers);
+    public IMUserData getIMUserData(String username) {
         try{
-            restTemplate.exchange(url,httpMethod,entity,String.class);
-            return true;
+            ResponseEntity<LoginUserDto> response = restTemplate.getForEntity(
+                    String.format("%s/users/%s", LOGIN_TRACKER_URL, username)
+                    ,LoginUserDto.class
+            );
+            return response.getBody().getImUserData();
         }catch (HttpClientErrorException e){
-            System.err.printf("Custom API Error,url[%s],body[%s],error type[%s]\n",url,requestBody,e.getMessage());
-            return false;
+            log.info("getIMUserData got error: {}",e);
+            return null;
         }
+    }
+
+    @Override
+    public String login(UserLoginDto userLoginDto) {
+        try{
+            ResponseEntity<String> response = restTemplate.postForEntity(String.format("%s/login",USER_DATABASE_URL),userLoginDto,String.class);
+            if(response.getStatusCode().is2xxSuccessful()) return "Login success!";
+        }catch (HttpClientErrorException e){
+            log.info("Login Error: {}",e);
+        }
+        return "Something go wrong, please try again after few minutes!";
+    }
+
+    @Override
+    public String signUp(UserSignUpDto userSignUpDto) {
+        try{
+            ResponseEntity<String> response = restTemplate.postForEntity(String.format("%s/users/new",USER_DATABASE_URL), userSignUpDto,String.class);
+            if(response.getStatusCode().is2xxSuccessful()) return "Sign up success! Now you can login!";
+        }catch (HttpClientErrorException e){
+            log.info("Sign up Error: {}",e);
+        }
+        return "Something go wrong, please try again after few minutes!";
+    }
+
+    @Override
+    public void newCommConfig(String eventName,CommConfigDto commConfigDto) {
+        try{
+            ResponseEntity<String> response = restTemplate.postForEntity(String.format("%s/events/%s/comm/new",EVENT_EXECUTOR_URL,eventName),commConfigDto,String.class);
+            if(!response.getStatusCode().is2xxSuccessful()) throw new HttpApiException(response.getBody());
+        }catch (HttpClientErrorException e){
+            log.info("newCommConfig Error: {}",e);
+        }
+    }
+
+    @Override
+    public void deleteCommConfig(String eventName) {
+        try{
+            restTemplate.delete(String.format("%s/events/%s/comm/delete",EVENT_EXECUTOR_URL,eventName));
+        }catch (HttpClientErrorException e){
+            log.info("deleteCommConfig Error: {}",e);
+        }
+    }
+
+    @Override
+    public CommConfigDto getCommConfig(String eventName) {
+        try{
+            ResponseEntity<CommConfigDto> response = restTemplate.getForEntity(String.format("%s/events/%s/comm",EVENT_EXECUTOR_URL,eventName),CommConfigDto.class);
+            if(response.getStatusCode().is2xxSuccessful()) return response.getBody();
+        }catch (HttpClientErrorException e){
+            log.info("getCommConfig Error: {}",e);
+        }
+        return null;
+    }
+
+    @Override
+    public void newNotifyConfig(String eventName,NotifyConfigDto notifyConfigDto) {
+        try{
+            ResponseEntity<String> response = restTemplate.postForEntity(String.format("%s/events/%s/notify/new",EVENT_EXECUTOR_URL),notifyConfigDto,String.class);
+            if(!response.getStatusCode().is2xxSuccessful()) throw new HttpApiException(response.getBody());
+        }catch (HttpClientErrorException e){
+            log.info("newNotifyConfig Error: {}",e);
+        }
+    }
+
+    @Override
+    public void deleteNotifyConfig(String eventName) {
+        try{
+            restTemplate.delete(String.format("%s/events/%s/notify/delete",EVENT_EXECUTOR_URL,eventName));
+        }catch (HttpClientErrorException e){
+            log.info("deleteNotifyConfig Error: {}",e);
+        }
+    }
+
+    @Override
+    public NotifyConfigDto getNotifyConfig(String eventName) {
+        try{
+            ResponseEntity<NotifyConfigDto> response = restTemplate.getForEntity(String.format("%s/events/%s/notify",EVENT_EXECUTOR_URL,eventName),NotifyConfigDto.class);
+            if(response.getStatusCode().is2xxSuccessful()) return response.getBody();
+        }catch (HttpClientErrorException e){
+            log.info("getNotifyConfig Error: {}",e);
+        }
+        return null;
     }
 }

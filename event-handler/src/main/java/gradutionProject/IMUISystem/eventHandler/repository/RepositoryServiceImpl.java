@@ -1,14 +1,15 @@
 package gradutionProject.IMUISystem.eventHandler.repository;
 
-import gradutionProject.IMUISystem.eventHandler.api.exception.EventAlreadyExistException;
-import gradutionProject.IMUISystem.eventHandler.api.exception.EventNotExistException;
-import gradutionProject.IMUISystem.eventHandler.entity.APIData;
+import gradutionProject.IMUISystem.eventHandler.controller.exception.EventAlreadyExistException;
+import gradutionProject.IMUISystem.eventHandler.controller.exception.EventNotExistException;
 import gradutionProject.IMUISystem.eventHandler.entity.CustomizeEvent;
 import gradutionProject.IMUISystem.eventHandler.entity.IMUserData;
 import gradutionProject.IMUISystem.eventHandler.entity.UserState;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,6 +17,23 @@ import java.util.List;
 public class RepositoryServiceImpl implements RepositoryService{
     private final CustomizeEventRepository customizeEventRepository;
     private final UserStateRepository userStateRepository;
+    @PostConstruct
+    public void init() {
+        customizeEventRepository.save(
+                CustomizeEvent.builder()
+                        .eventName("LOGIN")
+                        .description("")
+                        .variables(new ArrayList<>(){{add("USERNAME");add("PASSWORD");}})
+                        .build()
+        );
+        customizeEventRepository.save(
+                CustomizeEvent.builder()
+                        .eventName("SIGN_UP")
+                        .description("")
+                        .variables(new ArrayList<>(){{add("USER_DISPLAY_NAME");add("USERNAME");add("PASSWORD");}})
+                        .build()
+        );
+    }
     @Override
     public boolean isUserHaveState(IMUserData imUserData) {
         return userStateRepository.existsById(imUserData);
@@ -45,14 +63,7 @@ public class RepositoryServiceImpl implements RepositoryService{
     @Override
     public List<String> getEventVariables(String eventName) {
         if(!customizeEventRepository.existsById(eventName)) return null;
-//        return customizeEventRepository.getReferenceById(eventName).getVariables();
         return customizeEventRepository.getEventVariables(eventName);
-    }
-
-    @Override
-    public APIData getAPIData(String eventName) {
-        if(!customizeEventRepository.existsById(eventName)) return null;
-        return customizeEventRepository.getReferenceById(eventName).getApiData();
     }
 
     @Override
@@ -74,19 +85,8 @@ public class RepositoryServiceImpl implements RepositoryService{
 
 
     @Override
-    public void alterEvent(String eventName, String description, APIData apiData, List<String> variables) {
-        CustomizeEvent event = getEvent(eventName);
-        if(description!=null)
-            event.setDescription(description);
-        if(apiData!=null)
-            event.setApiData(apiData);
-        if(variables!=null)
-            event.setVariables(variables);
-        customizeEventRepository.save(event);
-    }
-
-    @Override
     public void deleteEvent(String eventName) {
         customizeEventRepository.deleteById(eventName);
     }
+
 }

@@ -80,8 +80,8 @@ spec:
   type: LoadBalancer
   ports:
     - protocol: TCP
-      port: 8002
+      port: 8004
       targetPort: 8080
-      nodePort: 30002
+      nodePort: 30004
 
 

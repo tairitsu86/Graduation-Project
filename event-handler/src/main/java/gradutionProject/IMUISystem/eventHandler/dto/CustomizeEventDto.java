@@ -1,16 +1,20 @@
 package gradutionProject.IMUISystem.eventHandler.dto;
 
-import gradutionProject.IMUISystem.eventHandler.entity.APIData;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
 @Builder
-public class NewEventDto {
+@AllArgsConstructor
+@NoArgsConstructor
+public class CustomizeEventDto {
     private String eventName;
     private String description;
     private List<String> variables;
-    private APIData apiData;
+    private CommConfigDto commConfigDto;
+    private NotifyConfigDto notifyConfigDto;
 }
