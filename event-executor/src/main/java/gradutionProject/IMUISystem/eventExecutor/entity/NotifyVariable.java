@@ -33,4 +33,6 @@ public class NotifyVariable {
 
     @Column(name = "json_path")
     private String jsonPath;
+
+    //TODO add format and replace value
 }

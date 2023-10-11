@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
-import static gradutionProject.IMUISystem.eventExecutor.rabbitMQ.RabbitmqConfig.executeEventQueue;
+import static gradutionProject.IMUISystem.eventExecutor.rabbitMQ.RabbitmqConfig.EXECUTE_EVENT_QUEUE;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,7 +23,7 @@ public class MQEventListener {
     private final RestRequestService restRequestService;
     private final MQEventPublisher mqEventPublisher;
 
-    @RabbitListener(queues={executeEventQueue})
+    @RabbitListener(queues={EXECUTE_EVENT_QUEUE})
     public void receive(ExecuteEventDto executeEventDto) {
         log.info("Execute event: {}", executeEventDto);
         try {

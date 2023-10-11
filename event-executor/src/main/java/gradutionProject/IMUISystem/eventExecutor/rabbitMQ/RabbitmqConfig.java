@@ -14,9 +14,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableRabbit
 public class RabbitmqConfig {
-    public static final String executeEventQueue = "IM-UI/Execute-event";
-    public static final String sendingEventQueue = "IM-UI/Sending-event";
-    public static final String topicExchange = "event-executor-exchange";
+    public static final String EXECUTE_EVENT_QUEUE = "IM-UI/Execute-event";
+    public static final String SENDING_EVENT_QUEUE = "IM-UI/Sending-event";
+    public static final String DEVICE_STATE_QUEUE = "IoT/Device-state-event";
+    public static final String MQ_EXCHANGE = "event-executor-exchange";
 
     @Bean
     public MessageConverter jsonMessageConverter(ObjectMapper objectMapper) {
@@ -24,23 +25,31 @@ public class RabbitmqConfig {
     }
     @Bean
     public Queue executeEventQueue() {
-        return new Queue(executeEventQueue,false);
+        return new Queue(EXECUTE_EVENT_QUEUE,false);
     }
-
     @Bean
     public Queue sendingEventQueue() {
-        return new Queue(sendingEventQueue,false);
+        return new Queue(SENDING_EVENT_QUEUE,false);
+    }
+    @Bean
+    public Queue deviceStateQueue() {
+        return new Queue(DEVICE_STATE_QUEUE,false);
     }
     @Bean
     public TopicExchange exchange() {
-        return new TopicExchange(topicExchange);
+        return new TopicExchange(MQ_EXCHANGE);
     }
     @Bean
     public Binding bindingExecuteEventQueue(TopicExchange exchange) {
-        return BindingBuilder.bind(executeEventQueue()).to(exchange).with(executeEventQueue);
+        return BindingBuilder.bind(executeEventQueue()).to(exchange).with(EXECUTE_EVENT_QUEUE);
     }
     @Bean
     public Binding bindingSendingEventQueue(TopicExchange exchange) {
-        return BindingBuilder.bind(sendingEventQueue()).to(exchange).with(sendingEventQueue);
+        return BindingBuilder.bind(sendingEventQueue()).to(exchange).with(SENDING_EVENT_QUEUE);
     }
+    @Bean
+    public Binding bindingDeviceStateQueue(TopicExchange exchange) {
+        return BindingBuilder.bind(deviceStateQueue()).to(exchange).with(DEVICE_STATE_QUEUE);
+    }
+
 }

@@ -4,6 +4,7 @@ import gradutionProject.IMUISystem.eventExecutor.controller.exception.CommConfig
 import gradutionProject.IMUISystem.eventExecutor.controller.exception.NotifyConfigAlreadyExistException;
 import gradutionProject.IMUISystem.eventExecutor.entity.CommConfig;
 import gradutionProject.IMUISystem.eventExecutor.entity.NotifyConfig;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,11 @@ import org.springframework.stereotype.Service;
 public class RepositoryServiceImpl implements RepositoryService{
     private final CommConfigRepository commConfigRepository;
     private final NotifyConfigRepository notifyConfigRepository;
+
+    @PostConstruct
+    public void init() {
+
+    }
 
     @Override
     public void newCommConfig(CommConfig commConfig) {
