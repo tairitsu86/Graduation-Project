@@ -1,4 +1,4 @@
-package graduationProject.IoTSystem.deviceConnector.api.exception;
+package graduationProject.IoTSystem.deviceConnector.controller.exception;
 
 import lombok.AllArgsConstructor;
 
