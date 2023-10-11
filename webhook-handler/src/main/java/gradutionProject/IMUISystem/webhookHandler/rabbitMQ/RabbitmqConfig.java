@@ -8,30 +8,34 @@ import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableRabbit
 public class RabbitmqConfig {
-    static final String topicExchangeName = "webhook-handler-exchange";
+    public static final String IMUI_IBC_EXCHANGE = "IM-UI-System_IM-base-communication_Exchange";
 
-    static final String userEventQueue = "IM-UI/User-event";
+    public static final String IM_USER_MESSAGE_QUEUE = "IM-UI-System.IM-User-Message";
     @Bean
     public MessageConverter jsonMessageConverter(ObjectMapper objectMapper) {
         return new Jackson2JsonMessageConverter(objectMapper);
     }
-    @Bean
-    public Queue queue() {
-        return new Queue(userEventQueue,false);
+
+
+
+    @Bean("IMUI_IBC")
+    public TopicExchange exchangeIMUI_IBC() {
+        return new TopicExchange(IMUI_IBC_EXCHANGE);
     }
     @Bean
-    public TopicExchange exchange() {
-        return new TopicExchange(topicExchangeName);
+    public Queue imUserMessageQueue() {
+        return new Queue(IM_USER_MESSAGE_QUEUE,false);
     }
     @Bean
-    public Binding binding(Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(userEventQueue);
+    public Binding binding(@Qualifier("IMUI_IBC") TopicExchange exchange) {
+        return BindingBuilder.bind(imUserMessageQueue()).to(exchange).with(IM_USER_MESSAGE_QUEUE);
     }
 
 }
