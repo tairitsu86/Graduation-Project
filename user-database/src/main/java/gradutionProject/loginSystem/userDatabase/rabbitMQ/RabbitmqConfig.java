@@ -8,37 +8,41 @@ import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableRabbit
 public class RabbitmqConfig {
-    public static final String loginEventQueue = "login-system/Login-event";
-    public static final String logoutEventQueue = "login-system/Logout-event";
-    static final String topicExchange = "user-database-exchange";
+    public static final String LOGIN_LOG_QUEUE = "Login-System.Login-Log";
+    public static final String LOGOUT_LOG_QUEUE = "Login-System.Logout-Log";
+    static final String LOGIN_UA_EXCHANGE = "Login-System_User-Access_Exchange";
     @Bean
     public MessageConverter jsonMessageConverter(ObjectMapper objectMapper) {
         return new Jackson2JsonMessageConverter(objectMapper);
     }
-    @Bean
-    public Queue loginEventQueue() {
-        return new Queue(loginEventQueue,false);
+
+
+
+    @Bean("LOGIN_UA")
+    public TopicExchange exchangeLOGIN_UA() {
+        return new TopicExchange(LOGIN_UA_EXCHANGE);
     }
     @Bean
-    public Queue logoutEventQueue() {
-        return new Queue(logoutEventQueue,false);
+    public Queue loginLogQueue() {
+        return new Queue(LOGIN_LOG_QUEUE,false);
     }
     @Bean
-    public TopicExchange exchange() {
-        return new TopicExchange(topicExchange);
+    public Queue logoutLogQueue() {
+        return new Queue(LOGOUT_LOG_QUEUE,false);
     }
     @Bean
-    public Binding bindingLoginEventQueue(TopicExchange exchange) {
-        return BindingBuilder.bind(loginEventQueue()).to(exchange).with(loginEventQueue);
+    public Binding bindingLoginLogQueue(@Qualifier("LOGIN_UA") TopicExchange exchange) {
+        return BindingBuilder.bind(loginLogQueue()).to(exchange).with(LOGIN_LOG_QUEUE);
     }
     @Bean
-    public Binding bindingLogoutEventQueue(TopicExchange exchange) {
-        return BindingBuilder.bind(logoutEventQueue()).to(exchange).with(logoutEventQueue);
+    public Binding bindingLogoutLogQueue(@Qualifier("LOGIN_UA") TopicExchange exchange) {
+        return BindingBuilder.bind(logoutLogQueue()).to(exchange).with(LOGOUT_LOG_QUEUE);
     }
 }

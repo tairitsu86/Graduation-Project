@@ -22,5 +22,3 @@ spring:
   sql:
     init:
       mode: always
-my_env:
-  loginTrackerUrl: ${LOGIN_TRACKER_URL}

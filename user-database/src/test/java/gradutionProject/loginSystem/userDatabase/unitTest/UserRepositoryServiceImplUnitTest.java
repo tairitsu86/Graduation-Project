@@ -1,8 +1,8 @@
 package gradutionProject.loginSystem.userDatabase.unitTest;
 
-import gradutionProject.loginSystem.userDatabase.api.excpetion.UserLoginWithIncorrectAccountException;
-import gradutionProject.loginSystem.userDatabase.api.excpetion.UserNotExistException;
-import gradutionProject.loginSystem.userDatabase.api.excpetion.UsernameAlreadyExistException;
+import gradutionProject.loginSystem.userDatabase.controller.excpetion.UserLoginWithIncorrectAccountException;
+import gradutionProject.loginSystem.userDatabase.controller.excpetion.UserNotExistException;
+import gradutionProject.loginSystem.userDatabase.controller.excpetion.UsernameAlreadyExistException;
 import gradutionProject.loginSystem.userDatabase.entity.User;
 import gradutionProject.loginSystem.userDatabase.repository.UserRepository;
 import gradutionProject.loginSystem.userDatabase.repository.UserRepositoryServiceImpl;

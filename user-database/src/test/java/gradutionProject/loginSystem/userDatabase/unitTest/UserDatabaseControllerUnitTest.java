@@ -1,6 +1,6 @@
 package gradutionProject.loginSystem.userDatabase.unitTest;
 
-import gradutionProject.loginSystem.userDatabase.api.UserDatabaseController;
+import gradutionProject.loginSystem.userDatabase.controller.UserDatabaseController;
 import gradutionProject.loginSystem.userDatabase.dto.AddUserDto;
 import gradutionProject.loginSystem.userDatabase.dto.AlterUserDataDto;
 import gradutionProject.loginSystem.userDatabase.dto.UserLoginDto;
