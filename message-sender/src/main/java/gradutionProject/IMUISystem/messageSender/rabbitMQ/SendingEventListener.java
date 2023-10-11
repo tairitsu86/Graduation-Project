@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-import static gradutionProject.IMUISystem.messageSender.rabbitMQ.RabbitmqConfig.queueName;
+import static gradutionProject.IMUISystem.messageSender.rabbitMQ.RabbitmqConfig.SEND_MESSAGE_QUEUE;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,7 +21,7 @@ public class SendingEventListener {
     private final SendingService sendingService;
     private final RestRequestService restRequestService;
 
-    @RabbitListener(queues={queueName})
+    @RabbitListener(queues={SEND_MESSAGE_QUEUE})
     public void receive(SendingEventDto sendingEventDto) {
         log.info("Sending Event:"+sendingEventDto.toString());
         List<IMUserData> recipients = new ArrayList<>();
@@ -31,34 +31,4 @@ public class SendingEventListener {
             recipients.addAll(sendingEventDto.getImUserDataList());
         sendingService.sendTextMessage(recipients,sendingEventDto.getMessage());
     }
-
-    /* test data
-    {
-      "imUserDataList": [
-        {
-          "platform": "LINE",
-          "userId": ""
-        }
-      ],
-      "message": "HiHi"
-    }
-    {
-      "usernameList": [
-        "OAO"
-      ],
-      "message": "HiHi"
-    }
-    {
-      "imUserDataList": [
-        {
-          "platform": "LINE",
-          "userId": ""
-        }
-      ],
-      "usernameList": [
-        "OAO"
-      ],
-      "message": "HiHi"
-    }
-    */
 }
