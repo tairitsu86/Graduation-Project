@@ -9,15 +9,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
-import static gradutionProject.IMUISystem.loginTracker.rabbitMQ.RabbitmqConfig.loginEventQueue;
-import static gradutionProject.IMUISystem.loginTracker.rabbitMQ.RabbitmqConfig.logoutEventQueue;
+import static gradutionProject.IMUISystem.loginTracker.rabbitMQ.RabbitmqConfig.*;
 
 @Slf4j
 @RequiredArgsConstructor
 @Component
 public class LoginEventListener {
     private final LoginUserRepositoryService loginUserRepositoryService;
-    @RabbitListener(queues={loginEventQueue})
+    @RabbitListener(queues={LOGIN_LOG_QUEUE})
     public void receiveLoginEvent(LoginEventDto loginEventDto) {
         if(loginEventDto==null||loginEventDto.getPlatformType()==null||loginEventDto.getFromPlatform()==null||loginEventDto.getPlatformUserId()==null||loginEventDto.getUsername()==null) {
             log.info("Null Login event:"+(loginEventDto==null?null:loginEventDto.toString()));
@@ -33,7 +32,7 @@ public class LoginEventListener {
                 loginEventDto.getUsername()
         );
     }
-    @RabbitListener(queues={logoutEventQueue})
+    @RabbitListener(queues={LOGOUT_LOG_QUEUE})
     public void receiveLogoutEvent(LogoutEventDto logoutEventDto) {
         if(logoutEventDto==null||logoutEventDto.getPlatformType()==null||logoutEventDto.getFromPlatform()==null||logoutEventDto.getPlatformUserId()==null) {
             log.info("Null Logout event:"+(logoutEventDto==null?null:logoutEventDto.toString()));
