@@ -17,7 +17,9 @@ env:
   RABBITMQ_USERNAME: ${{ secrets.RABBITMQ_USERNAME }}
   RABBITMQ_PASSWORD: ${{ secrets.RABBITMQ_PASSWORD }}
   LOGIN_TRACKER_URL: ${{ secrets.LOGIN_TRACKER_URL }}
-
+  EVENT_EXECUTOR_URL: ${{ secrets.EVENT_EXECUTOR_URL }}
+  USER_DATABASE_URL: ${{ secrets.USER_DATABASE_URL }}
+  
 jobs:
   build:
     runs-on: ubuntu-latest
