@@ -19,7 +19,7 @@ public class LoginUserRepositoryServiceImpl implements LoginUserRepositoryServic
                 .build();
         if(!loginUserRepository.existsById(id))
             throw new LoginUserNotExistException(id.toString());
-        return loginUserRepository.getReferenceById(id);
+        return loginUserRepository.findById(id).get();
     }
 
     @Override
