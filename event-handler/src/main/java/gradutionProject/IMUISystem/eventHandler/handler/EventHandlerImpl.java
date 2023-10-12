@@ -5,6 +5,7 @@ import gradutionProject.IMUISystem.eventHandler.dto.SendingEventDto;
 import gradutionProject.IMUISystem.eventHandler.dto.UserLoginDto;
 import gradutionProject.IMUISystem.eventHandler.dto.UserSignUpDto;
 import gradutionProject.IMUISystem.eventHandler.entity.IMUserData;
+import gradutionProject.IMUISystem.eventHandler.entity.Option;
 import gradutionProject.IMUISystem.eventHandler.entity.UserState;
 import gradutionProject.IMUISystem.eventHandler.rabbitMQ.MQEventPublisher;
 import gradutionProject.IMUISystem.eventHandler.repository.RepositoryService;
@@ -20,6 +21,7 @@ public class EventHandlerImpl implements EventHandler{
     private final RepositoryService repositoryService;
     private final MQEventPublisher mqEventPublisher;
     private final RestRequestService restRequestService;
+    private final Option optionService;
 
     @Override
     public void newMessage(IMUserData imUserData, String message) {
@@ -48,11 +50,11 @@ public class EventHandlerImpl implements EventHandler{
     }
 
     @Override
-    public void menuEvent(IMUserData imUserData,String username, String description, List<String> events, Map<String,String> metadata) {
-        newUserState(imUserData,username,"MENU",events,metadata);
+    public void menuEvent(IMUserData imUserData,String username, String description, List<Option> options, Map<String,String> parameters) {
+        newUserState(imUserData,username,"MENU",optionService.tranToStringList(options),parameters);
         StringBuilder message = new StringBuilder(description);
-        for(int i=0;i<events.size();i++)
-            message.append(String.format("\n[%d]%s",i,events.get(i)));
+        for(int i=0;i<options.size();i++)
+            message.append(String.format("\n[%d]%s",i,options.get(i).getDisplayName()));
         sendMessage(imUserData,message.toString());
     }
 
@@ -64,7 +66,27 @@ public class EventHandlerImpl implements EventHandler{
 
     @Override
     public void loginOrSignUpEvent(IMUserData imUserData) {
-        menuEvent(imUserData, null, "Login or Sign up!",new ArrayList<>(){{add("LOGIN");add("SIGN_UP");}},null);
+        menuEvent(
+                imUserData,
+                null,
+                "Login or Sign up!"
+                ,new ArrayList<>(){
+                    {
+                        add(
+                                Option.builder()
+                                        .displayName("Login")
+                                        .nextEvent("LOGIN")
+                                        .build()
+                        );
+                        add(
+                                Option.builder()
+                                        .displayName("Sign up")
+                                        .nextEvent("SIGN_UP")
+                                        .build()
+                        );
+                    }
+                }
+                ,null);
     }
 
     @Override
@@ -92,7 +114,16 @@ public class EventHandlerImpl implements EventHandler{
 
     @Override
     public void defaultMenu(IMUserData imUserData,String username) {
-        menuEvent(imUserData,username,"Hello!\nWhat are you looking for?",repositoryService.getAllEvent(),null);
+        List<Option> options = new ArrayList<>();
+        List<String> events = repositoryService.getAllEvent();
+        for (int i=0;i<events.size();i++)
+            options.add(
+                    Option.builder()
+                            .displayName(events.get(i))
+                            .nextEvent(events.get(i))
+                            .build()
+            );
+        menuEvent(imUserData,username,"Hello!\nWhat are you looking for?", options,null);
     }
 
     public void continueUserEvent(IMUserData imUserData, String message){
@@ -116,18 +147,21 @@ public class EventHandlerImpl implements EventHandler{
             return;
         }
         repositoryService.removeUserState(imUserData);
-        newUserEvent(imUserData, userState.getUsername(), userState.getData().get(index),userState.getVariables());
+        Option o = optionService.tranFromString(userState.getData().get(index));
+        Map<String,String> parameters = userState.getParameters();
+        parameters.putAll(o.getOptionParameters());
+        newUserEvent(imUserData, userState.getUsername(), o.getNextEvent(), parameters);
     }
 
     public void continueCustomEvent(UserState userState, IMUserData imUserData, String message){
-        userState.getVariables().put(userState.getData().get(0),message);
+        userState.getParameters().put(userState.getData().get(0), message);
         userState.getData().remove(0);
         if(userState.getData().isEmpty()){
-            executeEvent(userState.getEventName(), userState.getVariables());
+            executeEvent(userState.getEventName(), userState.getParameters());
             repositoryService.removeUserState(imUserData);
             return;
         }
-        sendMessage(imUserData,String.format("Please Enter %s!",userState.getData().get(0)));
+        sendMessage(imUserData,String.format("Please Enter %s!", userState.getData().get(0)));
         repositoryService.newUserState(userState);
     }
 
@@ -184,7 +218,7 @@ public class EventHandlerImpl implements EventHandler{
                         .username(username)
                         .eventName(eventName)
                         .data(data)
-                        .variables(variables)
+                        .parameters(variables)
                         .build()
         );
     }

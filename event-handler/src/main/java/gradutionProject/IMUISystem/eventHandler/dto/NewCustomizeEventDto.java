@@ -1,5 +1,6 @@
 package gradutionProject.IMUISystem.eventHandler.dto;
 
+import gradutionProject.IMUISystem.eventHandler.entity.Option;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,6 @@ public class NewCustomizeEventDto {
     private String eventName;
     private String username;
     private String description;
-    private List<String> events;
+    private List<Option> options;
     private Map<String,String> parameters;
 }
