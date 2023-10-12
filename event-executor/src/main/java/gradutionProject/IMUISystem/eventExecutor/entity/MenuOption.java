@@ -5,13 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Map;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NotifyConfig {
-    private String respondTemplate;
-    private List<NotifyVariable> notifyVariables;
+@Builder
+public class MenuOption {
+    private String displayName;
+    private String nextEvent;
+    private Map<String,String> optionParameters;
 }

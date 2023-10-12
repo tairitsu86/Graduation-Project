@@ -1,7 +1,7 @@
 package gradutionProject.IMUISystem.eventExecutor.controller;
 
 import gradutionProject.IMUISystem.eventExecutor.entity.CommConfig;
-import gradutionProject.IMUISystem.eventExecutor.entity.NotifyConfig;
+import gradutionProject.IMUISystem.eventExecutor.entity.RespondConfig;
 import gradutionProject.IMUISystem.eventExecutor.repository.RepositoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,21 +39,21 @@ public class EventHandlerController {
 
     @GetMapping("/events/{eventName}/notify")
     @ResponseStatus(HttpStatus.OK)
-    public NotifyConfig getNotifyConfig(@PathVariable String eventName){
-        return repositoryService.getNotifyConfig(eventName);
+    public RespondConfig getRespondConfig(@PathVariable String eventName){
+        return repositoryService.getRespondConfig(eventName);
     }
 
     @PostMapping("/events/{eventName}/notify/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public void newNotifyConfig(@PathVariable String eventName,@RequestBody NotifyConfig notifyConfig){
-        notifyConfig.setEventName(eventName);
-        repositoryService.newNotifyConfig(notifyConfig);
+    public void newRespondConfig(@PathVariable String eventName,@RequestBody RespondConfig respondConfig){
+        respondConfig.setEventName(eventName);
+        repositoryService.newRespondConfig(respondConfig);
     }
 
     @DeleteMapping("/events/{eventName}/notify/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteNotifyConfig(@PathVariable String eventName){
-        repositoryService.deleteNotifyConfig(eventName);
+    public void deleteRespondConfig(@PathVariable String eventName){
+        repositoryService.deleteRespondConfig(eventName);
     }
 
 
