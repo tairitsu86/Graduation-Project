@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Objects;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -33,9 +35,9 @@ public class RestRequestServiceImpl implements RestRequestService {
                     String.format("%s/%s/users/%s", LOGIN_TRACKER_URL, imUserData.getPlatform(),imUserData.getUserId())
                     ,LoginUserDto.class
             );
-            return response.getBody().getUsername();
+            return Objects.requireNonNull(response.getBody()).getUsername();
         }catch (HttpClientErrorException e){
-            log.info("getUsername got error: {}",e);
+            log.info("getUsername got error: {}", e.getMessage(), e);
             return null;
         }
     }
@@ -47,9 +49,9 @@ public class RestRequestServiceImpl implements RestRequestService {
                     String.format("%s/users/%s", LOGIN_TRACKER_URL, username)
                     ,LoginUserDto.class
             );
-            return response.getBody().getImUserData();
+            return Objects.requireNonNull(response.getBody()).getImUserData();
         }catch (HttpClientErrorException e){
-            log.info("getIMUserData got error: {}",e);
+            log.info("getIMUserData got error: {}", e.getMessage(),e);
             return null;
         }
     }
@@ -60,7 +62,7 @@ public class RestRequestServiceImpl implements RestRequestService {
             ResponseEntity<String> response = restTemplate.postForEntity(String.format("%s/login",USER_DATABASE_URL),userLoginDto,String.class);
             if(response.getStatusCode().is2xxSuccessful()) return "Login success!";
         }catch (HttpClientErrorException e){
-            log.info("Login Error: {}",e);
+            log.info("Login Error: {}", e.getMessage());
         }
         return "Something go wrong, please try again after few minutes!";
     }
@@ -71,7 +73,7 @@ public class RestRequestServiceImpl implements RestRequestService {
             ResponseEntity<String> response = restTemplate.postForEntity(String.format("%s/users/new",USER_DATABASE_URL), userSignUpDto,String.class);
             if(response.getStatusCode().is2xxSuccessful()) return "Sign up success! Now you can login!";
         }catch (HttpClientErrorException e){
-            log.info("Sign up Error: {}",e);
+            log.info("Sign up Error: {}", e.getMessage());
         }
         return "Something go wrong, please try again after few minutes!";
     }
@@ -82,7 +84,7 @@ public class RestRequestServiceImpl implements RestRequestService {
             ResponseEntity<String> response = restTemplate.postForEntity(String.format("%s/events/%s/comm/new",EVENT_EXECUTOR_URL,eventName),commConfigDto,String.class);
             if(!response.getStatusCode().is2xxSuccessful()) throw new HttpApiException(response.getBody());
         }catch (HttpClientErrorException e){
-            log.info("newCommConfig Error: {}",e);
+            log.info("newCommConfig Error: {}", e.getMessage());
         }
     }
 
@@ -91,7 +93,7 @@ public class RestRequestServiceImpl implements RestRequestService {
         try{
             restTemplate.delete(String.format("%s/events/%s/comm/delete",EVENT_EXECUTOR_URL,eventName));
         }catch (HttpClientErrorException e){
-            log.info("deleteCommConfig Error: {}",e);
+            log.info("deleteCommConfig Error: {}", e.getMessage());
         }
     }
 
@@ -101,7 +103,7 @@ public class RestRequestServiceImpl implements RestRequestService {
             ResponseEntity<CommConfigDto> response = restTemplate.getForEntity(String.format("%s/events/%s/comm",EVENT_EXECUTOR_URL,eventName),CommConfigDto.class);
             if(response.getStatusCode().is2xxSuccessful()) return response.getBody();
         }catch (HttpClientErrorException e){
-            log.info("getCommConfig Error: {}",e);
+            log.info("getCommConfig Error: {}", e.getMessage());
         }
         return null;
     }
@@ -112,7 +114,7 @@ public class RestRequestServiceImpl implements RestRequestService {
             ResponseEntity<String> response = restTemplate.postForEntity(String.format("%s/events/%s/notify/new",EVENT_EXECUTOR_URL),notifyConfigDto,String.class);
             if(!response.getStatusCode().is2xxSuccessful()) throw new HttpApiException(response.getBody());
         }catch (HttpClientErrorException e){
-            log.info("newNotifyConfig Error: {}",e);
+            log.info("newNotifyConfig Error: {}", e.getMessage());
         }
     }
 
@@ -121,7 +123,7 @@ public class RestRequestServiceImpl implements RestRequestService {
         try{
             restTemplate.delete(String.format("%s/events/%s/notify/delete",EVENT_EXECUTOR_URL,eventName));
         }catch (HttpClientErrorException e){
-            log.info("deleteNotifyConfig Error: {}",e);
+            log.info("deleteNotifyConfig Error: {}", e.getMessage());
         }
     }
 
@@ -131,7 +133,7 @@ public class RestRequestServiceImpl implements RestRequestService {
             ResponseEntity<NotifyConfigDto> response = restTemplate.getForEntity(String.format("%s/events/%s/notify",EVENT_EXECUTOR_URL,eventName),NotifyConfigDto.class);
             if(response.getStatusCode().is2xxSuccessful()) return response.getBody();
         }catch (HttpClientErrorException e){
-            log.info("getNotifyConfig Error: {}",e);
+            log.info("getNotifyConfig Error: {}", e.getMessage());
         }
         return null;
     }
