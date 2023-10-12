@@ -1,8 +1,10 @@
 package gradutionProject.IMUISystem.eventHandler.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ import java.util.Map;
 
 @Data
 @AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Builder
 @Component
 public class Option {
@@ -19,7 +21,17 @@ public class Option {
     private String nextEvent;
     private Map<String,String> optionParameters;
 
-    private final ObjectMapper objectMapper;
+    @JsonIgnoreProperties
+    //Use final injection will let it can't find 0 args constructor, then go wrong.
+    //This error only happen when final injection(with @RequiredArgsConstructor/ Constructor with contains all final field)
+    //and @builder(with @AllArgsConstructor) both exist, and we want creating a bean by @Component.
+    //But use @Autowired didn't, why?
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    public Option(ObjectMapper objectMapper){
+        this.objectMapper = objectMapper;
+    }
     public String tranToString(Option o) {
         try {
             return objectMapper.writeValueAsString(o);
