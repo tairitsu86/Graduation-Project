@@ -36,15 +36,15 @@ IF OBJECT_ID(N'user_state_data',N'U') IS NULL
 			CONSTRAINT [user_state_data_fk] FOREIGN KEY([platform], [user_id]) REFERENCES [user_state] ([platform], [user_id])
 		) ON [PRIMARY]
 	END;
-IF OBJECT_ID(N'user_state_variables',N'U') IS NULL
+IF OBJECT_ID(N'user_state_parameters',N'U') IS NULL
 	BEGIN
-		CREATE TABLE [dbo].[user_state_variables](
+		CREATE TABLE [dbo].[user_state_parameters](
 			[platform] [varchar](255) NOT NULL,
 			[user_id] [varchar](255) NOT NULL,
-			[variable] [varchar](255) NOT NULL,
-			[variable_key] [varchar](255) NOT NULL,
-			CONSTRAINT [variable_key_unique] UNIQUE([platform], [user_id], [variable_key]),
-			CONSTRAINT [user_state_variables_fk] FOREIGN KEY([platform], [user_id]) REFERENCES [user_state] ([platform], [user_id])
+			[parameter] [varchar](255) NOT NULL,
+			[parameter_key] [varchar](255) NOT NULL,
+			CONSTRAINT [parameter_key_unique] UNIQUE([platform], [user_id], [parameter_key]),
+			CONSTRAINT [user_state_parameters_fk] FOREIGN KEY([platform], [user_id]) REFERENCES [user_state] ([platform], [user_id])
 		)
 	END;
 

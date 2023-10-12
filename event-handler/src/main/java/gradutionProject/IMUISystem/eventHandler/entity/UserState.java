@@ -39,13 +39,13 @@ public class UserState {
 
     @ElementCollection
     @JoinTable(
-            name = "user_state_variables",
+            name = "user_state_parameters",
             joinColumns = {
                     @JoinColumn(name = "platform", referencedColumnName = "platform"),
                     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
             }
     )
-    @MapKeyColumn(name = "variable_key")
-    @Column(name = "variable")
-    private Map<String,String> variables;
+    @MapKeyColumn(name = "parameter_key")
+    @Column(name = "parameter")
+    private Map<String,String> parameters;
 }
