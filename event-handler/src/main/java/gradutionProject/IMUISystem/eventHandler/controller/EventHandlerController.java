@@ -43,21 +43,6 @@ public class EventHandlerController {
                 .build()
         );
     }
-    /*
-    {
-      "eventName": "event_name",
-      "description": "description",
-      "variables": [
-        "variables1",
-        "variables2"
-      ],
-      "apiData": {
-        "urlTemplate": "url_template",
-        "apiMethod": "GET",
-        "requestBodyTemplate": "requestBodyTemplate"
-      }
-    }
-    */
     @DeleteMapping("events/{eventName}/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEvent(@PathVariable String eventName){
