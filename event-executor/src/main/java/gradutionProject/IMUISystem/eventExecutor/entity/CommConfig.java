@@ -25,6 +25,9 @@ public class CommConfig {
     @Column(name = "url_template")
     private String urlTemplate;
 
+    @Column(name = "header_template")
+    private String headerTemplate;
+
     @Column(name = "body_template")
     private String bodyTemplate;
 
