@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
 @RequiredArgsConstructor
 public class EventHandlerController {
@@ -33,12 +31,6 @@ public class EventHandlerController {
         repositoryService.newCommConfig(commConfig);
     }
 
-    @PatchMapping("/events/{eventName}/comm/alter")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void alterCommConfig(@PathVariable String eventName,@RequestBody Map<String,String> alterField){
-        //TODO
-    }
-
     @DeleteMapping("/events/{eventName}/comm/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCommConfig(@PathVariable String eventName){
@@ -56,12 +48,6 @@ public class EventHandlerController {
     public void newNotifyConfig(@PathVariable String eventName,@RequestBody NotifyConfig notifyConfig){
         notifyConfig.setEventName(eventName);
         repositoryService.newNotifyConfig(notifyConfig);
-    }
-
-    @PatchMapping("/events/{eventName}/notify/alter")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void alterNotifyConfig(@PathVariable String eventName,@RequestBody Map<String,String> alterField){
-        //TODO
     }
 
     @DeleteMapping("/events/{eventName}/notify/delete")
