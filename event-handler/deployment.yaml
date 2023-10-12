@@ -74,6 +74,11 @@ spec:
             configMapKeyRef:
               name: event-handler-configmap
               key: event-executor-url
+        - name: USER_DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: event-handler-configmap
+              key: user-database-url
 ---
 apiVersion: v1
 kind: Service
