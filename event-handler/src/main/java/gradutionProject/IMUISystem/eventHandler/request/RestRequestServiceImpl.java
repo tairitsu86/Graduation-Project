@@ -79,7 +79,7 @@ public class RestRequestServiceImpl implements RestRequestService {
     }
 
     @Override
-    public void newCommConfig(String eventName,CommConfigDto commConfigDto) {
+    public void newCommConfig(String eventName,Object commConfigDto) {
         try{
             ResponseEntity<String> response = restTemplate.postForEntity(String.format("%s/events/%s/comm/new",EVENT_EXECUTOR_URL,eventName),commConfigDto,String.class);
             if(!response.getStatusCode().is2xxSuccessful()) throw new HttpApiException(response.getBody());
@@ -98,9 +98,9 @@ public class RestRequestServiceImpl implements RestRequestService {
     }
 
     @Override
-    public CommConfigDto getCommConfig(String eventName) {
+    public Object getCommConfig(String eventName) {
         try{
-            ResponseEntity<CommConfigDto> response = restTemplate.getForEntity(String.format("%s/events/%s/comm",EVENT_EXECUTOR_URL,eventName),CommConfigDto.class);
+            ResponseEntity<Object> response = restTemplate.getForEntity(String.format("%s/events/%s/comm",EVENT_EXECUTOR_URL,eventName),Object.class);
             if(response.getStatusCode().is2xxSuccessful()) return response.getBody();
         }catch (HttpClientErrorException e){
             log.info("getCommConfig Error: {}", e.getMessage());
@@ -109,7 +109,7 @@ public class RestRequestServiceImpl implements RestRequestService {
     }
 
     @Override
-    public void newNotifyConfig(String eventName,NotifyConfigDto notifyConfigDto) {
+    public void newNotifyConfig(String eventName,Object notifyConfigDto) {
         try{
             ResponseEntity<String> response = restTemplate.postForEntity(String.format("%s/events/%s/notify/new",EVENT_EXECUTOR_URL),notifyConfigDto,String.class);
             if(!response.getStatusCode().is2xxSuccessful()) throw new HttpApiException(response.getBody());
@@ -128,9 +128,9 @@ public class RestRequestServiceImpl implements RestRequestService {
     }
 
     @Override
-    public NotifyConfigDto getNotifyConfig(String eventName) {
+    public Object getNotifyConfig(String eventName) {
         try{
-            ResponseEntity<NotifyConfigDto> response = restTemplate.getForEntity(String.format("%s/events/%s/notify",EVENT_EXECUTOR_URL,eventName),NotifyConfigDto.class);
+            ResponseEntity<Object> response = restTemplate.getForEntity(String.format("%s/events/%s/notify",EVENT_EXECUTOR_URL,eventName),Object.class);
             if(response.getStatusCode().is2xxSuccessful()) return response.getBody();
         }catch (HttpClientErrorException e){
             log.info("getNotifyConfig Error: {}", e.getMessage());

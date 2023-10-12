@@ -17,7 +17,7 @@ public class CustomizeEventDto {
     private String description;
     private List<String> variables;
     @JsonProperty("commConfig")
-    private CommConfigDto commConfigDto;
+    private Object commConfigDto;
     @JsonProperty("notifyConfig")
-    private NotifyConfigDto notifyConfigDto;
+    private Object notifyConfigDto;
 }
