@@ -3,7 +3,9 @@ package gradutionProject.IMUISystem.eventExecutor.rabbitMQ;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gradutionProject.IMUISystem.eventExecutor.dto.CommConfigDto;
+import gradutionProject.IMUISystem.eventExecutor.dto.NewCustomizeEventDto;
 import gradutionProject.IMUISystem.eventExecutor.dto.SendingEventDto;
+import gradutionProject.IMUISystem.eventExecutor.entity.MenuOption;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -32,7 +34,8 @@ public class MQEventPublisherImpl implements MQEventPublisher{
                 SendingEventDto.builder()
                         .usernameList(users)
                         .message(message)
-                        .build());
+                        .build()
+        );
     }
 
     @Override
@@ -43,6 +46,23 @@ public class MQEventPublisherImpl implements MQEventPublisher{
         } catch (Exception e) {
             log.info("publishCustomEvent convert json to Map<String,Object> got error: {}",e.getMessage(),e);
         }
+    }
+
+    @Override
+    public void publishMenuEvent(NewCustomizeEventDto newCustomizeEventDto) {
+        rabbitTemplate.convertAndSend(IMUI_RAE_EXCHANGE, NEW_EVENT_QUEUE, newCustomizeEventDto);
+    }
+
+    @Override
+    public void newMenu(String description, List<MenuOption> options, Map<String,String> parameters) {
+        publishMenuEvent(
+                NewCustomizeEventDto.builder()
+                        .eventName("MENU")
+                        .description(description)
+                        .options(options)
+                        .parameters(parameters)
+                        .build()
+        );
     }
 
 }

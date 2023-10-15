@@ -1,5 +1,6 @@
-package gradutionProject.IMUISystem.eventExecutor.entity;
+package gradutionProject.IMUISystem.eventExecutor.dto;
 
+import gradutionProject.IMUISystem.eventExecutor.entity.MenuOption;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,15 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MenuConfig {
+@Builder
+public class NewCustomizeEventDto {
+    private String eventName;
     private String username;
     private String description;
-    private String displayNameTemplate;
-    private String nextEvent;
-    private List<MenuVariable> variables;
+    private List<MenuOption> options;
     private Map<String,String> parameters;
-
 }
