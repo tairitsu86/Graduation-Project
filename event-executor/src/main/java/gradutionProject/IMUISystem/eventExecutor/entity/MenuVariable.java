@@ -1,5 +1,6 @@
 package gradutionProject.IMUISystem.eventExecutor.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.util.Map;
 public class MenuVariable {
     private String variableName;
     private String jsonPath;
+    @JsonProperty("isGlobal")
     private boolean isGlobal;
     private Map<String,String> replaceValue;
 }

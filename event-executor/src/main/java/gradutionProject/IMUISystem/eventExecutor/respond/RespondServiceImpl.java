@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import gradutionProject.IMUISystem.eventExecutor.dto.MenuConfigDto;
-import gradutionProject.IMUISystem.eventExecutor.dto.SendingEventDto;
 import gradutionProject.IMUISystem.eventExecutor.entity.*;
 import gradutionProject.IMUISystem.eventExecutor.rabbitMQ.MQEventPublisher;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +33,7 @@ public class RespondServiceImpl implements RespondService{
                     return;
                 }
                 MenuConfigDto menuConfigDto = getMenuConfigDto(menuConfig,jsonData);
-                mqEventPublisher.newMenu(menuConfig.getDescription(),menuConfigDto.getOptions(),menuConfigDto.getParameters());
+                mqEventPublisher.newMenu(username,menuConfig.getDescription(),menuConfigDto.getOptions(),menuConfigDto.getParameters());
             }
             case NOTIFY -> {
                 NotifyConfig notifyConfig;
@@ -55,7 +54,16 @@ public class RespondServiceImpl implements RespondService{
         for(NotifyVariable n: notifyConfig.getNotifyVariables()){
             value = "";
             Map<String,String> replaceValue = n.getReplaceValue();
-            List<String> temp = JsonPath.read(json,n.getJsonPath());
+            Object data = JsonPath.read(json,n.getJsonPath());
+            List<String> temp;
+            if(data instanceof List){
+                temp = (List<String>) data;
+            }else if(data instanceof String){
+                temp = new ArrayList<>(){{add((String) data);}};
+            }else{
+                return "json path error";
+            }
+
 
             for (int i=0;i<temp.size();i++) {
                 String s = temp.get(i);
@@ -94,12 +102,24 @@ public class RespondServiceImpl implements RespondService{
                 menuConfigDto.getParameters().put(m.getVariableName(),s);
                 continue;
             }
-
-            List<String> temp = JsonPath.read(json,m.getJsonPath());
+            Object data = JsonPath.read(json,m.getJsonPath());
+            List<String> temp;
+            if(data instanceof List){
+                temp = (List<String>) data;
+            }else if(data instanceof String){
+                temp = new ArrayList<>(){{add((String) data);}};
+            }else{
+                throw new RuntimeException("getMenuConfigDto error");
+            }
 
             for(int i=0;i<temp.size();i++){
                 if(i>=options.size())
-                    options.add(MenuOption.builder().optionParameters(new HashMap<>()).build());
+                    options.add(
+                            MenuOption.builder()
+                                    .nextEvent(menuConfig.getNextEvent())
+                                    .optionParameters(new HashMap<>())
+                                    .build()
+                    );
                 options.get(i).getOptionParameters().put(m.getVariableName(),temp.get(i));
             }
         }
