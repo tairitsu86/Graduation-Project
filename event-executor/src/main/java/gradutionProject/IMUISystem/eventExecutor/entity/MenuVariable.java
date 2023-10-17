@@ -1,20 +1,21 @@
 package gradutionProject.IMUISystem.eventExecutor.entity;
 
-import jakarta.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
+import java.util.Map;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NotifyVariableId implements Serializable {
-    @Column(name = "event_name")
-    private String eventName;
-    @Column(name = "variable_name")
+public class MenuVariable {
     private String variableName;
+    private String jsonPath;
+    @JsonProperty("isGlobal")
+    private boolean isGlobal;
+    private Map<String,String> replaceValue;
 }

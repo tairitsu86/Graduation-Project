@@ -6,12 +6,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NotifyConfig {
-    private String respondTemplate;
-    private List<NotifyVariable> notifyVariables;
+public class MenuConfig {
+    private String description;
+    private String displayNameTemplate;
+    private String nextEvent;
+    private List<MenuVariable> variables;
+    private Map<String,String> parameters;
 }

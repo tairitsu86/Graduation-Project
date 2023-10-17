@@ -1,5 +1,7 @@
 package gradutionProject.IMUISystem.eventExecutor.respond;
 
+import gradutionProject.IMUISystem.eventExecutor.entity.RespondConfig;
+
 public interface RespondService {
-    void respondUser(String username,String jsonData,String respondTemplate);
+    void respond(String username, RespondConfig respondConfig, String jsonData);
 }

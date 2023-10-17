@@ -1,9 +1,10 @@
 package gradutionProject.IMUISystem.eventExecutor.repository;
 
 import gradutionProject.IMUISystem.eventExecutor.controller.exception.CommConfigAlreadyExistException;
-import gradutionProject.IMUISystem.eventExecutor.controller.exception.NotifyConfigAlreadyExistException;
+import gradutionProject.IMUISystem.eventExecutor.controller.exception.RespondConfigAlreadyExistException;
 import gradutionProject.IMUISystem.eventExecutor.entity.CommConfig;
 import gradutionProject.IMUISystem.eventExecutor.entity.NotifyConfig;
+import gradutionProject.IMUISystem.eventExecutor.entity.RespondConfig;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RepositoryServiceImpl implements RepositoryService{
     private final CommConfigRepository commConfigRepository;
-    private final NotifyConfigRepository notifyConfigRepository;
+    private final RespondConfigRepository respondConfigRepository;
 
     @PostConstruct
     public void init() {
@@ -43,25 +44,25 @@ public class RepositoryServiceImpl implements RepositoryService{
     }
 
     @Override
-    public void newNotifyConfig(NotifyConfig notifyConfig) {
-        if(notifyConfigRepository.existsById(notifyConfig.getEventName()))
-            throw new NotifyConfigAlreadyExistException(notifyConfig.getEventName());
-        notifyConfigRepository.save(notifyConfig);
+    public void newRespondConfig(RespondConfig respondConfig) {
+        if(respondConfigRepository.existsById(respondConfig.getEventName()))
+            throw new RespondConfigAlreadyExistException(respondConfig.getEventName());
+        respondConfigRepository.save(respondConfig);
     }
 
     @Override
-    public void deleteNotifyConfig(String eventName) {
-        notifyConfigRepository.deleteById(eventName);
+    public void deleteRespondConfig(String eventName) {
+        respondConfigRepository.deleteById(eventName);
     }
 
     @Override
-    public boolean isNotifyConfigExist(String eventName) {
-        return notifyConfigRepository.existsById(eventName);
+    public boolean isRespondConfigExist(String eventName) {
+        return respondConfigRepository.existsById(eventName);
     }
 
     @Override
-    public NotifyConfig getNotifyConfig(String eventName) {
-        if(!notifyConfigRepository.existsById(eventName)) return null;
-        return notifyConfigRepository.getReferenceById(eventName);
+    public RespondConfig getRespondConfig(String eventName) {
+        if(!respondConfigRepository.existsById(eventName)) return null;
+        return respondConfigRepository.getReferenceById(eventName);
     }
 }

@@ -10,26 +10,27 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Embeddable
 @Entity
-@Table(name = "communication_config")
-public class CommConfig {
+@Table(name = "respond_config")
+public class RespondConfig {
+
     @Id
     @Column(name = "event_name")
     private String eventName;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "method_type")
-    private MethodType methodType;
+    @Column(name = "respond_type")
+    private RespondType respondType;
 
-    @Column(name = "url_template")
-    private String urlTemplate;
-
-    @Column(name = "header_template")
-    private String headerTemplate;
-
-    @Column(name = "body_template")
-    private String bodyTemplate;
-
-
+    @Column(name = "respond_data")
+    private String respondData;
 }
+
+
+
+
+
+
+
+
+

@@ -5,13 +5,13 @@ import gradutionProject.IMUISystem.eventExecutor.dto.ExecuteEventDto;
 import gradutionProject.IMUISystem.eventExecutor.entity.CommConfig;
 import gradutionProject.IMUISystem.eventExecutor.repository.RepositoryService;
 import gradutionProject.IMUISystem.eventExecutor.request.RestRequestService;
+import gradutionProject.IMUISystem.eventExecutor.respond.RespondService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import static gradutionProject.IMUISystem.eventExecutor.rabbitMQ.RabbitmqConfig.EXECUTE_EVENT_QUEUE;
@@ -24,6 +24,7 @@ public class MQEventListener {
     private final RepositoryService repositoryService;
     private final RestRequestService restRequestService;
     private final MQEventPublisher mqEventPublisher;
+    private final RespondService respondService;
 
     @RabbitListener(queues={EXECUTE_EVENT_QUEUE})
     public void receive(ExecuteEventDto executeEventDto) {
@@ -37,12 +38,8 @@ public class MQEventListener {
                     ResponseEntity<String> response =
                             restRequestService.sendEventRequest(CommConfigDto.createCommConfigDto(commConfig,executeEventDto.getVariables()));
 
-                    if(!repositoryService.isNotifyConfigExist(executeEventDto.getEventName())) return;
-
-                    mqEventPublisher.notifyUser(
-                            new ArrayList<>(){{add(executeEventDto.getExecutor());}},
-                            repositoryService.getNotifyConfig(executeEventDto.getEventName()),
-                            response.getBody());
+                    if(!repositoryService.isRespondConfigExist(executeEventDto.getEventName())) return;
+                    respondService.respond(executeEventDto.getExecutor(),repositoryService.getRespondConfig(executeEventDto.getEventName()),response.getBody());
                 }
             }
 

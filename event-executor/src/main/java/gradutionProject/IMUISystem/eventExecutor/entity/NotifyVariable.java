@@ -1,38 +1,22 @@
 package gradutionProject.IMUISystem.eventExecutor.entity;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "notify_variable")
-@IdClass(NotifyVariableId.class)
 public class NotifyVariable {
-    
-    @Id
-    @Column(name = "event_name")
-    private String eventName;
-
-    @Id
-    @Column(name = "variable_name")
     private String variableName;
-
-    @ManyToOne
-    @JoinColumn(name = "event_name", insertable=false, updatable=false)
-    private NotifyConfig notifyConfig;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "notify_variable_type")
-    private NotifyVariableType notifyVariableType;
-
-    @Column(name = "json_path")
     private String jsonPath;
+    private Map<String,String> replaceValue;
+    private String startFormat;
+    private String middleFormat;
+    private String endFormat;
 
-    //TODO add format and replace value
 }
