@@ -60,7 +60,7 @@ public class MQEventPublisherImpl implements MQEventPublisher{
                         .eventName("MENU")
                         .username(username)
                         .description(description)
-                        .options(options)
+                        .menuOptions(options)
                         .parameters(parameters)
                         .build()
         );
