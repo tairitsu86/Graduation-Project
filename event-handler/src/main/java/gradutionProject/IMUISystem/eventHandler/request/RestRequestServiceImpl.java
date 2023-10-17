@@ -109,31 +109,31 @@ public class RestRequestServiceImpl implements RestRequestService {
     }
 
     @Override
-    public void newNotifyConfig(String eventName,Object notifyConfigDto) {
+    public void newRespondConfig(String eventName, Object respondConfigDto) {
         try{
-            ResponseEntity<String> response = restTemplate.postForEntity(String.format("%s/events/%s/notify/new",EVENT_EXECUTOR_URL),notifyConfigDto,String.class);
+            ResponseEntity<String> response = restTemplate.postForEntity(String.format("%s/events/%s/respond/new",EVENT_EXECUTOR_URL,eventName),respondConfigDto,String.class);
             if(!response.getStatusCode().is2xxSuccessful()) throw new HttpApiException(response.getBody());
         }catch (HttpClientErrorException e){
-            log.info("newNotifyConfig Error: {}", e.getMessage());
+            log.info("newRespondConfig Error: {}", e.getMessage());
         }
     }
 
     @Override
-    public void deleteNotifyConfig(String eventName) {
+    public void deleteRespondConfig(String eventName) {
         try{
-            restTemplate.delete(String.format("%s/events/%s/notify/delete",EVENT_EXECUTOR_URL,eventName));
+            restTemplate.delete(String.format("%s/events/%s/respond/delete",EVENT_EXECUTOR_URL,eventName));
         }catch (HttpClientErrorException e){
-            log.info("deleteNotifyConfig Error: {}", e.getMessage());
+            log.info("deleteRespondConfig Error: {}", e.getMessage());
         }
     }
 
     @Override
-    public Object getNotifyConfig(String eventName) {
+    public Object getRespondConfig(String eventName) {
         try{
-            ResponseEntity<Object> response = restTemplate.getForEntity(String.format("%s/events/%s/notify",EVENT_EXECUTOR_URL,eventName),Object.class);
+            ResponseEntity<Object> response = restTemplate.getForEntity(String.format("%s/events/%s/respond",EVENT_EXECUTOR_URL,eventName),Object.class);
             if(response.getStatusCode().is2xxSuccessful()) return response.getBody();
         }catch (HttpClientErrorException e){
-            log.info("getNotifyConfig Error: {}", e.getMessage());
+            log.info("getRespondConfig Error: {}", e.getMessage());
         }
         return null;
     }

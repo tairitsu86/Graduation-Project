@@ -24,10 +24,7 @@ public class CustomizeEvent{
     @Column(name = "description")
     private String description;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "customize_event_variables", joinColumns = @JoinColumn(name = "event_name"),uniqueConstraints = {@UniqueConstraint(columnNames = {"event_name", "variable"})})
-    @OrderColumn
-    @Column(name = "variable")
-    private List<String> variables;
+    @Column(name = "variables")
+    private String variables;
 
 }

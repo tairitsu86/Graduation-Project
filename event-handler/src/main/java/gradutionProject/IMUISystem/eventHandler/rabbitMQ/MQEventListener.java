@@ -44,7 +44,7 @@ public class MQEventListener {
                         imUserData,
                         newCustomizeEventDto.getUsername(),
                         newCustomizeEventDto.getDescription(),
-                        newCustomizeEventDto.getOptions(),
+                        newCustomizeEventDto.getMenuOptions(),
                         newCustomizeEventDto.getParameters()
                 );
                 return;
