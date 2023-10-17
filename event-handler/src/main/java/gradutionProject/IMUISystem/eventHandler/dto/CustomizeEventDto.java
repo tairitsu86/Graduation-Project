@@ -1,5 +1,7 @@
 package gradutionProject.IMUISystem.eventHandler.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import gradutionProject.IMUISystem.eventHandler.entity.CustomizeEventVariable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +16,9 @@ import java.util.List;
 public class CustomizeEventDto {
     private String eventName;
     private String description;
-    private List<String> variables;
-    private CommConfigDto commConfigDto;
-    private NotifyConfigDto notifyConfigDto;
+    private List<CustomizeEventVariable> variables;
+    @JsonProperty("commConfig")
+    private Object commConfigDto;
+    @JsonProperty("respondConfig")
+    private Object respondConfigDto;
 }

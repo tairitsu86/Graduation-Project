@@ -11,17 +11,17 @@ public interface RestRequestService {
 
     String signUp(UserSignUpDto userSignUpDto);
 
-    void newCommConfig(String eventName, CommConfigDto commConfigDto);
+    void newCommConfig(String eventName, Object commConfigDto);
 
     void deleteCommConfig(String eventName);
 
-    CommConfigDto getCommConfig(String eventName);
+    Object getCommConfig(String eventName);
 
-    void newNotifyConfig(String eventName,NotifyConfigDto notifyConfigDto);
+    void newRespondConfig(String eventName, Object respondConfigDto);
 
-    void deleteNotifyConfig(String eventName);
+    void deleteRespondConfig(String eventName);
 
-    NotifyConfigDto getNotifyConfig(String eventName);
+    Object getRespondConfig(String eventName);
 
 
 }

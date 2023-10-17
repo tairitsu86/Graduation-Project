@@ -26,7 +26,7 @@ public class MQEventListener {
             log.info("Message event: {}",messageEventDto);
             eventHandler.newMessage(messageEventDto.getImUserData(),messageEventDto.getMessage());
         }catch (Exception e){
-            log.info("Something wrong with: {}",e);
+            log.info("Something wrong with: {}",e.getMessage(),e);
         }
     }
 
@@ -39,26 +39,28 @@ public class MQEventListener {
                 log.info("User didn't exist or didn't login!");
                 return;
             }
-            switch (newCustomizeEventDto.getEventName()){
-                case "MENU"-> eventHandler.menuEvent(
+            if (newCustomizeEventDto.getEventName().equals("MENU")) {
+                eventHandler.menuEvent(
                         imUserData,
                         newCustomizeEventDto.getUsername(),
                         newCustomizeEventDto.getDescription(),
-                        newCustomizeEventDto.getEvents(),
+                        newCustomizeEventDto.getMenuOptions(),
                         newCustomizeEventDto.getParameters()
                 );
-                default -> {
-                    if(!repositoryService.checkEventName(newCustomizeEventDto.getEventName())) return;
-                    eventHandler.newUserEvent(
-                            imUserData,
-                            newCustomizeEventDto.getUsername(),
-                            newCustomizeEventDto.getEventName(),
-                            newCustomizeEventDto.getParameters()
-                    );
-                }
+                return;
             }
+
+            if (!repositoryService.checkEventName(newCustomizeEventDto.getEventName())) return;
+
+            eventHandler.newUserEvent(
+                    imUserData,
+                    newCustomizeEventDto.getUsername(),
+                    newCustomizeEventDto.getEventName(),
+                    newCustomizeEventDto.getParameters()
+            );
+
         }catch (Exception e){
-            log.info("Something wrong with: {}",e);
+            log.info("Something wrong with: {}",e.getMessage(),e);
         }
     }
 }
