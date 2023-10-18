@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: line-service
+  labels:
+    app: line-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: line-service
+  template:
+    metadata:
+      labels:
+        app: line-service
+    spec:
+      containers:
+      - name: line-service
+        image: tairitsu86/graduation-project_im-ui-system_line-service:latest
+        resources:
+            limits:
+              memory: "1024Mi"
+              cpu: "500m"
+        ports:
+        - containerPort: 8080
+        env:
+        - name: LINE_BOT_TOKEN
+          valueFrom: 
+            secretKeyRef:
+              name: line-service-secret
+              key: line-bot-token
+        - name: LINE_BOT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: line-service-secret
+              key: line-bot-secret
+        - name: RABBITMQ_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: line-service-secret
+              key: rabbitmq-username
+        - name: RABBITMQ_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: line-service-secret
+              key: rabbitmq-password
+        - name: LINE_WEBHOOK
+          valueFrom:
+            configMapKeyRef:
+              name: line-service-configmap
+              key: line-webhook
+        - name: RABBITMQ_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: line-service-configmap
+              key: rabbitmq-ip
+        - name: RABBITMQ_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: line-service-configmap
+              key: rabbitmq-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: line-service-service
+spec:
+  selector:
+    app: line-service
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8009
+      targetPort: 8080
+      nodePort: 30009
+
+
