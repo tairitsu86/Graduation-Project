@@ -1,4 +1,4 @@
-package gradutionProject.loginSystem.groupmanager;
+package gradutionProject.loginSystem.groupManager;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
