@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitmqConfig {
     public static final String SEND_MESSAGE_QUEUE = "IM-UI-System.Send-Message";
     public static final String IMUI_IBC_EXCHANGE = "IM-UI-System_IM-base-communication_Exchange";
+    public static final String IMIG_IPS_EXCHANGE = "IM-Integration-System_IM-platform-service_Exchange";
 
     @Bean
     public MessageConverter jsonMessageConverter(ObjectMapper objectMapper) {
