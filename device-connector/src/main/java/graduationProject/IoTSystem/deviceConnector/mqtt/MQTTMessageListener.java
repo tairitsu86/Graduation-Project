@@ -53,8 +53,7 @@ public class MQTTMessageListener implements MessageHandler {
                     return;
                 }
                 mqEventPublisher.publishDeviceStateEvent(deviceStateDto);
-                if(deviceStateDto.getCallBy() == FunctionType.CONTROL)
-                    deviceStateHistoryRepository.save(DeviceStateHistory.mapByDto(deviceStateDto));
+                deviceStateHistoryRepository.save(DeviceStateHistory.mapByDto(deviceStateDto));
             }
         }
     }
