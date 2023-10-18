@@ -4,22 +4,22 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import gradutionProject.IMUISystem.eventExecutor.dto.MenuConfigDto;
+import gradutionProject.IMUISystem.eventExecutor.dto.NotifyConfigDto;
 import gradutionProject.IMUISystem.eventExecutor.entity.*;
 import gradutionProject.IMUISystem.eventExecutor.rabbitMQ.MQEventPublisher;
+import gradutionProject.IMUISystem.eventExecutor.request.RestRequestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class RespondServiceImpl implements RespondService{
     private final MQEventPublisher mqEventPublisher;
+    private final RestRequestService restRequestService;
     private final ObjectMapper objectMapper;
     @Override
     public void respond(String username, RespondConfig respondConfig, String jsonData) {
@@ -43,11 +43,18 @@ public class RespondServiceImpl implements RespondService{
                     log.info("Map notifyConfig error: {}",e.getMessage(),e);
                     return;
                 }
-                mqEventPublisher.notifyUser(new ArrayList<>(){{add(username);}}, getMessage(notifyConfig,jsonData));
+                NotifyConfigDto notifyConfigDto = getNotifyConfigDto(username, notifyConfig, jsonData);
+                notifyConfigDto.getUsernameList().addAll(restRequestService.getGroupUsers(notifyConfigDto.getGroupList()));
+                mqEventPublisher.notifyUser(
+                        new ArrayList<>(new LinkedHashSet<>(notifyConfigDto.getUsernameList()))
+                        ,notifyConfigDto.getMessage()
+                );
             }
         }
     }
-    public String getMessage(NotifyConfig notifyConfig, String json){
+
+
+    public NotifyConfigDto getNotifyConfigDto(String username,NotifyConfig notifyConfig, String json){
         Map<String,String> variables = new HashMap<>();
         String value;
         String formatString;
@@ -61,7 +68,7 @@ public class RespondServiceImpl implements RespondService{
             }else if(data instanceof String){
                 temp = new ArrayList<>(){{add((String) data);}};
             }else{
-                return "json path error";
+                throw new RuntimeException("getNotifyConfigDto json path read error: \n"+json);
             }
 
 
@@ -87,7 +94,15 @@ public class RespondServiceImpl implements RespondService{
         String message = notifyConfig.getRespondTemplate();
         for (String s:variables.keySet())
             message = message.replace(String.format("${%s}",s),variables.get(s));
-        return message;
+        NotifyConfigDto notifyConfigDto = NotifyConfigDto.builder().message(message).build();
+
+        if(variables.containsKey("USERNAME_LIST"))
+            notifyConfigDto.setGroupList(Arrays.stream(variables.get("USERNAME_LIST").split(" ")).toList());
+
+        if(variables.containsKey("GROUP_LIST"))
+            notifyConfigDto.setGroupList(Arrays.stream(variables.get("GROUP_LIST").split(" ")).toList());
+
+        return notifyConfigDto;
     }
 
     public MenuConfigDto getMenuConfigDto(MenuConfig menuConfig, String json){

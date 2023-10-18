@@ -64,6 +64,11 @@ spec:
             configMapKeyRef:
               name: event-executor-configmap
               key: rabbitmq-port
+        - name: GROUP_MANAGER_URL
+          valueFrom:
+            configMapKeyRef:
+              name: event-executor-configmap
+              key: group-manager-url
 ---
 apiVersion: v1
 kind: Service
