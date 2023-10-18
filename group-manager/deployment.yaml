@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: group-manager
-        image: tairitsu86/graduation-project_im-ui-system_group-manager:latest
+        image: tairitsu86/graduation-project_login-system_group-manager:latest
         resources:
             limits:
               memory: "1024Mi"
