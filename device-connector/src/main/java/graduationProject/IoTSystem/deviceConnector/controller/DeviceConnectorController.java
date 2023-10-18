@@ -1,12 +1,9 @@
 package graduationProject.IoTSystem.deviceConnector.controller;
 
-import graduationProject.IoTSystem.deviceConnector.dto.DeviceStateSimpleDto;
 import graduationProject.IoTSystem.deviceConnector.repository.DeviceStateHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,10 +15,9 @@ public class DeviceConnectorController {
         return "This is Device Controller!";
     }
 
-    @GetMapping("/devices/{deviceId}/state")
-    private Object getDeviceState(@PathVariable String deviceId){
-//        return deviceStateHistoryRepository.getDeviceAllStates(deviceId);
-        return null;
+    @GetMapping("/devices/{deviceId}/states")
+    private Object getDeviceAllStates(@PathVariable String deviceId){
+        return deviceStateHistoryRepository.getDeviceAllStates(deviceId);
     }
 }
 
