@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: line-service
-        image: tairitsu86/graduation-project_im-ui-system_line-service:latest
+        image: tairitsu86/graduation-project_im-ig-system_line-service:latest
         resources:
             limits:
               memory: "1024Mi"
