@@ -5,11 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@Builder
-@NoArgsConstructor
+import java.util.List;
+
 @AllArgsConstructor
-public class IMUserData {
-    private String platform;
-    private String userId;
+@NoArgsConstructor
+@Builder
+@Data
+public class SendingServiceDto {
+    private List<String> userIdList;
+    private String message;
 }
