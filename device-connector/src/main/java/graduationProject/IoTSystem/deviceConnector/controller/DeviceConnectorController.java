@@ -9,10 +9,15 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class DeviceConnectorController {
     private final DeviceStateHistoryRepository deviceStateHistoryRepository;
-    @GetMapping
+    @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
     public String home(){
         return "This is Device Controller!";
+    }
+
+    @GetMapping("/devices/{deviceId}/states")
+    private Object getDeviceAllStates(@PathVariable String deviceId){
+        return deviceStateHistoryRepository.getDeviceAllStates(deviceId);
     }
 }
 

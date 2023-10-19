@@ -16,7 +16,6 @@ public class DeviceStateDto {
     private String executor;
     private String deviceId;
     private String deviceName;
-    private FunctionType callBy;
     private String stateName;
     private String stateValue;
 }
