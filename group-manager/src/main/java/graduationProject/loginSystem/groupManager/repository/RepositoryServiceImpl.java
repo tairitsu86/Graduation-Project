@@ -8,6 +8,7 @@ import graduationProject.loginSystem.groupManager.entity.Group;
 import graduationProject.loginSystem.groupManager.entity.GroupRole;
 import graduationProject.loginSystem.groupManager.entity.Member;
 import graduationProject.loginSystem.groupManager.entity.MemberId;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +23,18 @@ public class RepositoryServiceImpl implements RepositoryService{
 
     @Override
     public List<String> getGroups(String username) {
-        return memberRepository.getGroupIdByUsername(username);
+        List<String> groups = new ArrayList<>();
+        for (Member member: memberRepository.getMemberByUsername(username))
+            groups.add(member.getGroupId());
+        return groups;
     }
 
     @Override
     public List<String> getMembers(String groupId) {
-        return memberRepository.getUsernameByGroupId(groupId);
+        List<String> users = new ArrayList<>();
+        for (Member member: memberRepository.getMemberByGroupId(groupId))
+            users.add(member.getUsername());
+        return users;
     }
 
     @Override
@@ -68,6 +75,7 @@ public class RepositoryServiceImpl implements RepositoryService{
         return groupRepository.save(group);
     }
 
+    @Transactional
     @Override
     public void deleteGroup(String groupId) {
         memberRepository.deleteByGroupId(groupId);
@@ -107,7 +115,8 @@ public class RepositoryServiceImpl implements RepositoryService{
             else
                 newId[i] = (char)(random-36+97);
         }
-        if(groupRepository.existsById(String.copyValueOf(newId))) return newGroupId();
-        return String.copyValueOf(newId);
+        String newGroupId = String.copyValueOf(newId);
+        if(groupRepository.existsById(newGroupId)) return newGroupId();
+        return newGroupId;
     }
 }
