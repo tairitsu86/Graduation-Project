@@ -8,7 +8,7 @@
 		<version>3.1.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>gradutionProject.IoTSystem</groupId>
+	<groupId>graduationProject.IoTSystem</groupId>
 	<artifactId>device-database</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>device-database</name>
