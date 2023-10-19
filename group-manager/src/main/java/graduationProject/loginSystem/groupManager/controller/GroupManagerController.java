@@ -1,5 +1,6 @@
 package graduationProject.loginSystem.groupManager.controller;
 
+import graduationProject.loginSystem.groupManager.dto.CreateGroupDto;
 import graduationProject.loginSystem.groupManager.entity.Group;
 import graduationProject.loginSystem.groupManager.entity.GroupRole;
 import graduationProject.loginSystem.groupManager.dto.GroupDetailDto;
@@ -24,7 +25,7 @@ public class GroupManagerController {
 
     @GetMapping("/users/{username}/groups")
     @ResponseStatus(HttpStatus.OK)
-    public List<GroupDto> getGroups(@PathVariable String username){
+    public List<String> getGroups(@PathVariable String username){
         return repositoryService.getGroups(username);
     }
 
@@ -48,9 +49,10 @@ public class GroupManagerController {
 
     @PostMapping("/groups/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createGroup(@RequestBody Group group, @RequestParam String owner){
-        repositoryService.createGroup(group);
+    public Group createGroup(@RequestBody CreateGroupDto createGroupDto, @RequestParam String owner){
+        Group group = repositoryService.createGroup(createGroupDto);
         repositoryService.addMember(group.getGroupId(), owner, GroupRole.OWNER);
+        return group;
     }
 
     @DeleteMapping("/groups/{groupId}/delete")

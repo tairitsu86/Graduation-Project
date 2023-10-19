@@ -9,5 +9,7 @@ import java.util.List;
 public interface MemberRepository extends JpaRepository<Member, MemberId> {
     List<String> getUsernameByGroupId(String groupId);
 
+    List<String> getGroupIdByUsername(String username);
+
     void deleteByGroupId(String groupId);
 }
