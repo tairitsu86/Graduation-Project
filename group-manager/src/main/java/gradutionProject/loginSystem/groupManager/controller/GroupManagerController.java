@@ -39,6 +39,12 @@ public class GroupManagerController {
         return repositoryService.getGroupDetail(groupId);
     }
 
+    @GetMapping("/groups/search")
+    @ResponseStatus(HttpStatus.OK)
+    public List<GroupDto> searchGroup(@RequestParam String keyword){
+        return repositoryService.searchGroup(keyword);
+    }
+
     @PostMapping("/groups/new")
     @ResponseStatus(HttpStatus.CREATED)
     public void createGroup(@RequestBody Group group){
