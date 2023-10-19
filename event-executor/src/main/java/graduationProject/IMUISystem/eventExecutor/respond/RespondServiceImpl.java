@@ -140,8 +140,9 @@ public class RespondServiceImpl implements RespondService{
         }
         String description = menuConfig.getDescriptionTemplate();
         for (String s :menuConfigDto.getParameters().keySet()){
-            menuConfigDto.setDescription(description.replace(String.format("${%s}",s),menuConfigDto.getParameters().get(s)));
+            description = description.replace(String.format("${%s}",s),menuConfigDto.getParameters().get(s));
         }
+        menuConfigDto.setDescription(description);
         for (MenuOption option:options) {
             String displayName = menuConfig.getDisplayNameTemplate();
             for (String s:option.getOptionParameters().keySet())
