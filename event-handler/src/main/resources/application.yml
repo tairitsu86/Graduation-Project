@@ -24,3 +24,5 @@ spring:
       mode: always
 my_env:
   loginTrackerUrl: ${LOGIN_TRACKER_URL}
+  eventExecutorUrl: ${EVENT_EXECUTOR_URL}
+  userDatabaseUrl: ${USER_DATABASE_URL}

@@ -8,7 +8,7 @@
 		<version>3.1.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>gradutionProject.IMUISystem</groupId>
+	<groupId>graduationProject.IMUISystem</groupId>
 	<artifactId>event-handler</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>event-handler</name>
