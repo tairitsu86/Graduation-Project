@@ -9,7 +9,6 @@ import graduationProject.IMUISystem.eventHandler.controller.exception.EventNotEx
 import graduationProject.IMUISystem.eventHandler.controller.exception.JsonMappingException;
 import graduationProject.IMUISystem.eventHandler.dto.CustomizeEventDto;
 import graduationProject.IMUISystem.eventHandler.dto.UserStateDto;
-import graduationProject.IMUISystem.eventHandler.entity.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
