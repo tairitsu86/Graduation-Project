@@ -1,5 +1,7 @@
 package graduationProject.IoTSystem.deviceDatabase.request;
 
-public interface RestRequestService {
+import java.util.List;
 
+public interface RestRequestService {
+    List<String> getGroupsByUsername(String username);
 }

@@ -12,6 +12,4 @@ import lombok.NoArgsConstructor;
 public class GetDeviceDto {
     private String deviceId;
     private String deviceName;
-    private String deviceDescription;
-    private String deviceOwner;
 }

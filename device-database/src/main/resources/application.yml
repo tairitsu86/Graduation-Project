@@ -22,3 +22,5 @@ spring:
   sql:
     init:
       mode: always
+my_env:
+  groupManagerUrl: ${GROUP_MANAGER_URL}

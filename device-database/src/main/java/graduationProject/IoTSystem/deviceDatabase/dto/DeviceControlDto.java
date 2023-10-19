@@ -1,10 +1,11 @@
 package graduationProject.IoTSystem.deviceDatabase.dto;
 
-import graduationProject.IoTSystem.deviceDatabase.entity.FunctionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Map;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,6 +15,5 @@ public class DeviceControlDto {
     private String executor;
     private String deviceId;
     private int functionId;
-    private FunctionType functionType;
-    private String functionPara;
+    private Map<String,String> parameters;
 }

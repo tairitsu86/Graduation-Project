@@ -1,5 +1,6 @@
 package graduationProject.IoTSystem.deviceDatabase;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -14,5 +15,9 @@ public class DeviceDatabaseApplication {
 	@Bean
 	public RestTemplate createRestTemplateBean(){
 		return new RestTemplate();
+	}
+	@Bean
+	public ObjectMapper createObjectMapperBean(){
+		return new ObjectMapper();
 	}
 }

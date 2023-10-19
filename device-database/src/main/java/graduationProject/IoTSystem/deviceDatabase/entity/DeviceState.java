@@ -5,11 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Builder
-public class DeviceFunctionParameter {
-    private String parameterName;
-    private String parameterRange;
+public class DeviceState {
+    private String stateName;
+    private String stateRange;
 }

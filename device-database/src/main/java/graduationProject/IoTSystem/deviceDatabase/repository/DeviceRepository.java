@@ -1,25 +1,24 @@
 package graduationProject.IoTSystem.deviceDatabase.repository;
 
-import graduationProject.IoTSystem.deviceDatabase.dto.GetDeviceDto;
-import graduationProject.IoTSystem.deviceDatabase.dto.GetDevicesDto;
 import graduationProject.IoTSystem.deviceDatabase.entity.Device;
-import graduationProject.IoTSystem.deviceDatabase.entity.FunctionType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @Repository
 public interface DeviceRepository extends JpaRepository<Device,String> {
-    @Query(value = "SELECT [device_id],[device_name] FROM [devices] WHERE [device_owner] = '?1'",nativeQuery = true)
-    List<GetDevicesDto> getDeviceByUsername(String username);
-    @Query(value = "SELECT * FROM [devices] WHERE [device_id] = '?1'",nativeQuery = true)
-    Optional<GetDeviceDto> getDeviceByDeviceId(String deviceId);
-    @Query(value = "SELECT [device_owner] FROM [devices] WHERE [device_id] = '?1'",nativeQuery = true)
-    Optional<String> getDeviceOwner(String deviceId);
-    @Query(value = "SELECT [function_type] FROM [device_functions] WHERE [device_id] = '?1' AND [function_id] = ?2",nativeQuery = true)
-    Optional<FunctionType> getFunctionType(String deviceId, int functionId);
+    @Query(value = "SELECT D.device_id AS deviceId, D.device_name AS deviceName \n" +
+            "FROM [dbo].[device] AS D\n" +
+            "JOIN [dbo].[device_permission_users] AS U ON D.device_id = U.device_id\n" +
+            "WHERE  username = ?1",nativeQuery = true)
+    List<Map<String,String>> getDeviceByUsername(String username);
 
+    @Query(value = "SELECT D.device_id AS deviceId, D.device_name AS deviceName \n" +
+            "FROM [dbo].[device] AS D\n" +
+            "JOIN [dbo].[device_permission_groups] AS G ON D.device_id = G.device_id\n" +
+            "WHERE group_id in (?1)",nativeQuery = true)
+    List<Map<String,String>> getDeviceByGroupList(List<String> groupList);
 }

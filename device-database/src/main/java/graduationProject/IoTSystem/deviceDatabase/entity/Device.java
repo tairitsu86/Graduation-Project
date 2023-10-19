@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -14,7 +13,7 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="devices")
+@Table(name="device")
 public class Device {
     @Id
     @Column(name = "device_id")
@@ -23,14 +22,17 @@ public class Device {
     @Column(name = "device_name")
     private String deviceName;
 
-    @Column(name = "device_description")
-    private String deviceDescription;
+    @Column(name = "description")
+    private String description;
 
-    @Column(name = "device_owner")
-    private String deviceOwner;
+    @Column(name = "owner")
+    private String owner;
 
-    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL)
-    private List<DeviceFunction> functions;
+    @Column(name = "states")
+    private String states;
+
+    @Column(name = "functions")
+    private String functions;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "device_permission_groups", joinColumns = @JoinColumn(name = "device_id"))

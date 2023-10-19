@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -13,5 +15,5 @@ public class UserControlDto {
     private String username;
     private String deviceId;
     private int functionId;
-    private String functionPara;
+    private Map<String,String> parameters;
 }
