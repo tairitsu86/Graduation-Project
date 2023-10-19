@@ -1,7 +1,7 @@
-package gradutionProject.IMUISystem.messageSender.request;
+package graduationProject.IMUISystem.messageSender.request;
 
-import gradutionProject.IMUISystem.messageSender.dto.GetIMDataDto;
-import gradutionProject.IMUISystem.messageSender.dto.IMUserData;
+import graduationProject.IMUISystem.messageSender.dto.IMUserData;
+import graduationProject.IMUISystem.messageSender.dto.LoginUserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,13 +20,11 @@ public class RestRequestServiceImpl implements RestRequestService {
     @Override
     public List<IMUserData> getIMData(List<String> usernameList) {
         List<IMUserData> imUserDataList = new ArrayList<>();
-        GetIMDataDto getIMDataDto;
+        LoginUserDto loginUserDto;
         for(String username:usernameList){
-//            String s = restTemplate.getForObject(String.format("%s/users/%s",LOGIN_TRACKER_URL,username), String.class);
-//            System.out.println(s);
-            getIMDataDto = restTemplate.getForObject(String.format("%s/users/%s",LOGIN_TRACKER_URL,username), GetIMDataDto.class);
-            if(getIMDataDto==null||getIMDataDto.getImUserDataList()==null) continue;
-            imUserDataList.addAll(getIMDataDto.getImUserDataList());
+            loginUserDto = restTemplate.getForObject(String.format("%s/users/%s",LOGIN_TRACKER_URL,username), LoginUserDto.class);
+            if(loginUserDto==null||loginUserDto.getImUserData()==null) continue;
+            imUserDataList.add(loginUserDto.getImUserData());
         }
         return imUserDataList;
     }

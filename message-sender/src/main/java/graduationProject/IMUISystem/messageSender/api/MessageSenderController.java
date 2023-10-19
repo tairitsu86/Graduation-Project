@@ -1,4 +1,4 @@
-package gradutionProject.IMUISystem.messageSender.api;
+package graduationProject.IMUISystem.messageSender.api;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;

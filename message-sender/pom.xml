@@ -8,7 +8,7 @@
 		<version>3.1.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>gradutionProject.IMUISystem</groupId>
+	<groupId>graduationProject.IMUISystem</groupId>
 	<artifactId>message-sender</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>message-sender</name>
@@ -94,45 +94,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
-		</dependency>
-		<!-- line bot dependency -->
-		<!-- https://github.com/line/line-bot-sdk-java -->
-		<dependency>
-			<groupId>com.linecorp.bot</groupId>
-			<artifactId>line-bot-cli</artifactId>
-			<version>4.7.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.linecorp.bot</groupId>
-			<artifactId>line-bot-spring-boot</artifactId>
-			<version>6.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.linecorp.bot</groupId>
-			<artifactId>line-bot-parser</artifactId>
-			<version>6.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.linecorp.bot</groupId>
-			<artifactId>line-bot-api-client</artifactId>
-			<version>6.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.linecorp.bot</groupId>
-			<artifactId>line-bot-servlet</artifactId>
-			<version>6.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.linecorp.bot</groupId>
-			<artifactId>line-bot-model</artifactId>
-			<version>6.0.0</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api -->
-		<dependency>
-			<groupId>jakarta.servlet</groupId>
-			<artifactId>jakarta.servlet-api</artifactId>
-			<version>6.0.0</version>
-			<scope>provided</scope>
 		</dependency>
 
 	</dependencies>

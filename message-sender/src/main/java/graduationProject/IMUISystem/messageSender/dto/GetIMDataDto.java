@@ -1,4 +1,4 @@
-package gradutionProject.IMUISystem.messageSender.dto;
+package graduationProject.IMUISystem.messageSender.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
