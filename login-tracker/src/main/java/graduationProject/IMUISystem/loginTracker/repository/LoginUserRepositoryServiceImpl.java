@@ -1,12 +1,11 @@
-package gradutionProject.IMUISystem.loginTracker.repository;
+package graduationProject.IMUISystem.loginTracker.repository;
 
-import gradutionProject.IMUISystem.loginTracker.api.exception.LoginUserNotExistException;
-import gradutionProject.IMUISystem.loginTracker.entity.IMUserData;
-import gradutionProject.IMUISystem.loginTracker.entity.LoginUser;
+import graduationProject.IMUISystem.loginTracker.entity.LoginUser;
+import graduationProject.IMUISystem.loginTracker.controller.exception.LoginUserNotExistException;
+import graduationProject.IMUISystem.loginTracker.entity.IMUserData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,12 +18,14 @@ public class LoginUserRepositoryServiceImpl implements LoginUserRepositoryServic
                 .userId(IMUserId)
                 .build();
         if(!loginUserRepository.existsById(id))
-            throw new LoginUserNotExistException(id);
-        return loginUserRepository.getReferenceById(id);
+            throw new LoginUserNotExistException(id.toString());
+        return loginUserRepository.findById(id).get();
     }
 
     @Override
-    public List<LoginUser> getLoginUser(String username) {
+    public LoginUser getLoginUser(String username) {
+        if(!loginUserRepository.existsByUsername(username))
+            throw new LoginUserNotExistException(username);
         return loginUserRepository.findByUsername(username);
     }
 

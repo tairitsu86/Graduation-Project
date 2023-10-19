@@ -1,4 +1,4 @@
-package gradutionProject.IMUISystem.loginTracker.entity;
+package graduationProject.IMUISystem.loginTracker.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
