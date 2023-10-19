@@ -1,4 +1,4 @@
-package gradutionProject.IMUISystem.loginTracker;
+package graduationProject.IMUISystem.loginTracker;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

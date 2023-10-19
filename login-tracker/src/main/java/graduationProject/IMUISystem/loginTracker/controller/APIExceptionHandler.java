@@ -1,6 +1,6 @@
-package gradutionProject.IMUISystem.loginTracker.controller;
+package graduationProject.IMUISystem.loginTracker.controller;
 
-import gradutionProject.IMUISystem.loginTracker.controller.exception.LoginUserNotExistException;
+import graduationProject.IMUISystem.loginTracker.controller.exception.LoginUserNotExistException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;

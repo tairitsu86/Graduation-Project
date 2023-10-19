@@ -1,7 +1,7 @@
-package gradutionProject.IMUISystem.loginTracker.repository;
+package graduationProject.IMUISystem.loginTracker.repository;
 
-import gradutionProject.IMUISystem.loginTracker.entity.IMUserData;
-import gradutionProject.IMUISystem.loginTracker.entity.LoginUser;
+import graduationProject.IMUISystem.loginTracker.entity.LoginUser;
+import graduationProject.IMUISystem.loginTracker.entity.IMUserData;
 
 
 public interface LoginUserRepositoryService {

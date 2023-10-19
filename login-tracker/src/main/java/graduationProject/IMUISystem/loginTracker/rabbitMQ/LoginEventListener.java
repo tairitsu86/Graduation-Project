@@ -1,15 +1,15 @@
-package gradutionProject.IMUISystem.loginTracker.rabbitMQ;
+package graduationProject.IMUISystem.loginTracker.rabbitMQ;
 
-import gradutionProject.IMUISystem.loginTracker.dto.LoginEventDto;
-import gradutionProject.IMUISystem.loginTracker.dto.LogoutEventDto;
-import gradutionProject.IMUISystem.loginTracker.entity.IMUserData;
-import gradutionProject.IMUISystem.loginTracker.repository.LoginUserRepositoryService;
+import graduationProject.IMUISystem.loginTracker.repository.LoginUserRepositoryService;
+import graduationProject.IMUISystem.loginTracker.dto.LoginEventDto;
+import graduationProject.IMUISystem.loginTracker.dto.LogoutEventDto;
+import graduationProject.IMUISystem.loginTracker.entity.IMUserData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
-import static gradutionProject.IMUISystem.loginTracker.rabbitMQ.RabbitmqConfig.*;
+import static graduationProject.IMUISystem.loginTracker.rabbitMQ.RabbitmqConfig.*;
 
 @Slf4j
 @RequiredArgsConstructor

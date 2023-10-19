@@ -1,4 +1,4 @@
-package gradutionProject.IMUISystem.loginTracker;
+package graduationProject.IMUISystem.loginTracker;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

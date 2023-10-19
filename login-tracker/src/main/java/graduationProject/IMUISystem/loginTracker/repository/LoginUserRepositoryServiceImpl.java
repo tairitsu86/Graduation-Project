@@ -1,8 +1,8 @@
-package gradutionProject.IMUISystem.loginTracker.repository;
+package graduationProject.IMUISystem.loginTracker.repository;
 
-import gradutionProject.IMUISystem.loginTracker.controller.exception.LoginUserNotExistException;
-import gradutionProject.IMUISystem.loginTracker.entity.IMUserData;
-import gradutionProject.IMUISystem.loginTracker.entity.LoginUser;
+import graduationProject.IMUISystem.loginTracker.entity.LoginUser;
+import graduationProject.IMUISystem.loginTracker.controller.exception.LoginUserNotExistException;
+import graduationProject.IMUISystem.loginTracker.entity.IMUserData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
