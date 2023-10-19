@@ -1,8 +1,7 @@
-package gradutionProject.IMUISystem.messageSender.request;
+package graduationProject.IMUISystem.messageSender.request;
 
-import gradutionProject.IMUISystem.messageSender.dto.GetIMDataDto;
-import gradutionProject.IMUISystem.messageSender.dto.IMUserData;
-import gradutionProject.IMUISystem.messageSender.dto.LoginUserDto;
+import graduationProject.IMUISystem.messageSender.dto.IMUserData;
+import graduationProject.IMUISystem.messageSender.dto.LoginUserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
