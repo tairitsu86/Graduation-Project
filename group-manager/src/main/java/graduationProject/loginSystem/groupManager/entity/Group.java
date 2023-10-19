@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "group")
+@Table(name = "group_table")
 public class Group {
     @Id
     @Column(name = "group_id")
