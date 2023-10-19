@@ -16,7 +16,7 @@ env:
   RABBITMQ_PORT: ${{ secrets.RABBITMQ_PORT }}
   RABBITMQ_USERNAME: ${{ secrets.RABBITMQ_USERNAME }}
   RABBITMQ_PASSWORD: ${{ secrets.RABBITMQ_PASSWORD }}
-  LOGIN_TRACKER_URL: ${{ secrets.LOGIN_TRACKER_URL }}
+  GROUP_MANAGER_URL: ${{ secrets.GROUP_MANAGER_URL }}
 
 jobs:
   build:

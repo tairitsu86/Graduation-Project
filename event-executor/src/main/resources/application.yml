@@ -23,4 +23,4 @@ spring:
     init:
       mode: always
 my_env:
-  loginTrackerUrl: ${LOGIN_TRACKER_URL}
+  groupManagerUrl: ${GROUP_MANAGER_URL}
