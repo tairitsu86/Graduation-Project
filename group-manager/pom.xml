@@ -8,7 +8,7 @@
 		<version>3.1.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>gradutionProject.loginSystem</groupId>
+	<groupId>graduationProject.loginSystem</groupId>
 	<artifactId>group-manager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>group-manager</name>
