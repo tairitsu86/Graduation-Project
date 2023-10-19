@@ -1,10 +1,10 @@
-package gradutionProject.IMUISystem.messageSender.sender;
+package graduationProject.IMUISystem.messageSender.sender;
 
-import gradutionProject.IMUISystem.messageSender.dto.IMUserData;
-import gradutionProject.IMUISystem.messageSender.dto.SendingEventDto;
-import gradutionProject.IMUISystem.messageSender.dto.SendingServiceDto;
-import gradutionProject.IMUISystem.messageSender.rabbitMQ.MQEventPublisher;
-import gradutionProject.IMUISystem.messageSender.request.RestRequestService;
+import graduationProject.IMUISystem.messageSender.request.RestRequestService;
+import graduationProject.IMUISystem.messageSender.dto.IMUserData;
+import graduationProject.IMUISystem.messageSender.dto.SendingEventDto;
+import graduationProject.IMUISystem.messageSender.dto.SendingServiceDto;
+import graduationProject.IMUISystem.messageSender.rabbitMQ.MQEventPublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

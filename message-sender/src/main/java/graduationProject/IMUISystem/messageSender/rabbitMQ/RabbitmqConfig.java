@@ -1,4 +1,4 @@
-package gradutionProject.IMUISystem.messageSender.rabbitMQ;
+package graduationProject.IMUISystem.messageSender.rabbitMQ;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.core.Binding;

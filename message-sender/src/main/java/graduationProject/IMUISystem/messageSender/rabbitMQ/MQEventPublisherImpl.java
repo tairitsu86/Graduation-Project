@@ -1,11 +1,11 @@
-package gradutionProject.IMUISystem.messageSender.rabbitMQ;
+package graduationProject.IMUISystem.messageSender.rabbitMQ;
 
-import gradutionProject.IMUISystem.messageSender.dto.SendingServiceDto;
+import graduationProject.IMUISystem.messageSender.dto.SendingServiceDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
-import static gradutionProject.IMUISystem.messageSender.rabbitMQ.RabbitmqConfig.IMIG_IPS_EXCHANGE;
+import static graduationProject.IMUISystem.messageSender.rabbitMQ.RabbitmqConfig.IMIG_IPS_EXCHANGE;
 
 
 @Service
