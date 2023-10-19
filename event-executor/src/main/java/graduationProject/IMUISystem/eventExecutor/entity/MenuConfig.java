@@ -13,7 +13,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MenuConfig {
-    private String description;
+    private String descriptionTemplate;
     private String displayNameTemplate;
     private String nextEvent;
     private List<MenuVariable> variables;
