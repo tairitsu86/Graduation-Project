@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: group-manager
+  labels:
+    app: group-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: group-manager
+  template:
+    metadata:
+      labels:
+        app: group-manager
+    spec:
+      containers:
+      - name: group-manager
+        image: tairitsu86/graduation-project_login-system_group-manager:latest
+        resources:
+            limits:
+              memory: "1024Mi"
+              cpu: "500m"
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DATABASE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: group-manager-secret
+              key: database-username
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: group-manager-secret
+              key: database-password
+        - name: RABBITMQ_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: group-manager-secret
+              key: rabbitmq-username
+        - name: RABBITMQ_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: group-manager-secret
+              key: rabbitmq-password
+        - name: DATABASE_IP_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: group-manager-configmap
+              key: database-ip-port
+        - name: DATABASE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: group-manager-configmap
+              key: database-name
+        - name: RABBITMQ_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: group-manager-configmap
+              key: rabbitmq-ip
+        - name: RABBITMQ_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: group-manager-configmap
+              key: rabbitmq-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: group-manager-service
+spec:
+  selector:
+    app: group-manager
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8008
+      targetPort: 8080
+      nodePort: 30008
+
+
