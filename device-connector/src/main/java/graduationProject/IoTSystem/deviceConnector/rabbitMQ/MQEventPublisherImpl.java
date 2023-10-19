@@ -15,11 +15,13 @@ public class MQEventPublisherImpl implements MQEventPublisher{
     private final RabbitTemplate rabbitTemplate;
     @Override
     public void publishDeviceStateEvent(DeviceStateDto deviceStateDto) {
-        rabbitTemplate.convertAndSend(MQ_EXCHANGE, DEVICE_STATE_QUEUE,deviceStateDto);
+        deviceStateDto.setNotificationType("device-state");
+        deviceStateDto.setFrom("device-connector");
+        rabbitTemplate.convertAndSend(SYS_NTF_EXCHANGE, "",deviceStateDto);
     }
 
     @Override
     public void publishDeviceInfoEvent(DeviceInfoDto deviceInfoDto) {
-        rabbitTemplate.convertAndSend(MQ_EXCHANGE, DEVICE_INFO_QUEUE,deviceInfoDto);
+        rabbitTemplate.convertAndSend(IoT_DBC_EXCHANGE, DEVICE_INFO_QUEUE,deviceInfoDto);
     }
 }

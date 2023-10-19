@@ -11,9 +11,11 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class DeviceStateDto {
+    private String notificationType;
+    private String from;
     private String executor;
-    private FunctionType functionType;
     private String deviceId;
+    private String deviceName;
     private String stateName;
     private String stateValue;
 }
