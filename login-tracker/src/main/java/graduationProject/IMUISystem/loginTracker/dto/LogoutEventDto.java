@@ -1,4 +1,4 @@
-package gradutionProject.IMUISystem.loginTracker.dto;
+package graduationProject.IMUISystem.loginTracker.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

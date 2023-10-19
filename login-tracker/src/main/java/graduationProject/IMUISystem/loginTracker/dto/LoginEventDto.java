@@ -1,6 +1,5 @@
-package gradutionProject.IMUISystem.loginTracker.dto;
+package graduationProject.IMUISystem.loginTracker.dto;
 
-import gradutionProject.IMUISystem.loginTracker.entity.IMUserData;
 import lombok.Data;
 
 @Data

@@ -1,7 +1,7 @@
-package gradutionProject.IMUISystem.loginTracker.controller;
+package graduationProject.IMUISystem.loginTracker.controller;
 
-import gradutionProject.IMUISystem.loginTracker.entity.LoginUser;
-import gradutionProject.IMUISystem.loginTracker.repository.LoginUserRepositoryService;
+import graduationProject.IMUISystem.loginTracker.entity.LoginUser;
+import graduationProject.IMUISystem.loginTracker.repository.LoginUserRepositoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
