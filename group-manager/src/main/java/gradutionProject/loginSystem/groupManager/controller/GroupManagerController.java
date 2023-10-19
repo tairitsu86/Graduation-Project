@@ -3,6 +3,7 @@ package gradutionProject.loginSystem.groupManager.controller;
 import gradutionProject.loginSystem.groupManager.dto.GroupDetailDto;
 import gradutionProject.loginSystem.groupManager.dto.GroupDto;
 import gradutionProject.loginSystem.groupManager.entity.Group;
+import gradutionProject.loginSystem.groupManager.entity.GroupRole;
 import gradutionProject.loginSystem.groupManager.repository.RepositoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,8 +48,9 @@ public class GroupManagerController {
 
     @PostMapping("/groups/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createGroup(@RequestBody Group group){
+    public void createGroup(@RequestBody Group group, @RequestParam String owner){
         repositoryService.createGroup(group);
+        repositoryService.addMember(group.getGroupId(), owner, GroupRole.OWNER);
     }
 
     @DeleteMapping("/groups/{groupId}/delete")
@@ -60,7 +62,7 @@ public class GroupManagerController {
     @PostMapping("/groups/{groupId}/members/new")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addMember(@PathVariable String groupId, @RequestParam String username){
-        repositoryService.addMember(groupId,username);
+        repositoryService.addMember(groupId,username, GroupRole.MEMBER);
     }
 
     @DeleteMapping("/groups/{groupId}/members/{username}/delete")
