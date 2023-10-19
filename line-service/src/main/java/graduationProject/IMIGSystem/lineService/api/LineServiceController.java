@@ -1,4 +1,4 @@
-package gradutionProject.IMIGSystem.lineService.api;
+package graduationProject.IMIGSystem.lineService.api;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
