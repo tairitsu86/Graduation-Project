@@ -8,7 +8,6 @@ import graduationProject.IMUISystem.eventExecutor.dto.NotifyConfigDto;
 import graduationProject.IMUISystem.eventExecutor.entity.*;
 import graduationProject.IMUISystem.eventExecutor.rabbitMQ.MQEventPublisher;
 import graduationProject.IMUISystem.eventExecutor.request.RestRequestService;
-import graduationProject.IMUISystem.eventExecutor.entity.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,7 +33,7 @@ public class RespondServiceImpl implements RespondService{
                     return;
                 }
                 MenuConfigDto menuConfigDto = getMenuConfigDto(menuConfig,jsonData);
-                mqEventPublisher.newMenu(username,menuConfig.getDescription(),menuConfigDto.getOptions(),menuConfigDto.getParameters());
+                mqEventPublisher.newMenu(username,menuConfigDto.getDescription(),menuConfigDto.getOptions(),menuConfigDto.getParameters());
             }
             case NOTIFY -> {
                 NotifyConfig notifyConfig;
@@ -138,6 +137,10 @@ public class RespondServiceImpl implements RespondService{
                     );
                 options.get(i).getOptionParameters().put(m.getVariableName(),temp.get(i));
             }
+        }
+        String description = menuConfig.getDescriptionTemplate();
+        for (String s :menuConfigDto.getParameters().keySet()){
+            menuConfigDto.setDescription(description.replace(String.format("${%s}",s),menuConfigDto.getParameters().get(s)));
         }
         for (MenuOption option:options) {
             String displayName = menuConfig.getDisplayNameTemplate();

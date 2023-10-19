@@ -14,6 +14,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Builder
 public class MenuConfigDto {
+    private String description;
     private List<MenuOption> options;
     private Map<String,String> parameters;
 }
