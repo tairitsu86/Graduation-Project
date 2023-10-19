@@ -1,11 +1,12 @@
 package graduationProject.IoTSystem.deviceConnector.rabbitMQ;
 
 
-import graduationProject.IoTSystem.deviceConnector.dto.DeviceInfoDto;
 import graduationProject.IoTSystem.deviceConnector.dto.DeviceStateDto;
+
+import java.util.Map;
 
 public interface MQEventPublisher {
     void publishDeviceStateEvent(DeviceStateDto deviceStateDto);
 
-    void publishDeviceInfoEvent(DeviceInfoDto deviceInfoDto);
+    void publishDeviceInfoEvent(Map<String,Object> deviceInfoDto);
 }
