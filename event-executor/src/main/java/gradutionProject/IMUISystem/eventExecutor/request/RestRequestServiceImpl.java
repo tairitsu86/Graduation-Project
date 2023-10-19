@@ -52,8 +52,8 @@ public class RestRequestServiceImpl implements RestRequestService {
             return restTemplate.exchange(commConfigDto.getUrl(),httpMethod,entity,String.class);
         }catch (HttpClientErrorException e){
             System.err.printf("Custom API Error,url[%s],body[%s],error type[%s]\n",commConfigDto.getUrl(),commConfigDto.getBody(),e.getMessage());
+            return new ResponseEntity<>(e.getResponseBodyAsString(),e.getStatusCode());
         }
-        return null;
     }
 
     @Override
