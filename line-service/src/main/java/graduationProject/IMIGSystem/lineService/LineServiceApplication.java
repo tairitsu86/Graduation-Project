@@ -1,4 +1,4 @@
-package gradutionProject.IMIGSystem.lineService;
+package graduationProject.IMIGSystem.lineService;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

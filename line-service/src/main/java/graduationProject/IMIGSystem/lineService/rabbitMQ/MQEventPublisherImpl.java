@@ -1,11 +1,11 @@
-package gradutionProject.IMIGSystem.lineService.rabbitMQ;
+package graduationProject.IMIGSystem.lineService.rabbitMQ;
 
-import gradutionProject.IMIGSystem.lineService.dto.MessageEventDto;
+import graduationProject.IMIGSystem.lineService.dto.MessageEventDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
-import static gradutionProject.IMIGSystem.lineService.rabbitMQ.RabbitmqConfig.*;
+import static graduationProject.IMIGSystem.lineService.rabbitMQ.RabbitmqConfig.*;
 
 
 @Service

@@ -1,4 +1,4 @@
-package gradutionProject.IMIGSystem.lineService.service;
+package graduationProject.IMIGSystem.lineService.service;
 
 public interface IMService {
     void SendTextMessage(String userId,String message);

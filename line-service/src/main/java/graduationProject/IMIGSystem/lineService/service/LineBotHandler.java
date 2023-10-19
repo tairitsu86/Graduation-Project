@@ -1,12 +1,12 @@
-package gradutionProject.IMIGSystem.lineService.service;
+package graduationProject.IMIGSystem.lineService.service;
 
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
-import gradutionProject.IMIGSystem.lineService.dto.IMUserData;
-import gradutionProject.IMIGSystem.lineService.dto.MessageEventDto;
-import gradutionProject.IMIGSystem.lineService.rabbitMQ.MQEventPublisher;
+import graduationProject.IMIGSystem.lineService.dto.IMUserData;
+import graduationProject.IMIGSystem.lineService.dto.MessageEventDto;
+import graduationProject.IMIGSystem.lineService.rabbitMQ.MQEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

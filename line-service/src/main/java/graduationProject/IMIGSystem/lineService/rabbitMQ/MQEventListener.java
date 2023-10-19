@@ -1,13 +1,13 @@
-package gradutionProject.IMIGSystem.lineService.rabbitMQ;
+package graduationProject.IMIGSystem.lineService.rabbitMQ;
 
-import gradutionProject.IMIGSystem.lineService.dto.SendingServiceDto;
-import gradutionProject.IMIGSystem.lineService.service.IMService;
+import graduationProject.IMIGSystem.lineService.dto.SendingServiceDto;
+import graduationProject.IMIGSystem.lineService.service.IMService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
-import static gradutionProject.IMIGSystem.lineService.rabbitMQ.RabbitmqConfig.LINE_QUEUE;
+import static graduationProject.IMIGSystem.lineService.rabbitMQ.RabbitmqConfig.LINE_QUEUE;
 
 @Slf4j
 @RequiredArgsConstructor

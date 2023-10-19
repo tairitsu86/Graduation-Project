@@ -8,7 +8,7 @@
 		<version>3.1.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>gradutionProject.IMIGSystem</groupId>
+	<groupId>graduationProject.IMIGSystem</groupId>
 	<artifactId>line-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>line-service</name>
