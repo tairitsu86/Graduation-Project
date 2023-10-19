@@ -1,4 +1,4 @@
-package gradutionProject.IMIGSystem.lineService.rabbitMQ;
+package graduationProject.IMIGSystem.lineService.rabbitMQ;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.core.Binding;

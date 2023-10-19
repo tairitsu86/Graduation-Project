@@ -1,4 +1,4 @@
-package gradutionProject.IMIGSystem.lineService.service;
+package graduationProject.IMIGSystem.lineService.service;
 
 import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.PushMessage;

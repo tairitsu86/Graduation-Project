@@ -1,4 +1,4 @@
-package gradutionProject.IMIGSystem.lineService.dto;
+package graduationProject.IMIGSystem.lineService.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
