@@ -34,13 +34,13 @@ public class RepositoryServiceImpl implements RepositoryService{
                         add(
                                 CustomizeEventVariable.builder()
                                         .variableName("USERNAME")
-                                        .displayName("username")
+                                        .displayNameTemplate("username")
                                         .build()
                         );
                         add(
                                 CustomizeEventVariable.builder()
                                         .variableName("PASSWORD")
-                                        .displayName("password")
+                                        .displayNameTemplate("password")
                                         .build()
                         );
                     }}
@@ -61,19 +61,19 @@ public class RepositoryServiceImpl implements RepositoryService{
                         add(
                                 CustomizeEventVariable.builder()
                                         .variableName("USER_DISPLAY_NAME")
-                                        .displayName("display name")
+                                        .displayNameTemplate("display name")
                                         .build()
                         );
                         add(
                                 CustomizeEventVariable.builder()
                                         .variableName("USERNAME")
-                                        .displayName("username")
+                                        .displayNameTemplate("username")
                                         .build()
                         );
                         add(
                                 CustomizeEventVariable.builder()
                                         .variableName("PASSWORD")
-                                        .displayName("password")
+                                        .displayNameTemplate("password")
                                         .build()
                         );
                     }}
@@ -202,7 +202,7 @@ public class RepositoryServiceImpl implements RepositoryService{
         customizeEventRepository.save(
                 CustomizeEvent.builder()
                         .eventName(customizeEventDto.getEventName())
-                        .description(customizeEventDto.getDescription())
+                        .description(customizeEventDto.getDescription()==null?"%s":customizeEventDto.getDescription())
                         .variables(variables)
                         .build()
         );

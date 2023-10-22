@@ -7,7 +7,6 @@ import graduationProject.IMUISystem.eventHandler.entity.MenuOption;
 import graduationProject.IMUISystem.eventHandler.rabbitMQ.MQEventPublisher;
 import graduationProject.IMUISystem.eventHandler.repository.RepositoryService;
 import graduationProject.IMUISystem.eventHandler.request.RestRequestService;
-import graduationProject.IMUISystem.eventHandler.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -100,10 +99,18 @@ public class EventHandlerImpl implements EventHandler{
             parameters.put("USERNAME",username);
 
 
-        List<CustomizeEventVariable> data = new ArrayList<>();
+        List<CustomizeEventVariableDto> data = new ArrayList<>();
         for (CustomizeEventVariable variable:customizeEventDto.getVariables()) {
             if(parameters.containsKey(variable.getVariableName())) continue;
-            data.add(variable);
+            String displayName = variable.getDisplayNameTemplate();
+            for (String s:parameter.keySet())
+                displayName = displayName.replace(String.format("${%s}",s),parameter.get(s));
+            data.add(
+                    CustomizeEventVariableDto.builder()
+                            .displayName(displayName)
+                            .variableName(variable.getVariableName())
+                            .build()
+            );
         }
         if(data.isEmpty()){
             executeEvent(eventName, parameters);
@@ -111,13 +118,14 @@ public class EventHandlerImpl implements EventHandler{
         }
         newUserState(imUserData, username, eventName, customizeEventDto.getDescription(), data, parameters);
 
-        sendMessage(imUserData, String.format(customizeEventDto.getDescription()==null?"%s":customizeEventDto.getDescription(), data.get(0).getDisplayName()));
+        sendMessage(imUserData, String.format(customizeEventDto.getDescription(), data.get(0).getDisplayName()));
     }
 
     @Override
     public void defaultMenu(IMUserData imUserData,String username) {
         List<MenuOption> menuOptions = new ArrayList<>();
         List<String> events = repositoryService.getAllEvent();
+        //TODO add a table, use that table to create the default menu
         for (String event : events)
             menuOptions.add(
                     MenuOption.builder()
@@ -162,7 +170,7 @@ public class EventHandlerImpl implements EventHandler{
     }
 
     public void continueCustomEvent(UserStateDto userStateDto, IMUserData imUserData, String message){
-        if(!(userStateDto.getData().get(0) instanceof CustomizeEventVariable variable))
+        if(!(userStateDto.getData().get(0) instanceof CustomizeEventVariableDto variable))
             throw new RuntimeException("userStateDto.getData().get(0) not a CustomizeEventVariable!");
 
         userStateDto.getParameters().put(variable.getVariableName(), message);
@@ -172,8 +180,11 @@ public class EventHandlerImpl implements EventHandler{
             repositoryService.removeUserState(imUserData);
             return;
         }
-        variable = (CustomizeEventVariable)userStateDto.getData().get(0);
-        sendMessage(imUserData,String.format(userStateDto.getDescription(), variable.getDisplayName()));
+
+        if(!(userStateDto.getData().get(0) instanceof CustomizeEventVariableDto nextVar))
+            throw new RuntimeException("userStateDto.getData().get(0) not a CustomizeEventVariable!");
+
+        sendMessage(imUserData,String.format(userStateDto.getDescription(), nextVar.getDisplayName()));
         repositoryService.newUserStateDto(userStateDto);
     }
 
@@ -211,7 +222,7 @@ public class EventHandlerImpl implements EventHandler{
                     ExecuteEventDto.builder()
                             .eventName(eventName)
                             .executor(variables.get("USERNAME"))
-                            .variables(variables)
+                            .parameters(variables)
                             .build()
             );
         }

@@ -5,15 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Map;
-
-
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class ExecuteEventDto {
-    private String eventName;
-    private String executor;
-    private Map<String,String> parameters;
+public class CustomizeEventVariableDto {
+    private String displayName;
+    private String variableName;
 }
