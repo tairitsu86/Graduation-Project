@@ -22,7 +22,7 @@ public class RespondServiceImpl implements RespondService{
     private final RestRequestService restRequestService;
     private final ObjectMapper objectMapper;
     @Override
-    public void respond(String username, RespondConfig respondConfig, String jsonData) {
+    public void respond(String username, RespondConfig respondConfig, Map<String,String> parameters, String jsonData) {
         switch (respondConfig.getRespondType()){
             case MENU -> {
                 MenuConfig menuConfig;
@@ -33,7 +33,12 @@ public class RespondServiceImpl implements RespondService{
                     return;
                 }
                 MenuConfigDto menuConfigDto = getMenuConfigDto(menuConfig,jsonData);
-                mqEventPublisher.newMenu(username,menuConfigDto.getDescription(),menuConfigDto.getOptions(),menuConfigDto.getParameters());
+                Map<String,String> respondParameters = new HashMap<>();
+                if(parameters!=null&&!parameters.isEmpty())
+                    respondParameters.putAll(parameters);
+                if(menuConfigDto.getParameters()!=null&&!menuConfigDto.getParameters().isEmpty())
+                    respondParameters.putAll(menuConfigDto.getParameters());
+                mqEventPublisher.newMenu(username,menuConfigDto.getDescription(),menuConfigDto.getOptions(), respondParameters);
             }
             case NOTIFY -> {
                 NotifyConfig notifyConfig;
@@ -96,8 +101,10 @@ public class RespondServiceImpl implements RespondService{
             message = message.replace(String.format("${%s}",s),variables.get(s));
         NotifyConfigDto notifyConfigDto = NotifyConfigDto.builder().message(message).build();
 
+        notifyConfigDto.setUsernameList(new ArrayList<>(){{add(username);}});
+
         if(variables.containsKey("USERNAME_LIST"))
-            notifyConfigDto.setGroupList(Arrays.stream(variables.get("USERNAME_LIST").split(" ")).toList());
+            notifyConfigDto.getUsernameList().addAll(Arrays.stream(variables.get("USERNAME_LIST").split(" ")).toList());
 
         if(variables.containsKey("GROUP_LIST"))
             notifyConfigDto.setGroupList(Arrays.stream(variables.get("GROUP_LIST").split(" ")).toList());

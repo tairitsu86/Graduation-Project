@@ -34,13 +34,13 @@ public class MQEventListener {
             if(!repositoryService.isCommConfigExist(executeEventDto.getEventName())) return;
             CommConfig commConfig = repositoryService.getCommConfig(executeEventDto.getEventName());
             if (Objects.requireNonNull(commConfig.getMethodType()) == MethodType.MQ) {
-                mqEventPublisher.publishCustomEvent(CommConfigDto.createCommConfigDto(commConfig, executeEventDto.getVariables()));
+                mqEventPublisher.publishCustomEvent(CommConfigDto.createCommConfigDto(commConfig, executeEventDto.getParameters()));
             } else {
                 ResponseEntity<String> response =
-                        restRequestService.sendEventRequest(CommConfigDto.createCommConfigDto(commConfig, executeEventDto.getVariables()));
+                        restRequestService.sendEventRequest(CommConfigDto.createCommConfigDto(commConfig, executeEventDto.getParameters()));
 
                 if (!repositoryService.isRespondConfigExist(executeEventDto.getEventName())) return;
-                respondService.respond(executeEventDto.getExecutor(), repositoryService.getRespondConfig(executeEventDto.getEventName()), response.getBody());
+                respondService.respond(executeEventDto.getExecutor(), repositoryService.getRespondConfig(executeEventDto.getEventName()), executeEventDto.getParameters(),response.getBody());
             }
 
         }catch (Exception e){
@@ -55,7 +55,7 @@ public class MQEventListener {
             String executor = (String) notifyEvent.get("executor");
             String jsonData = objectMapper.writeValueAsString(notifyEvent);
             if(!repositoryService.isRespondConfigExist(eventName)) return;
-            respondService.respond(executor,repositoryService.getRespondConfig(eventName),jsonData);
+            respondService.respond(executor,repositoryService.getRespondConfig(eventName), null,jsonData);
         }catch (Exception e){
             log.info("Something wrong with: {}",e.getMessage(),e);
         }
