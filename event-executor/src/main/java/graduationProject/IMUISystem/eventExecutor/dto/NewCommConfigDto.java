@@ -12,9 +12,9 @@ import java.util.Map;
 @NoArgsConstructor
 @Builder
 @Data
-public class CommConfigDto {
+public class NewCommConfigDto {
     private MethodType methodType;
-    private String url;
-    private Map<String, String> header;
-    private String body;
+    private String urlTemplate;
+    private Map<String,String> headerTemplate;
+    private Map<String,Object> bodyTemplate;
 }

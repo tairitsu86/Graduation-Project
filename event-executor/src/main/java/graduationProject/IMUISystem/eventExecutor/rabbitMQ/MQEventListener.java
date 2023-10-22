@@ -1,5 +1,7 @@
 package graduationProject.IMUISystem.eventExecutor.rabbitMQ;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import graduationProject.IMUISystem.eventExecutor.dto.CommConfigDto;
 import graduationProject.IMUISystem.eventExecutor.dto.ExecuteEventDto;
@@ -34,10 +36,10 @@ public class MQEventListener {
             if(!repositoryService.isCommConfigExist(executeEventDto.getEventName())) return;
             CommConfig commConfig = repositoryService.getCommConfig(executeEventDto.getEventName());
             if (Objects.requireNonNull(commConfig.getMethodType()) == MethodType.MQ) {
-                mqEventPublisher.publishCustomEvent(CommConfigDto.createCommConfigDto(commConfig, executeEventDto.getParameters()));
+                mqEventPublisher.publishCustomEvent(getCommConfigDto(commConfig, executeEventDto.getParameters()));
             } else {
                 ResponseEntity<String> response =
-                        restRequestService.sendEventRequest(CommConfigDto.createCommConfigDto(commConfig, executeEventDto.getParameters()));
+                        restRequestService.sendEventRequest(getCommConfigDto(commConfig, executeEventDto.getParameters()));
 
                 if (!repositoryService.isRespondConfigExist(executeEventDto.getEventName())) return;
                 respondService.respond(executeEventDto.getExecutor(), repositoryService.getRespondConfig(executeEventDto.getEventName()), executeEventDto.getParameters(),response.getBody());
@@ -59,6 +61,33 @@ public class MQEventListener {
         }catch (Exception e){
             log.info("Something wrong with: {}",e.getMessage(),e);
         }
+    }
+    public CommConfigDto getCommConfigDto(CommConfig commConfig, Map<String, String> variables){
+        String url = commConfig.getUrlTemplate();
+        String headerString = commConfig.getHeaderTemplate();
+        if(headerString==null) headerString = "";
+        String body = commConfig.getBodyTemplate();
+        if(body==null) body = "";
+        if(variables!=null)
+            for(String key:variables.keySet()){
+                String replaceValue = String.format("${%s}",key);
+                url = url.replace(replaceValue,variables.get(key));
+                headerString = headerString.replace(replaceValue,variables.get(key));
+                body = body.replace(replaceValue,variables.get(key));
+            }
+        Map<String, String> header;
+        try{
+            header = objectMapper.readValue(headerString, new TypeReference<>() {});
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        return CommConfigDto.builder()
+                .methodType(commConfig.getMethodType())
+                .url(url)
+                .header(header)
+                .body(body)
+                .build();
     }
 
 }

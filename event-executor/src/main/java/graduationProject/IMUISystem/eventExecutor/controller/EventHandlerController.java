@@ -2,6 +2,8 @@ package graduationProject.IMUISystem.eventExecutor.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import graduationProject.IMUISystem.eventExecutor.dto.CommConfigDto;
+import graduationProject.IMUISystem.eventExecutor.dto.NewCommConfigDto;
 import graduationProject.IMUISystem.eventExecutor.entity.CommConfig;
 import graduationProject.IMUISystem.eventExecutor.entity.RespondConfig;
 import graduationProject.IMUISystem.eventExecutor.repository.RepositoryService;
@@ -53,15 +55,14 @@ public class EventHandlerController {
 
     @GetMapping("/events/{eventName}/comm")
     @ResponseStatus(HttpStatus.OK)
-    public CommConfig getCommConfig(@PathVariable String eventName){
-        return repositoryService.getCommConfig(eventName);
+    public NewCommConfigDto getCommConfig(@PathVariable String eventName){
+        return repositoryService.getNewCommConfigDto(eventName);
     }
 
     @PostMapping("/events/{eventName}/comm/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public void newCommConfig(@PathVariable String eventName, @RequestBody CommConfig commConfig){
-        commConfig.setEventName(eventName);
-        repositoryService.newCommConfig(commConfig);
+    public void newCommConfig(@PathVariable String eventName, @RequestBody NewCommConfigDto newCommConfigDto){
+        repositoryService.newCommConfig(eventName, newCommConfigDto);
     }
 
     @DeleteMapping("/events/{eventName}/comm/delete")

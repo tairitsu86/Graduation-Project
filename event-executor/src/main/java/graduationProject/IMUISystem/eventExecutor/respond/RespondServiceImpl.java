@@ -68,8 +68,8 @@ public class RespondServiceImpl implements RespondService{
             Map<String,String> replaceValue = n.getReplaceValue();
             Object data = JsonPath.read(json,n.getJsonPath());
             List<String> temp;
-            if(data instanceof List){
-                temp = (List<String>) data;
+            if(data instanceof List<?> list){
+                temp = (List<String>) list;
             }else if(data instanceof String){
                 temp = new ArrayList<>(){{add((String) data);}};
             }else{
