@@ -1,6 +1,7 @@
 package graduationProject.IMUISystem.eventHandler.controller;
 
 import graduationProject.IMUISystem.eventHandler.dto.CustomizeEventDto;
+import graduationProject.IMUISystem.eventHandler.entity.MenuOption;
 import graduationProject.IMUISystem.eventHandler.repository.RepositoryService;
 import graduationProject.IMUISystem.eventHandler.request.RestRequestService;
 import lombok.RequiredArgsConstructor;
@@ -70,6 +71,18 @@ public class EventHandlerController {
         restRequestService.deleteCommConfig(eventName);
         restRequestService.deleteRespondConfig(eventName);
         repositoryService.deleteEvent(eventName);
+    }
+
+    @PatchMapping("menus/default/options/add")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void addOption(@RequestBody MenuOption option){
+        repositoryService.addOptionToDefaultMenu(option);
+    }
+
+    @PatchMapping("menus/default/options/remove")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeOption(@RequestBody MenuOption option){
+        repositoryService.removeOptionFromDefaultMenu(option);
     }
 
 }

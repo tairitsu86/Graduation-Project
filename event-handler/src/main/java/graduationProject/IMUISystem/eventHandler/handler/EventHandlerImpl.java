@@ -3,6 +3,7 @@ package graduationProject.IMUISystem.eventHandler.handler;
 import graduationProject.IMUISystem.eventHandler.dto.*;
 import graduationProject.IMUISystem.eventHandler.entity.CustomizeEventVariable;
 import graduationProject.IMUISystem.eventHandler.entity.IMUserData;
+import graduationProject.IMUISystem.eventHandler.entity.Menu;
 import graduationProject.IMUISystem.eventHandler.entity.MenuOption;
 import graduationProject.IMUISystem.eventHandler.rabbitMQ.MQEventPublisher;
 import graduationProject.IMUISystem.eventHandler.repository.RepositoryService;
@@ -63,27 +64,8 @@ public class EventHandlerImpl implements EventHandler{
 
     @Override
     public void loginOrSignUpEvent(IMUserData imUserData) {
-        menuEvent(
-                imUserData,
-                null,
-                "Login or Sign up!"
-                ,new ArrayList<>(){
-                    {
-                        add(
-                                MenuOption.builder()
-                                        .displayName("Login")
-                                        .nextEvent("LOGIN")
-                                        .build()
-                        );
-                        add(
-                                MenuOption.builder()
-                                        .displayName("Sign up")
-                                        .nextEvent("SIGN_UP")
-                                        .build()
-                        );
-                    }
-                }
-                ,null);
+        MenuDto menu = repositoryService.getMenuDto("LOGIN_OR_SIGN_UP_MENU");
+        menuEvent(imUserData, null, menu.getDescription(), menu.getOptions(),menu.getParameters());
     }
 
     @Override
@@ -126,17 +108,8 @@ public class EventHandlerImpl implements EventHandler{
 
     @Override
     public void defaultMenu(IMUserData imUserData,String username) {
-        List<MenuOption> menuOptions = new ArrayList<>();
-        List<String> events = repositoryService.getAllEvent();
-        //TODO add a table, use that table to create the default menu
-        for (String event : events)
-            menuOptions.add(
-                    MenuOption.builder()
-                            .displayName(event)
-                            .nextEvent(event)
-                            .build()
-            );
-        menuEvent(imUserData,username,"Hello!\nWhat are you looking for?", menuOptions,null);
+        MenuDto menu = repositoryService.getMenuDto("DEFAULT_MENU");
+        menuEvent(imUserData, username, menu.getDescription(), menu.getOptions(),menu.getParameters());
     }
 
     public void continueUserEvent(IMUserData imUserData, String message){
