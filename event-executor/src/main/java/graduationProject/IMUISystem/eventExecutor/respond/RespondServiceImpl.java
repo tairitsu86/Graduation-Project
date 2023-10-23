@@ -22,7 +22,7 @@ public class RespondServiceImpl implements RespondService{
     private final RestRequestService restRequestService;
     private final ObjectMapper objectMapper;
     @Override
-    public void respond(String username, RespondConfig respondConfig, Map<String,String> parameters, String jsonData) {
+    public void respond(String username, RespondConfig respondConfig, Map<String,Object> parameters, String jsonData) {
         switch (respondConfig.getRespondType()){
             case MENU -> {
                 MenuConfig menuConfig;
@@ -33,7 +33,7 @@ public class RespondServiceImpl implements RespondService{
                     return;
                 }
                 MenuConfigDto menuConfigDto = getMenuConfigDto(menuConfig,jsonData);
-                Map<String,String> respondParameters = new HashMap<>();
+                Map<String,Object> respondParameters = new HashMap<>();
                 if(parameters!=null&&!parameters.isEmpty())
                     respondParameters.putAll(parameters);
                 if(menuConfigDto.getParameters()!=null&&!menuConfigDto.getParameters().isEmpty())
@@ -115,48 +115,82 @@ public class RespondServiceImpl implements RespondService{
     public MenuConfigDto getMenuConfigDto(MenuConfig menuConfig, String json){
         MenuConfigDto menuConfigDto = MenuConfigDto.builder().parameters(menuConfig.getParameters()).options(new ArrayList<>()).build();
         List<MenuOption> options = menuConfigDto.getOptions();
-        for(MenuVariable m :menuConfig.getVariables()){
-            Map<String,String> replaceValue = m.getReplaceValue();
-            if(m.isGlobal()){
-                String s = JsonPath.read(json,m.getJsonPath());
+        for(MenuVariable menuVariable :menuConfig.getVariables()){
+            Map<String,String> replaceValue = menuVariable.getReplaceValue();
+            if(menuVariable.isGlobal()){
+                String s = JsonPath.read(json,menuVariable.getJsonPath());
                 if(replaceValue!=null&&replaceValue.containsKey(s))
                     s = replaceValue.get(s);
-                menuConfigDto.getParameters().put(m.getVariableName(),s);
+                menuConfigDto.getParameters().put(menuVariable.getVariableName(),s);
                 continue;
             }
-            Object data = JsonPath.read(json,m.getJsonPath());
-            List<String> temp;
-            if(data instanceof List){
-                temp = (List<String>) data;
-            }else if(data instanceof String){
-                temp = new ArrayList<>(){{add((String) data);}};
-            }else{
-                throw new RuntimeException("getMenuConfigDto error");
-            }
+            Object data = JsonPath.read(json,menuVariable.getJsonPath());
 
-            for(int i=0;i<temp.size();i++){
-                if(i>=options.size())
-                    options.add(
-                            MenuOption.builder()
-                                    .nextEvent(menuConfig.getNextEvent())
-                                    .optionParameters(new HashMap<>())
-                                    .build()
-                    );
-                options.get(i).getOptionParameters().put(m.getVariableName(),temp.get(i));
+
+            List<?> dataList;
+            if(menuVariable.getVariableName().startsWith("INT_")){
+                if(data instanceof List<?> list && !list.isEmpty()) {
+                    dataList = (List<Integer>) data;
+                }else if(data instanceof Integer i){
+                    dataList = new ArrayList<>(){{add(i);}};
+                }else{
+                    throw new RuntimeException("getMenuConfigDto error!");
+                }
+            } else if (menuVariable.getVariableName().startsWith("BOOL_")) {
+                if(data instanceof List<?> list && !list.isEmpty()) {
+                    dataList = (List<Boolean>) data;
+                }else if(data instanceof Boolean b){
+                    dataList = new ArrayList<>(){{add(b);}};
+                }else{
+                    throw new RuntimeException("getMenuConfigDto error!");
+                }
+            } else {
+                if(data instanceof List<?> list && !list.isEmpty()) {
+                    dataList = (List<String>) data;
+                }else if(data instanceof String s){
+                    dataList = new ArrayList<>(){{add(s);}};
+                }else{
+                    throw new RuntimeException("getMenuConfigDto error!");
+                }
             }
+            setMenuOption(options, menuVariable.getVariableName(), dataList, menuConfig.getNextEvent());
         }
+
+
         String description = menuConfig.getDescriptionTemplate();
         for (String s :menuConfigDto.getParameters().keySet()){
-            description = description.replace(String.format("${%s}",s),menuConfigDto.getParameters().get(s));
+            String format = "${%s}";
+            if(s.startsWith("INT_")||s.startsWith("BOOL_"))
+                format = "\"${%s}\"";
+            description = description.replace(String.format(format,s),menuConfigDto.getParameters().get(s).toString());
         }
         menuConfigDto.setDescription(description);
         for (MenuOption option:options) {
             String displayName = menuConfig.getDisplayNameTemplate();
-            for (String s:option.getOptionParameters().keySet())
-                displayName = displayName.replace(String.format("${%s}",s),option.getOptionParameters().get(s));
+            for (String s:option.getOptionParameters().keySet()){
+                String format = "${%s}";
+                if(s.startsWith("INT_")||s.startsWith("BOOL_"))
+                    format = "\"${%s}\"";
+                displayName = displayName.replace(String.format(format,s),option.getOptionParameters().get(s).toString());
+            }
             option.setDisplayName(displayName);
         }
 
         return menuConfigDto;
     }
+
+    public void setMenuOption(List<MenuOption> options, String variableName, List<?> data, String nextEvent){
+        for(int i=0;i<data.size();i++){
+            if(i>=options.size())
+                options.add(
+                        MenuOption.builder()
+                                .nextEvent(nextEvent)
+                                .optionParameters(new HashMap<>())
+                                .build()
+                );
+            options.get(i).getOptionParameters().put(variableName,data.get(i));
+        }
+    }
+
+
 }

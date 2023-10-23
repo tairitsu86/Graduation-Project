@@ -16,5 +16,5 @@ public class NewCommConfigDto {
     private MethodType methodType;
     private String urlTemplate;
     private Map<String,String> headerTemplate;
-    private Map<String,Object> bodyTemplate;
+    private Object bodyTemplate;
 }

@@ -15,5 +15,5 @@ import java.util.Map;
 public class ExecuteEventDto {
     private String eventName;
     private String executor;
-    private Map<String,String> parameters;
+    private Map<String,Object> parameters;
 }

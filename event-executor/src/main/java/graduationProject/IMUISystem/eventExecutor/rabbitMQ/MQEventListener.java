@@ -62,18 +62,21 @@ public class MQEventListener {
             log.info("Something wrong with: {}",e.getMessage(),e);
         }
     }
-    public CommConfigDto getCommConfigDto(CommConfig commConfig, Map<String, String> variables){
+    public CommConfigDto getCommConfigDto(CommConfig commConfig, Map<String, Object> variables){
         String url = commConfig.getUrlTemplate();
         String headerString = commConfig.getHeaderTemplate();
         if(headerString==null) headerString = "";
         String body = commConfig.getBodyTemplate();
         if(body==null) body = "";
         if(variables!=null)
-            for(String key:variables.keySet()){
-                String replaceValue = String.format("${%s}",key);
-                url = url.replace(replaceValue,variables.get(key));
-                headerString = headerString.replace(replaceValue,variables.get(key));
-                body = body.replace(replaceValue,variables.get(key));
+            for(String s:variables.keySet()){
+                String replaceValue = String.format("${%s}",s);
+                url = url.replace(replaceValue,variables.get(s).toString());
+                headerString = headerString.replace(replaceValue,variables.get(s).toString());
+
+                if(s.startsWith("INT_")||s.startsWith("BOOL_"))
+                    replaceValue = String.format("\"${%s}\"",s);;
+                body = body.replace(replaceValue,variables.get(s).toString());
             }
         Map<String, String> header;
         try{

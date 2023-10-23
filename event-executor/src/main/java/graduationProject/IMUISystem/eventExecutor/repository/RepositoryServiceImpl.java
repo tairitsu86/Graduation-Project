@@ -2,9 +2,7 @@ package graduationProject.IMUISystem.eventExecutor.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import graduationProject.IMUISystem.eventExecutor.dto.CommConfigDto;
 import graduationProject.IMUISystem.eventExecutor.dto.NewCommConfigDto;
 import graduationProject.IMUISystem.eventExecutor.entity.CommConfig;
 import graduationProject.IMUISystem.eventExecutor.entity.RespondConfig;
@@ -70,10 +68,10 @@ public class RepositoryServiceImpl implements RepositoryService{
     public NewCommConfigDto getNewCommConfigDto(String eventName) {
         CommConfig commConfig = getCommConfig(eventName);
         Map<String,String> headerTemplate;
-        Map<String,Object> bodyTemplate;
+        Object bodyTemplate;
         try {
             headerTemplate = objectMapper.readValue(commConfig.getHeaderTemplate(), new TypeReference<>() {});
-            bodyTemplate = objectMapper.readValue(commConfig.getBodyTemplate(), new TypeReference<>() {});
+            bodyTemplate = objectMapper.readValue(commConfig.getBodyTemplate(),Object.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
