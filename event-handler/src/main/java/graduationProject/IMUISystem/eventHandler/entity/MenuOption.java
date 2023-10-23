@@ -11,5 +11,5 @@ import java.util.Map;
 public class MenuOption {
     private String displayName;
     private String nextEvent;
-    private Map<String,String> optionParameters;
+    private Map<String,Object> optionParameters;
 }

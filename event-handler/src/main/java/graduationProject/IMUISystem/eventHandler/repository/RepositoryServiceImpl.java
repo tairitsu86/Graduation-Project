@@ -140,12 +140,12 @@ public class RepositoryServiceImpl implements RepositoryService{
                 .imUserData(userState.getImUserData())
                 .eventName(userState.getEventName())
                 .build();
-        Map<String,String> parameters;
+        Map<String,Object> parameters;
         List<?> data;
         try {
             parameters = objectMapper.readValue(userState.getParameters(), new TypeReference<>() {});
         } catch (JsonProcessingException e) {
-            throw new JsonMappingException(userState.getParameters(),"Map<String,String>");
+            throw new JsonMappingException(userState.getParameters(),"Map<String,Object>");
         }
         try {
             if(userState.getEventName().equals("MENU"))

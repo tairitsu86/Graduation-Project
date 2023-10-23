@@ -46,7 +46,7 @@ public class EventHandlerImpl implements EventHandler{
     }
 
     @Override
-    public void menuEvent(IMUserData imUserData, String username, String description, List<MenuOption> menuOptions, Map<String,String> parameters) {
+    public void menuEvent(IMUserData imUserData, String username, String description, List<MenuOption> menuOptions, Map<String,Object> parameters) {
 
         newUserState(imUserData,username,"MENU",description, menuOptions, parameters);
         StringBuilder message = new StringBuilder(description);
@@ -87,24 +87,26 @@ public class EventHandlerImpl implements EventHandler{
     }
 
     @Override
-    public void newUserEvent(IMUserData imUserData, String username, String eventName, Map<String, String> parameter) {
+    public void newUserEvent(IMUserData imUserData, String username, String eventName, Map<String,Object> parameters) {
         if(!repositoryService.checkEventName(eventName)) return;
         CustomizeEventDto customizeEventDto = repositoryService.getEventDto(eventName);
 
-        Map<String, String> parameters = new HashMap<>(parameter);
+        if(parameters==null)
+            parameters = new HashMap<>();
+
         parameters.put("PLATFORM",imUserData.getPlatform());
         parameters.put("USER_ID",imUserData.getUserId());
         parameters.put("EVENT_NAME",eventName);
         if(username!=null)
             parameters.put("USERNAME",username);
 
-
         List<CustomizeEventVariableDto> data = new ArrayList<>();
+
         for (CustomizeEventVariable variable:customizeEventDto.getVariables()) {
             if(parameters.containsKey(variable.getVariableName())) continue;
             String displayName = variable.getDisplayNameTemplate();
-            for (String s:parameter.keySet())
-                displayName = displayName.replace(String.format("${%s}",s),parameter.get(s));
+            for (String s:parameters.keySet())
+                displayName = displayName.replace(String.format("${%s}",s),parameters.get(s).toString());
             data.add(
                     CustomizeEventVariableDto.builder()
                             .displayName(displayName)
@@ -112,6 +114,7 @@ public class EventHandlerImpl implements EventHandler{
                             .build()
             );
         }
+
         if(data.isEmpty()){
             executeEvent(eventName, parameters);
             return;
@@ -161,7 +164,7 @@ public class EventHandlerImpl implements EventHandler{
             throw new RuntimeException("userStateDto.getData().get(index) not a MenuOption!");
 
         repositoryService.removeUserState(imUserData);
-        Map<String,String> parameters = new HashMap<>();
+        Map<String,Object> parameters = new HashMap<>();
         if(userStateDto.getParameters()!=null)
             parameters.putAll(userStateDto.getParameters());
         if(option.getOptionParameters()!=null)
@@ -188,41 +191,41 @@ public class EventHandlerImpl implements EventHandler{
         repositoryService.newUserStateDto(userStateDto);
     }
 
-    public void executeEvent(String eventName, Map<String,String> variables){
+    public void executeEvent(String eventName, Map<String,Object> parameters){
         switch (eventName){
             case "LOGIN" -> sendMessage(
                     IMUserData.builder()
-                            .platform(variables.get("PLATFORM"))
-                            .userId(variables.get("USER_ID"))
+                            .platform(parameters.get("PLATFORM").toString())
+                            .userId(parameters.get("USER_ID").toString())
                             .build(),
                     restRequestService.login(
                             UserLoginDto.builder()
-                                    .fromPlatform(variables.get("PLATFORM"))
+                                    .fromPlatform(parameters.get("PLATFORM").toString())
                                     .platformType("Instant-Messaging")
-                                    .platformUserId(variables.get("USER_ID"))
-                                    .username(variables.get("USERNAME"))
-                                    .password(variables.get("PASSWORD"))
+                                    .platformUserId(parameters.get("USER_ID").toString())
+                                    .username(parameters.get("USERNAME").toString())
+                                    .password(parameters.get("PASSWORD").toString())
                                     .build()
                     )
             );
             case "SIGN_UP" -> sendMessage(
                     IMUserData.builder()
-                            .platform(variables.get("PLATFORM"))
-                            .userId(variables.get("USER_ID"))
+                            .platform(parameters.get("PLATFORM").toString())
+                            .userId(parameters.get("USER_ID").toString())
                             .build(),
                     restRequestService.signUp(
                             UserSignUpDto.builder()
-                                    .userDisplayName(variables.get("USER_DISPLAY_NAME"))
-                                    .username(variables.get("USERNAME"))
-                                    .password(variables.get("PASSWORD"))
+                                    .userDisplayName(parameters.get("USER_DISPLAY_NAME").toString())
+                                    .username(parameters.get("USERNAME").toString())
+                                    .password(parameters.get("PASSWORD").toString())
                                     .build()
                     )
             );
             default -> mqEventPublisher.publishExecuteEvent(
                     ExecuteEventDto.builder()
                             .eventName(eventName)
-                            .executor(variables.get("USERNAME"))
-                            .parameters(variables)
+                            .executor(parameters.get("USERNAME").toString())
+                            .parameters(parameters)
                             .build()
             );
         }
@@ -234,7 +237,7 @@ public class EventHandlerImpl implements EventHandler{
                 .build()
         );
     }
-    public void newUserState(IMUserData imUserData, String username, String eventName, String description, List<?> data, Map<String,String> variables){
+    public void newUserState(IMUserData imUserData, String username, String eventName, String description, List<?> data, Map<String,Object> parameters){
         repositoryService.newUserStateDto(
                 UserStateDto.builder()
                         .imUserData(imUserData)
@@ -242,7 +245,7 @@ public class EventHandlerImpl implements EventHandler{
                         .eventName(eventName)
                         .description(description)
                         .data(data)
-                        .parameters(variables)
+                        .parameters(parameters)
                         .build()
         );
     }

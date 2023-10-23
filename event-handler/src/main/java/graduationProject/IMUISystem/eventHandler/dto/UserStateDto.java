@@ -19,5 +19,5 @@ public class UserStateDto {
     private String eventName;
     private String description;
     private List<?> data;
-    private Map<String,String> parameters;
+    private Map<String,Object> parameters;
 }
