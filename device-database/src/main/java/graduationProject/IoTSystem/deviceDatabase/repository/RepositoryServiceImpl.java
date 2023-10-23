@@ -34,7 +34,7 @@ public class RepositoryServiceImpl implements RepositoryService {
         if(groupList==null||groupList.size()==0)
             return result;
         List<Map<String,String>> groupResult = deviceRepository.getDeviceByGroupList(groupList);
-        if(userResult!=null)
+        if(groupResult!=null)
             outFor:
             for (Map<String,String> newData:groupResult) {
                 for (Map<String,String> data:result) {
@@ -43,6 +43,25 @@ public class RepositoryServiceImpl implements RepositoryService {
                 }
                 result.add(newData);
             }
+        return result;
+    }
+
+    @Override
+    public Set<String> getDeviceIdByUsername(String username) {
+        Set<String> result = new HashSet<>();
+
+        List<String> userResult = deviceRepository.getDeviceIdByUsername(username);
+        if(userResult!=null)
+            result.addAll(userResult);
+
+        List<String> groupList = restRequestService.getGroupsByUsername(username);
+        if(groupList==null||groupList.size()==0)
+            return result;
+        List<String> groupResult = deviceRepository.getDeviceIdByGroupList(groupList);
+
+        if(groupResult!=null)
+            result.addAll(groupResult);
+
         return result;
     }
 
@@ -177,9 +196,7 @@ public class RepositoryServiceImpl implements RepositoryService {
 
     @Override
     public boolean checkPermission(String username, String deviceId) {
-        Device device = deviceRepository.getReferenceById(deviceId);
-        if(device.getUsers().contains(username)) return true;
-        return false;
+        return  getDeviceIdByUsername(username).contains(deviceId);
     }
 
     public void addPermissionFunction(List<DeviceFunction> functions){

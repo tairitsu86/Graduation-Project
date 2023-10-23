@@ -9,6 +9,7 @@ import java.util.Set;
 
 public interface RepositoryService {
     Set<Map<String,String>> getDeviceByUsername(String username);
+    Set<String> getDeviceIdByUsername(String username);
     GetDeviceDetailDto getDeviceDetail(String deviceId, String username);
     void updateDeviceInfo(DeviceDto deviceDto);
     boolean isOwner(String deviceId, String username);
