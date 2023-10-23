@@ -20,5 +20,13 @@ IF OBJECT_ID(N'user_state',N'U') IS NULL
             CONSTRAINT [user_state_pk] PRIMARY KEY([platform], [user_id])
         )
     END;
-
-
+IF OBJECT_ID(N'menu',N'U') IS NULL
+    BEGIN
+        CREATE TABLE [menu](
+            [menu_name] [varchar](255) NOT NULL,
+            [description] [varchar](MAX) NULL,
+            [options] [varchar](MAX) NULL,
+            [parameters] [varchar](MAX) NULL,
+            CONSTRAINT [menu_pk] PRIMARY KEY([menu_name])
+        )
+    END;
