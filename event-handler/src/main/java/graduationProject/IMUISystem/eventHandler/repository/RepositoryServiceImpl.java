@@ -124,18 +124,21 @@ public class RepositoryServiceImpl implements RepositoryService{
                             .menuName("LOGIN_OR_SIGN_UP_MENU")
                             .description("Login or Sign up!")
                             .options(temp)
+                            .parameters("{}")
                             .build()
             );
         }
         //Default menu
         {
-            menuRepository.save(
-                    Menu.builder()
-                            .menuName("DEFAULT_MENU")
-                            .description("Hello!\nWhat are you looking for?")
-                            .options("")
-                            .build()
-            );
+            if(!menuRepository.existsById("DEFAULT_MENU"))
+                menuRepository.save(
+                        Menu.builder()
+                                .menuName("DEFAULT_MENU")
+                                .description("Hello!\nWhat are you looking for?")
+                                .options("[]")
+                                .parameters("{}")
+                                .build()
+                );
         }
     }
     @Override
@@ -317,7 +320,7 @@ public class RepositoryServiceImpl implements RepositoryService{
     public void removeOptionFromDefaultMenu(MenuOption menuOption) {
         if(!menuRepository.existsById("DEFAULT_MENU")) throw new RuntimeException("DEFAULT_MENU not exist!");
         MenuDto menuDto = getMenuDto("DEFAULT_MENU");
-        menuDto.getOptions().remove(menuDto);
+        menuDto.getOptions().remove(menuOption);
         setMenuDto(menuDto);
     }
 

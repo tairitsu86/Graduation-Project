@@ -82,20 +82,17 @@ public class EventHandlerImpl implements EventHandler{
         if(username!=null)
             parameters.put("USERNAME",username);
 
-        List<CustomizeEventVariableDto> data = new ArrayList<>();
-
-        for (CustomizeEventVariable variable:customizeEventDto.getVariables()) {
-            if(parameters.containsKey(variable.getVariableName())) continue;
-            String displayName = variable.getDisplayNameTemplate();
-            for (String s:parameters.keySet())
-                displayName = displayName.replace(String.format("${%s}",s),parameters.get(s).toString());
-            data.add(
-                    CustomizeEventVariableDto.builder()
-                            .displayName(displayName)
-                            .variableName(variable.getVariableName())
-                            .build()
-            );
-        }
+        List<CustomizeEventVariable> data = new ArrayList<>();
+        if(customizeEventDto.getVariables()!=null)
+            for (CustomizeEventVariable variable:customizeEventDto.getVariables()) {
+                if(parameters.containsKey(variable.getVariableName())) continue;
+                data.add(
+                        CustomizeEventVariable.builder()
+                                .displayNameTemplate(variable.getDisplayNameTemplate())
+                                .variableName(variable.getVariableName())
+                                .build()
+                );
+            }
 
         if(data.isEmpty()){
             executeEvent(eventName, parameters);
@@ -103,13 +100,18 @@ public class EventHandlerImpl implements EventHandler{
         }
         newUserState(imUserData, username, eventName, customizeEventDto.getDescription(), data, parameters);
 
-        sendMessage(imUserData, String.format(customizeEventDto.getDescription(), data.get(0).getDisplayName()));
+        sendMessage(imUserData, String.format(customizeEventDto.getDescription(), getDisplayName(data.get(0).getDisplayNameTemplate(), parameters)));
     }
 
     @Override
     public void defaultMenu(IMUserData imUserData,String username) {
         MenuDto menu = repositoryService.getMenuDto("DEFAULT_MENU");
         menuEvent(imUserData, username, menu.getDescription(), menu.getOptions(),menu.getParameters());
+    }
+    public String getDisplayName(String displayNameTemplate, Map<String, Object> parameters){
+        for (String s:parameters.keySet())
+            displayNameTemplate = displayNameTemplate.replace(String.format("${%s}",s),parameters.get(s).toString());
+        return displayNameTemplate;
     }
 
     public void continueUserEvent(IMUserData imUserData, String message){
@@ -146,7 +148,7 @@ public class EventHandlerImpl implements EventHandler{
     }
 
     public void continueCustomEvent(UserStateDto userStateDto, IMUserData imUserData, String message){
-        if(!(userStateDto.getData().get(0) instanceof CustomizeEventVariableDto variable))
+        if(!(userStateDto.getData().get(0) instanceof CustomizeEventVariable variable))
             throw new RuntimeException("userStateDto.getData().get(0) not a CustomizeEventVariable!");
 
         userStateDto.getParameters().put(variable.getVariableName(), message);
@@ -157,10 +159,10 @@ public class EventHandlerImpl implements EventHandler{
             return;
         }
 
-        if(!(userStateDto.getData().get(0) instanceof CustomizeEventVariableDto nextVar))
+        if(!(userStateDto.getData().get(0) instanceof CustomizeEventVariable nextVar))
             throw new RuntimeException("userStateDto.getData().get(0) not a CustomizeEventVariable!");
 
-        sendMessage(imUserData,String.format(userStateDto.getDescription(), nextVar.getDisplayName()));
+        sendMessage(imUserData,String.format(userStateDto.getDescription(), getDisplayName(nextVar.getDisplayNameTemplate(), userStateDto.getParameters())));
         repositoryService.newUserStateDto(userStateDto);
     }
 
