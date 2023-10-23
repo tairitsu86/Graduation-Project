@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomizeEventVariable {
-    private String displayName;
+    private String displayNameTemplate;
     private String variableName;
 }

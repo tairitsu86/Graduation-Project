@@ -3,13 +3,13 @@ package graduationProject.IMUISystem.eventHandler.repository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import graduationProject.IMUISystem.eventHandler.dto.MenuDto;
 import graduationProject.IMUISystem.eventHandler.entity.*;
 import graduationProject.IMUISystem.eventHandler.controller.exception.EventAlreadyExistException;
 import graduationProject.IMUISystem.eventHandler.controller.exception.EventNotExistException;
 import graduationProject.IMUISystem.eventHandler.controller.exception.JsonMappingException;
 import graduationProject.IMUISystem.eventHandler.dto.CustomizeEventDto;
 import graduationProject.IMUISystem.eventHandler.dto.UserStateDto;
-import graduationProject.IMUISystem.eventHandler.entity.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,69 +26,120 @@ public class RepositoryServiceImpl implements RepositoryService{
     private final CustomizeEventRepository customizeEventRepository;
     private final UserStateRepository userStateRepository;
     private final ObjectMapper objectMapper;
+    private final MenuRepository menuRepository;
+
     @PostConstruct
     public void init() {
         String temp;
-        try {
-            temp = objectMapper.writeValueAsString(
-                    new ArrayList<>(){{
-                        add(
-                                CustomizeEventVariable.builder()
-                                        .variableName("USERNAME")
-                                        .displayName("username")
-                                        .build()
-                        );
-                        add(
-                                CustomizeEventVariable.builder()
-                                        .variableName("PASSWORD")
-                                        .displayName("password")
-                                        .build()
-                        );
-                    }}
+        //Login event
+        {
+            try {
+                temp = objectMapper.writeValueAsString(
+                        new ArrayList<>() {{
+                            add(
+                                    CustomizeEventVariable.builder()
+                                            .variableName("USERNAME")
+                                            .displayNameTemplate("username")
+                                            .build()
+                            );
+                            add(
+                                    CustomizeEventVariable.builder()
+                                            .variableName("PASSWORD")
+                                            .displayNameTemplate("password")
+                                            .build()
+                            );
+                        }}
+                );
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            customizeEventRepository.save(
+                    CustomizeEvent.builder()
+                            .eventName("LOGIN")
+                            .description("Please enter your %s!")
+                            .variables(temp)
+                            .build()
             );
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
         }
-        customizeEventRepository.save(
-                CustomizeEvent.builder()
-                        .eventName("LOGIN")
-                        .description("Please enter your %s!")
-                        .variables(temp)
-                        .build()
-        );
-        try {
-            temp = objectMapper.writeValueAsString(
-                    new ArrayList<>(){{
-                        add(
-                                CustomizeEventVariable.builder()
-                                        .variableName("USER_DISPLAY_NAME")
-                                        .displayName("display name")
-                                        .build()
-                        );
-                        add(
-                                CustomizeEventVariable.builder()
-                                        .variableName("USERNAME")
-                                        .displayName("username")
-                                        .build()
-                        );
-                        add(
-                                CustomizeEventVariable.builder()
-                                        .variableName("PASSWORD")
-                                        .displayName("password")
-                                        .build()
-                        );
-                    }}
+        //Sign up event
+        {
+            try {
+                temp = objectMapper.writeValueAsString(
+                        new ArrayList<>() {{
+                            add(
+                                    CustomizeEventVariable.builder()
+                                            .variableName("USER_DISPLAY_NAME")
+                                            .displayNameTemplate("display name")
+                                            .build()
+                            );
+                            add(
+                                    CustomizeEventVariable.builder()
+                                            .variableName("USERNAME")
+                                            .displayNameTemplate("username")
+                                            .build()
+                            );
+                            add(
+                                    CustomizeEventVariable.builder()
+                                            .variableName("PASSWORD")
+                                            .displayNameTemplate("password")
+                                            .build()
+                            );
+                        }}
+                );
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            customizeEventRepository.save(
+                    CustomizeEvent.builder()
+                            .eventName("SIGN_UP")
+                            .description("Please enter your %s!")
+                            .variables(temp)
+                            .build()
             );
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
         }
-        customizeEventRepository.save(
-                CustomizeEvent.builder()
-                        .eventName("SIGN_UP")
-                        .description("Please enter your %s!")
-                        .variables(temp)
-                        .build()
-        );
+        //Login or Sign up menu
+        {
+            try {
+                temp = objectMapper.writeValueAsString(
+                        new ArrayList<>(){{
+                            add(
+                                    MenuOption.builder()
+                                            .displayName("Login")
+                                            .nextEvent("LOGIN")
+                                            .build()
+                            );
+                            add(
+                                    MenuOption.builder()
+                                            .displayName("Sign up")
+                                            .nextEvent("SIGN_UP")
+                                            .build()
+                            );
+                        }}
+                );
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            menuRepository.save(
+                    Menu.builder()
+                            .menuName("LOGIN_OR_SIGN_UP_MENU")
+                            .description("Login or Sign up!")
+                            .options(temp)
+                            .parameters("{}")
+                            .build()
+            );
+        }
+        //Default menu
+        {
+            if(!menuRepository.existsById("DEFAULT_MENU"))
+                menuRepository.save(
+                        Menu.builder()
+                                .menuName("DEFAULT_MENU")
+                                .description("Hello!\nWhat are you looking for?")
+                                .options("[]")
+                                .parameters("{}")
+                                .build()
+                );
+        }
     }
     @Override
     public boolean isUserHaveState(IMUserData imUserData) {
@@ -141,12 +192,12 @@ public class RepositoryServiceImpl implements RepositoryService{
                 .imUserData(userState.getImUserData())
                 .eventName(userState.getEventName())
                 .build();
-        Map<String,String> parameters;
+        Map<String,Object> parameters;
         List<?> data;
         try {
             parameters = objectMapper.readValue(userState.getParameters(), new TypeReference<>() {});
         } catch (JsonProcessingException e) {
-            throw new JsonMappingException(userState.getParameters(),"Map<String,String>");
+            throw new JsonMappingException(userState.getParameters(),"Map<String,Object>");
         }
         try {
             if(userState.getEventName().equals("MENU"))
@@ -203,7 +254,7 @@ public class RepositoryServiceImpl implements RepositoryService{
         customizeEventRepository.save(
                 CustomizeEvent.builder()
                         .eventName(customizeEventDto.getEventName())
-                        .description(customizeEventDto.getDescription())
+                        .description(customizeEventDto.getDescription()==null?"%s":customizeEventDto.getDescription())
                         .variables(variables)
                         .build()
         );
@@ -214,6 +265,66 @@ public class RepositoryServiceImpl implements RepositoryService{
     public void deleteEvent(String eventName) {
         customizeEventRepository.deleteById(eventName);
     }
+
+    @Override
+    public MenuDto getMenuDto(String menuName) {
+        if(!menuRepository.existsById(menuName)) throw new RuntimeException("menu not exist!");
+        Menu menu = menuRepository.getReferenceById(menuName);
+        List<MenuOption> options;
+        Map<String,Object> parameters;
+        try {
+            options = objectMapper.readValue(menu.getOptions(), new TypeReference<>() {});
+            parameters = objectMapper.readValue(menu.getParameters(), new TypeReference<>() {});
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        return MenuDto.builder()
+                .menuName(menuName)
+                .description(menu.getDescription())
+                .options(options)
+                .parameters(parameters)
+                .build();
+    }
+
+    @Override
+    public void setMenuDto(MenuDto menuDto) {
+        String options;
+        String parameters;
+        try {
+            options = objectMapper.writeValueAsString(menuDto.getOptions());
+            parameters = objectMapper.writeValueAsString(menuDto.getParameters());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        menuRepository.save(
+                Menu.builder()
+                        .menuName(menuDto.getMenuName())
+                        .description(menuDto.getDescription())
+                        .options(options)
+                        .parameters(parameters)
+                        .build()
+        );
+    }
+
+    @Override
+    public void addOptionToDefaultMenu(MenuOption menuOption) {
+        if(!menuRepository.existsById("DEFAULT_MENU")) throw new RuntimeException("DEFAULT_MENU not exist!");
+        if(!customizeEventRepository.existsById(menuOption.getNextEvent())) throw new EventNotExistException(menuOption.getNextEvent());
+        MenuDto menuDto = getMenuDto("DEFAULT_MENU");
+        menuDto.getOptions().add(menuOption);
+        setMenuDto(menuDto);
+    }
+
+    @Override
+    public void removeOptionFromDefaultMenu(MenuOption menuOption) {
+        if(!menuRepository.existsById("DEFAULT_MENU")) throw new RuntimeException("DEFAULT_MENU not exist!");
+        MenuDto menuDto = getMenuDto("DEFAULT_MENU");
+        menuDto.getOptions().remove(menuOption);
+        setMenuDto(menuDto);
+    }
+
+
 
 
 }

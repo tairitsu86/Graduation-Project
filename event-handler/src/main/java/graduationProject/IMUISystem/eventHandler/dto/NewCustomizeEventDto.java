@@ -18,5 +18,5 @@ public class NewCustomizeEventDto {
     private String username;
     private String description;
     private List<MenuOption> menuOptions;
-    private Map<String,String> parameters;
+    private Map<String,Object> parameters;
 }
