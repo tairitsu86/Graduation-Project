@@ -54,7 +54,7 @@ public class MQEventPublisherImpl implements MQEventPublisher{
     }
 
     @Override
-    public void newMenu(String username, String description, List<MenuOption> options, Map<String,String> parameters) {
+    public void newMenu(String username, String description, List<MenuOption> options, Map<String,Object> parameters) {
         publishMenuEvent(
                 NewCustomizeEventDto.builder()
                         .eventName("MENU")

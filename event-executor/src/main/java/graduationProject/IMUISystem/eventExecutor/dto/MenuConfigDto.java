@@ -16,5 +16,5 @@ import java.util.Map;
 public class MenuConfigDto {
     private String description;
     private List<MenuOption> options;
-    private Map<String,String> parameters;
+    private Map<String,Object> parameters;
 }

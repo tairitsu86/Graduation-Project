@@ -17,5 +17,5 @@ public class MenuConfig {
     private String displayNameTemplate;
     private String nextEvent;
     private List<MenuVariable> variables;
-    private Map<String,String> parameters;
+    private Map<String,Object> parameters;
 }
