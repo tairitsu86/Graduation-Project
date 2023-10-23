@@ -64,6 +64,11 @@ spec:
             configMapKeyRef:
               name: device-database-configmap
               key: rabbitmq-port
+        - name: GROUP_MANAGER_URL
+          valueFrom:
+            configMapKeyRef:
+              name: device-database-configmap
+              key: group-manager-url
 ---
 apiVersion: v1
 kind: Service
