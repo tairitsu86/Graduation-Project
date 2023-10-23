@@ -59,55 +59,44 @@ public class RespondServiceImpl implements RespondService{
     }
 
 
-    public NotifyConfigDto getNotifyConfigDto(String username,NotifyConfig notifyConfig, String json){
-        Map<String,String> variables = new HashMap<>();
+    public NotifyConfigDto getNotifyConfigDto(String username, NotifyConfig notifyConfig, String json){
+        Map<String,Object> parameters = new HashMap<>();
         String value;
         String formatString;
-        for(NotifyVariable n: notifyConfig.getNotifyVariables()){
+        NotifyConfigDto notifyConfigDto = NotifyConfigDto.builder().usernameList(new ArrayList<>(){{add(username);}}).build();
+        for(NotifyVariable notifyVariable: notifyConfig.getNotifyVariables()){
             value = "";
-            Map<String,String> replaceValue = n.getReplaceValue();
-            Object data = JsonPath.read(json,n.getJsonPath());
-            List<String> temp;
-            if(data instanceof List<?> list){
-                temp = (List<String>) list;
-            }else if(data instanceof String){
-                temp = new ArrayList<>(){{add((String) data);}};
-            }else{
-                throw new RuntimeException("getNotifyConfigDto json path read error: \n"+json);
+            Map<String,String> replaceValue = notifyVariable.getReplaceValue();
+            if(notifyVariable.getVariableName().equals("USER_LIST")){
+                notifyConfigDto.getUsernameList().addAll((List<String>)getJsonVariable("USER_LIST", json , notifyVariable.getJsonPath()));
+                continue;
+            }else if(notifyVariable.getVariableName().equals("GROUP_LIST")){
+                notifyConfigDto.setGroupList((List<String>)getJsonVariable("GROUP_LIST", json , notifyVariable.getJsonPath()));
+                continue;
             }
 
+            List<?> dataList = getJsonVariable(notifyVariable.getVariableName() ,json ,notifyVariable.getJsonPath());
 
-            for (int i=0;i<temp.size();i++) {
-                String s = temp.get(i);
+            for (int i=0;i<dataList.size();i++) {
+                String s = dataList.get(i).toString();
 
                 if(replaceValue!=null&&replaceValue.containsKey(s))
                     s = replaceValue.get(s);
 
                 if(i==0){
-                    formatString = n.getStartFormat();
-                }else if(i==temp.size()-1){
-                    formatString = n.getEndFormat();
+                    formatString = notifyVariable.getStartFormat();
+                }else if(i==dataList.size()-1){
+                    formatString = notifyVariable.getEndFormat();
                 }else {
-                    formatString = n.getMiddleFormat();
+                    formatString = notifyVariable.getMiddleFormat();
                 }
 
                 value = String.format(formatString==null?"%s":formatString,value,s);
             }
-            variables.put(n.getVariableName(),value);
+            parameters.put(notifyVariable.getVariableName(),value);
         }
 
-        String message = notifyConfig.getRespondTemplate();
-        for (String s:variables.keySet())
-            message = message.replace(String.format("${%s}",s),variables.get(s));
-        NotifyConfigDto notifyConfigDto = NotifyConfigDto.builder().message(message).build();
-
-        notifyConfigDto.setUsernameList(new ArrayList<>(){{add(username);}});
-
-        if(variables.containsKey("USERNAME_LIST"))
-            notifyConfigDto.getUsernameList().addAll(Arrays.stream(variables.get("USERNAME_LIST").split(" ")).toList());
-
-        if(variables.containsKey("GROUP_LIST"))
-            notifyConfigDto.setGroupList(Arrays.stream(variables.get("GROUP_LIST").split(" ")).toList());
+        notifyConfigDto.setMessage(setTemplate(notifyConfig.getRespondTemplate(),parameters));
 
         return notifyConfigDto;
     }
@@ -124,60 +113,58 @@ public class RespondServiceImpl implements RespondService{
                 menuConfigDto.getParameters().put(menuVariable.getVariableName(),s);
                 continue;
             }
-            Object data = JsonPath.read(json,menuVariable.getJsonPath());
-
-
-            List<?> dataList;
-            if(menuVariable.getVariableName().startsWith("INT_")){
-                if(data instanceof List<?> list && !list.isEmpty()) {
-                    dataList = (List<Integer>) data;
-                }else if(data instanceof Integer i){
-                    dataList = new ArrayList<>(){{add(i);}};
-                }else{
-                    throw new RuntimeException("getMenuConfigDto error!");
-                }
-            } else if (menuVariable.getVariableName().startsWith("BOOL_")) {
-                if(data instanceof List<?> list && !list.isEmpty()) {
-                    dataList = (List<Boolean>) data;
-                }else if(data instanceof Boolean b){
-                    dataList = new ArrayList<>(){{add(b);}};
-                }else{
-                    throw new RuntimeException("getMenuConfigDto error!");
-                }
-            } else {
-                if(data instanceof List<?> list && !list.isEmpty()) {
-                    dataList = (List<String>) data;
-                }else if(data instanceof String s){
-                    dataList = new ArrayList<>(){{add(s);}};
-                }else{
-                    throw new RuntimeException("getMenuConfigDto error!");
-                }
-            }
-            setMenuOption(options, menuVariable.getVariableName(), dataList, menuConfig.getNextEvent());
+            setMenuOption(options,
+                    menuVariable.getVariableName(),
+                    getJsonVariable(menuVariable.getVariableName(),json,menuVariable.getJsonPath()),
+                    menuConfig.getNextEvent()
+            );
         }
 
+        menuConfigDto.setDescription(setTemplate(menuConfig.getDescriptionTemplate(),menuConfigDto.getParameters()));
 
-        String description = menuConfig.getDescriptionTemplate();
-        for (String s :menuConfigDto.getParameters().keySet()){
-            String format = "${%s}";
-            if(s.startsWith("INT_")||s.startsWith("BOOL_"))
-                format = "\"${%s}\"";
-            description = description.replace(String.format(format,s),menuConfigDto.getParameters().get(s).toString());
-        }
-        menuConfigDto.setDescription(description);
-        for (MenuOption option:options) {
-            String displayName = menuConfig.getDisplayNameTemplate();
-            for (String s:option.getOptionParameters().keySet()){
-                String format = "${%s}";
-                if(s.startsWith("INT_")||s.startsWith("BOOL_"))
-                    format = "\"${%s}\"";
-                displayName = displayName.replace(String.format(format,s),option.getOptionParameters().get(s).toString());
-            }
-            option.setDisplayName(displayName);
-        }
+        for (MenuOption option:options)
+            option.setDisplayName(setTemplate(menuConfig.getDisplayNameTemplate(),option.getOptionParameters()));
 
         return menuConfigDto;
     }
+    public List<?> getJsonVariable(String variableName, String json, String jsonPath){
+        Object data = JsonPath.read(json,jsonPath);
+
+        List<?> dataList;
+        if(variableName.startsWith("INT_")){
+            if(data instanceof List<?> list && !list.isEmpty()) {
+                dataList = (List<Integer>) data;
+            }else if(data instanceof Integer i){
+                dataList = new ArrayList<>(){{add(i);}};
+            }else{
+                throw new RuntimeException("getMenuConfigDto error!");
+            }
+        } else if (variableName.startsWith("BOOL_")) {
+            if(data instanceof List<?> list && !list.isEmpty()) {
+                dataList = (List<Boolean>) data;
+            }else if(data instanceof Boolean b){
+                dataList = new ArrayList<>(){{add(b);}};
+            }else{
+                throw new RuntimeException("getMenuConfigDto error!");
+            }
+        } else {
+            if(data instanceof List<?> list && !list.isEmpty()) {
+                dataList = (List<String>) data;
+            }else if(data instanceof String s){
+                dataList = new ArrayList<>(){{add(s);}};
+            }else{
+                throw new RuntimeException("getMenuConfigDto error!");
+            }
+        }
+        return dataList;
+    }
+
+    public String setTemplate(String template, Map<String,Object> parameters){
+        for (String s:parameters.keySet())
+            template = template.replace(String.format("${%s}",s),parameters.get(s).toString());
+        return template;
+    }
+
 
     public void setMenuOption(List<MenuOption> options, String variableName, List<?> data, String nextEvent){
         for(int i=0;i<data.size();i++){
