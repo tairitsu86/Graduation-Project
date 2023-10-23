@@ -17,5 +17,5 @@ public interface MQEventPublisher {
 
     void publishMenuEvent(NewCustomizeEventDto newCustomizeEventDto);
 
-    void newMenu(String username, String description, List<MenuOption> options, Map<String,String> parameters);
+    void newMenu(String username, String description, List<MenuOption> options, Map<String,Object> parameters);
 }
