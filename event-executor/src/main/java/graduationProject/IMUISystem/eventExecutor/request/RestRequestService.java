@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface RestRequestService {
+
+
     ResponseEntity<String> sendEventRequest(CommConfigDto commConfigDto);
 
     List<String> getGroupUsers(List<String> groups);

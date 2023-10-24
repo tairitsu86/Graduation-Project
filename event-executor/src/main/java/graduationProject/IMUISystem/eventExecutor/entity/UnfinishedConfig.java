@@ -6,16 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Map;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MenuConfig {
-    private String descriptionTemplate;
-    private String displayNameTemplate;
+public class UnfinishedConfig {
     private String nextEvent;
-    private List<MenuVariable> menuVariables;
-    private Map<String,Object> parameters;
+    private List<UnfinishedVariable> unfinishedVariables;
 }

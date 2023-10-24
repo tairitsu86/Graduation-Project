@@ -2,6 +2,7 @@ package graduationProject.IMUISystem.eventExecutor.rabbitMQ;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import graduationProject.IMUISystem.eventExecutor.dto.ExecuteEventDto;
 import graduationProject.IMUISystem.eventExecutor.dto.NewCustomizeEventDto;
 import graduationProject.IMUISystem.eventExecutor.entity.MenuOption;
 import graduationProject.IMUISystem.eventExecutor.dto.CommConfigDto;
@@ -25,7 +26,14 @@ public class MQEventPublisherImpl implements MQEventPublisher{
 
     @Override
     public void publishSendingEvent(SendingEventDto sendingEventDto) {
-        rabbitTemplate.convertAndSend(IMUI_IBC_EXCHANGE, SEND_MESSAGE_QUEUE,sendingEventDto);
+        rabbitTemplate.convertAndSend(IMUI_IBC_EXCHANGE, SEND_MESSAGE_QUEUE, sendingEventDto);
+        log.info("Send to exchange [{}] with routingKey [{}], event [{}]", IMUI_IBC_EXCHANGE, SEND_MESSAGE_QUEUE, sendingEventDto);
+    }
+
+    @Override
+    public void publishExecuteEvent(ExecuteEventDto executeEventDto) {
+        rabbitTemplate.convertAndSend(IMUI_RAE_EXCHANGE, EXECUTE_EVENT_QUEUE, executeEventDto);
+        log.info("Send to exchange [{}] with routingKey [{}], event [{}]", IMUI_RAE_EXCHANGE, EXECUTE_EVENT_QUEUE, executeEventDto);
     }
 
     @Override
