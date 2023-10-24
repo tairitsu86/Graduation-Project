@@ -18,7 +18,8 @@ env:
   RABBITMQ_PASSWORD: ${{ secrets.RABBITMQ_PASSWORD }}
   MQTT_USERNAME: ${{ secrets.MQTT_USERNAME }}
   MQTT_PASSWORD: ${{ secrets.MQTT_PASSWORD }}
-  MQTT_HOST: ${{ secrets.MQTT_HOST }}
+  MQTT_HOST_IP: ${{ secrets.MQTT_HOST_IP }}
+  MQTT_HOST_PORT: ${{ secrets.MQTT_HOST_PORT }}
   
 jobs:
   build:
