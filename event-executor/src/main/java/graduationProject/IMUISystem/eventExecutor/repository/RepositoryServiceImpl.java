@@ -20,10 +20,6 @@ public class RepositoryServiceImpl implements RepositoryService{
     private final CommConfigRepository commConfigRepository;
     private final RespondConfigRepository respondConfigRepository;
     private final ObjectMapper objectMapper;
-    @PostConstruct
-    public void init() {
-
-    }
 
     @Override
     public void newCommConfig(String eventName, NewCommConfigDto newCommConfigDto) {

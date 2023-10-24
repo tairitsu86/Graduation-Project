@@ -48,21 +48,21 @@ public class CommunicationServiceImpl implements CommunicationService{
     }
 
 
-    public CommConfigDto getCommConfigDto(CommConfig commConfig, Map<String, Object> variables){
+    public CommConfigDto getCommConfigDto(CommConfig commConfig, Map<String, Object> parameters){
         String url = commConfig.getUrlTemplate();
         String headerString = commConfig.getHeaderTemplate();
         if(headerString==null) headerString = "";
         String body = commConfig.getBodyTemplate();
         if(body==null) body = "";
-        if(variables!=null)
-            for(String s:variables.keySet()){
+        if(parameters!=null)
+            for(String s:parameters.keySet()){
                 String replaceValue = String.format("${%s}",s);
-                url = url.replace(replaceValue,variables.get(s).toString());
-                headerString = headerString.replace(replaceValue,variables.get(s).toString());
+                url = url.replace(replaceValue,parameters.get(s).toString());
+                headerString = headerString.replace(replaceValue,parameters.get(s).toString());
 
                 if(s.startsWith("INT_")||s.startsWith("BOOL_"))
-                    replaceValue = String.format("\"${%s}\"",s);;
-                body = body.replace(replaceValue,variables.get(s).toString());
+                    replaceValue = String.format("\"${%s}\"",s);
+                body = body.replace(replaceValue,parameters.get(s).toString());
             }
         Map<String, String> header;
         try{

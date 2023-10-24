@@ -39,10 +39,11 @@ public class RestRequestServiceImpl implements RestRequestService {
             headers.setAll(commConfigDto.getHeader());
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(commConfigDto.getBody(),headers);
+        log.info("Execute Custom API with url[{}], header[{}] ,body[{}]", commConfigDto.getUrl(), headers, commConfigDto.getBody());
         try{
             return restTemplate.exchange(commConfigDto.getUrl(),httpMethod,entity,String.class);
         }catch (HttpClientErrorException e){
-            System.err.printf("Custom API Error,url[%s],body[%s],error type[%s]\n",commConfigDto.getUrl(),commConfigDto.getBody(),e.getMessage());
+            log.info("Custom API Error: {}!",e.getMessage(),e);
             return new ResponseEntity<>(e.getResponseBodyAsString(),e.getStatusCode());
         }
     }
