@@ -63,7 +63,7 @@ public class RespondServiceImpl implements RespondService{
         Map<String,Object> parameters = new HashMap<>();
         String value;
         String formatString;
-        NotifyConfigDto notifyConfigDto = NotifyConfigDto.builder().usernameList(new ArrayList<>(){{add(username);}}).build();
+        NotifyConfigDto notifyConfigDto = NotifyConfigDto.builder().usernameList(new ArrayList<>(){{add(username);}}).groupList(new ArrayList<>()).build();
         for(NotifyVariable notifyVariable: notifyConfig.getNotifyVariables()){
             value = "";
             Map<String,String> replaceValue = notifyVariable.getReplaceValue();
@@ -71,7 +71,7 @@ public class RespondServiceImpl implements RespondService{
                 notifyConfigDto.getUsernameList().addAll((List<String>)getJsonVariable("USER_LIST", json , notifyVariable.getJsonPath()));
                 continue;
             }else if(notifyVariable.getVariableName().equals("GROUP_LIST")){
-                notifyConfigDto.setGroupList((List<String>)getJsonVariable("GROUP_LIST", json , notifyVariable.getJsonPath()));
+                notifyConfigDto.getGroupList().addAll((List<String>)getJsonVariable("GROUP_LIST", json , notifyVariable.getJsonPath()));
                 continue;
             }
 
