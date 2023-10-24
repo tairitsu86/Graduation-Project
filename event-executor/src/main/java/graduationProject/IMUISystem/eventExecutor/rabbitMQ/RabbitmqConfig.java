@@ -73,8 +73,8 @@ public class RabbitmqConfig {
         return new Queue(NOTIFY_USER_QUEUE,false);
     }
     @Bean
-    public Binding bindingNotifyUserQueue(@Qualifier("SYS_NTF") TopicExchange exchange) {
-        return BindingBuilder.bind(notifyUserQueue()).to(exchange).with(NOTIFY_USER_QUEUE);
+    public Binding bindingNotifyUserQueue(@Qualifier("SYS_NTF") FanoutExchange exchange) {
+        return BindingBuilder.bind(notifyUserQueue()).to(exchange);
     }
 
     @Bean("SYS_SVC")
