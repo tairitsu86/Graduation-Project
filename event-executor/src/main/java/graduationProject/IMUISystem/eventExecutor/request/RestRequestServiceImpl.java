@@ -11,7 +11,9 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +21,7 @@ import java.util.List;
 public class RestRequestServiceImpl implements RestRequestService {
     private final RestTemplate restTemplate;
 
-    @Value("my_env.groupManagerUrl")
+    @Value("${my_env.groupManagerUrl}")
     private String GROUP_MANAGER_URL;
 
     @Override
@@ -50,17 +52,18 @@ public class RestRequestServiceImpl implements RestRequestService {
 
     @Override
     public List<String> getGroupUsers(List<String> groups) {
-        List<String> userList = new ArrayList<>();
+        Set<String> userList = new HashSet<>();
         GetGroupUsersDto getGroupUsersDto;
         for(String group:groups){
             try{
-                 getGroupUsersDto = restTemplate.getForObject(String.format("%s/groups/%s/users",GROUP_MANAGER_URL,group), GetGroupUsersDto.class);
-                 if(getGroupUsersDto!=null&&getGroupUsersDto.getUsernameList()!=null)
-                    userList.addAll(getGroupUsersDto.getUsernameList());
+                log.info("URL : {}", String.format("%s/groups/%s/members",GROUP_MANAGER_URL,group));
+                List<String> data = restTemplate.getForObject(String.format("%s/groups/%s/members",GROUP_MANAGER_URL,group), List.class);
+                if(data!=null)
+                    userList.addAll(data);
             }catch (HttpClientErrorException e){
-                log.info(String.format("getGroupUsers API Error,url[%s],error type: {}",String.format("%s/groups/%s/users",GROUP_MANAGER_URL,group)),e.getMessage());
+                log.info(String.format("getGroupUsers API Error,url[%s],error type: {}",String.format("%s/groups/%s/members",GROUP_MANAGER_URL,group)),e.getMessage());
             }
         }
-        return userList;
+        return new ArrayList<>(userList);
     }
 }
