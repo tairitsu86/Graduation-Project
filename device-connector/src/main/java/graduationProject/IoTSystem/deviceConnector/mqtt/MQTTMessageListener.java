@@ -1,10 +1,9 @@
 package graduationProject.IoTSystem.deviceConnector.mqtt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import graduationProject.IoTSystem.deviceConnector.dto.DeviceInfoDto;
 import graduationProject.IoTSystem.deviceConnector.dto.DeviceStateDto;
-import graduationProject.IoTSystem.deviceConnector.dto.info.FunctionType;
 import graduationProject.IoTSystem.deviceConnector.entity.DeviceStateHistory;
 import graduationProject.IoTSystem.deviceConnector.rabbitMQ.MQEventPublisher;
 import graduationProject.IoTSystem.deviceConnector.repository.DeviceStateHistoryRepository;
@@ -15,6 +14,7 @@ import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.Objects;
 
 import static graduationProject.IoTSystem.deviceConnector.mqtt.MQTTConfig.*;
@@ -35,9 +35,9 @@ public class MQTTMessageListener implements MessageHandler {
         switch (Objects.requireNonNull(message.getHeaders().get("mqtt_receivedTopic"),"Mqtt topic is null").toString()){
             case TEST_TOPIC -> log.info("test topic!");
             case INFO_TOPIC -> {
-                DeviceInfoDto deviceInfoDto;
+                Map<String,Object> deviceInfoDto;
                 try {
-                    deviceInfoDto = objectMapper.readValue(payload,DeviceInfoDto.class);
+                    deviceInfoDto = objectMapper.readValue(payload, new TypeReference<Map<String, Object>>() {});
                 } catch (JsonProcessingException e) {
                     log.info("Error mapping with :{}",payload);
                     return;

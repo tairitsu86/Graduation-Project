@@ -1,6 +1,5 @@
 package graduationProject.IoTSystem.deviceConnector.dto;
 
-import graduationProject.IoTSystem.deviceConnector.dto.info.FunctionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -5,15 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Map;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-public class DeviceControlDto {
-    private String deviceId;
-    private String executor;
-    private int functionId;
-    private Map<String,String> parameters;
+public class NewDeviceDto {
+    private String id;
+    private String mqttHostIp;
+    private String mqttHostPort;
 }
