@@ -51,9 +51,9 @@ public class MQEventListener {
     }
     @RabbitListener(queues={RabbitmqConfig.NOTIFY_USER_QUEUE})
     public void receive(Map<String,Object> notifyEvent) {
-        log.info("Execute event: {}", notifyEvent);
+        log.info("Notify event: {}", notifyEvent);
         try {
-            String eventName = String.format("%s-%s",notifyEvent.get("from"),notifyEvent.get("notificationType"));
+            String eventName = String.format("%s_%s",notifyEvent.get("from"),notifyEvent.get("notificationType"));
             String executor = (String) notifyEvent.get("executor");
             String jsonData = objectMapper.writeValueAsString(notifyEvent);
             if(!repositoryService.isRespondConfigExist(eventName)) return;
