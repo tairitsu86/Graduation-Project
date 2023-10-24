@@ -43,6 +43,7 @@ public class MQEventPublisherImpl implements MQEventPublisher{
         try {
             Map<String, Object> jsonMap = objectMapper.readValue(commConfigDto.getBody(), new TypeReference<Map<String, Object>>() {});
             rabbitTemplate.convertAndSend(SYS_SVC_EXCHANGE, commConfigDto.getUrl(), jsonMap);
+            log.info("Send to exchange [{}] with routingKey [{}], event [{}]", SYS_SVC_EXCHANGE, commConfigDto.getUrl(), jsonMap);
         } catch (Exception e) {
             log.info("publishCustomEvent convert json to Map<String,Object> got error: {}",e.getMessage(),e);
         }
@@ -51,6 +52,7 @@ public class MQEventPublisherImpl implements MQEventPublisher{
     @Override
     public void publishMenuEvent(NewCustomizeEventDto newCustomizeEventDto) {
         rabbitTemplate.convertAndSend(IMUI_RAE_EXCHANGE, NEW_EVENT_QUEUE, newCustomizeEventDto);
+        log.info("Send to exchange [{}] with routingKey [{}], event [{}]", IMUI_RAE_EXCHANGE, NEW_EVENT_QUEUE, newCustomizeEventDto);
     }
 
     @Override
