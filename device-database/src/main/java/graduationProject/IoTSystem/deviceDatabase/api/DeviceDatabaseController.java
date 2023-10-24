@@ -1,5 +1,7 @@
 package graduationProject.IoTSystem.deviceDatabase.api;
 
+import graduationProject.IoTSystem.deviceDatabase.dto.DeviceDto;
+import graduationProject.IoTSystem.deviceDatabase.dto.DevicePermissionDto;
 import graduationProject.IoTSystem.deviceDatabase.dto.GetDeviceDetailDto;
 import graduationProject.IoTSystem.deviceDatabase.rabbitMQ.MQEventPublisher;
 import graduationProject.IoTSystem.deviceDatabase.repository.RepositoryService;
@@ -8,10 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,10 +36,17 @@ public class DeviceDatabaseController {
         return repositoryService.getDeviceDetail(deviceId, executor);
     }
 
-    @GetMapping("/devices/new/id")
-    public String newDeviceId(){
-        return UUID.randomUUID().toString();
+    @GetMapping("/devices/{deviceId}/permission")
+    @ResponseStatus(HttpStatus.OK)
+    public DevicePermissionDto getDevicePermission(@PathVariable String deviceId){
+        DeviceDto deviceDto = repositoryService.getDevice(deviceId);
+        return DevicePermissionDto.builder()
+                .users(deviceDto.getUsers())
+                .groups(deviceDto.getGroups())
+                .build();
     }
+
+
 
 }
 
