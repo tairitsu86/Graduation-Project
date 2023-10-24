@@ -1,6 +1,7 @@
 package graduationProject.IMUISystem.eventExecutor.rabbitMQ;
 
 import graduationProject.IMUISystem.eventExecutor.dto.CommConfigDto;
+import graduationProject.IMUISystem.eventExecutor.dto.ExecuteEventDto;
 import graduationProject.IMUISystem.eventExecutor.dto.NewCustomizeEventDto;
 import graduationProject.IMUISystem.eventExecutor.dto.SendingEventDto;
 import graduationProject.IMUISystem.eventExecutor.entity.MenuOption;
@@ -10,6 +11,7 @@ import java.util.Map;
 
 public interface MQEventPublisher {
     void publishSendingEvent(SendingEventDto sendingEventDto);
+    void publishExecuteEvent(ExecuteEventDto executeEventDto);
 
     void notifyUser(List<String> users, String message);
 

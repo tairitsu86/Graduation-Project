@@ -3,6 +3,8 @@ package graduationProject.IMUISystem.eventExecutor.respond;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import graduationProject.IMUISystem.eventExecutor.communication.CommunicationService;
+import graduationProject.IMUISystem.eventExecutor.dto.ExecuteEventDto;
 import graduationProject.IMUISystem.eventExecutor.dto.MenuConfigDto;
 import graduationProject.IMUISystem.eventExecutor.dto.NotifyConfigDto;
 import graduationProject.IMUISystem.eventExecutor.entity.*;
@@ -21,6 +23,7 @@ public class RespondServiceImpl implements RespondService{
     private final MQEventPublisher mqEventPublisher;
     private final RestRequestService restRequestService;
     private final ObjectMapper objectMapper;
+
     @Override
     public void respond(String username, RespondConfig respondConfig, Map<String,Object> parameters, String jsonData) {
         switch (respondConfig.getRespondType()){
@@ -48,19 +51,30 @@ public class RespondServiceImpl implements RespondService{
                     log.info("Map notifyConfig error: {}",e.getMessage(),e);
                     return;
                 }
-                NotifyConfigDto notifyConfigDto = getNotifyConfigDto(username, notifyConfig, jsonData);
+                NotifyConfigDto notifyConfigDto = getNotifyConfigDto(username, notifyConfig, jsonData, parameters);
                 notifyConfigDto.getUsernameList().addAll(restRequestService.getGroupUsers(notifyConfigDto.getGroupList()));
                 mqEventPublisher.notifyUser(
                         new ArrayList<>(new LinkedHashSet<>(notifyConfigDto.getUsernameList()))
                         ,notifyConfigDto.getMessage()
                 );
             }
+            case UNFINISHED -> {
+                UnfinishedConfig unfinishedConfig;
+                try {
+                    unfinishedConfig = objectMapper.readValue(respondConfig.getRespondData(), UnfinishedConfig.class);
+                } catch (JsonProcessingException e) {
+                    log.info("Map unfinishedConfig error: {}",e.getMessage(),e);
+                    return;
+                }
+                mqEventPublisher.publishExecuteEvent(getExecuteEventDto(username, unfinishedConfig, jsonData, parameters));
+            }
         }
     }
 
 
-    public NotifyConfigDto getNotifyConfigDto(String username, NotifyConfig notifyConfig, String json){
-        Map<String,Object> parameters = new HashMap<>();
+    public NotifyConfigDto getNotifyConfigDto(String username, NotifyConfig notifyConfig, String json,Map<String,Object> parameters){
+        if(parameters==null)
+            parameters = new HashMap<>();
         String value;
         String formatString;
         NotifyConfigDto notifyConfigDto = NotifyConfigDto.builder().usernameList(new ArrayList<>(){{add(username);}}).groupList(new ArrayList<>()).build();
@@ -68,14 +82,38 @@ public class RespondServiceImpl implements RespondService{
             value = "";
             Map<String,String> replaceValue = notifyVariable.getReplaceValue();
             if(notifyVariable.getVariableName().equals("USER_LIST")){
-                notifyConfigDto.getUsernameList().addAll((List<String>)getJsonVariable("USER_LIST", json , notifyVariable.getJsonPath()));
+                Object data;
+                String jsonPath = notifyVariable.getJsonPath();
+
+                if(jsonPath.equals("PAST_PARAMETER"))
+                    data = parameters.get(notifyVariable.getVariableName());
+                else
+                    data = JsonPath.read(json,jsonPath);
+
+                notifyConfigDto.getUsernameList().addAll((List<String>)getJsonVariable("USER_LIST", data));
                 continue;
             }else if(notifyVariable.getVariableName().equals("GROUP_LIST")){
-                notifyConfigDto.getGroupList().addAll((List<String>)getJsonVariable("GROUP_LIST", json , notifyVariable.getJsonPath()));
+                Object data;
+                String jsonPath = notifyVariable.getJsonPath();
+
+                if(jsonPath.equals("PAST_PARAMETER"))
+                    data = parameters.get(notifyVariable.getVariableName());
+                else
+                    data = JsonPath.read(json,jsonPath);
+
+                notifyConfigDto.getGroupList().addAll((List<String>)getJsonVariable("GROUP_LIST", data));
                 continue;
             }
 
-            List<?> dataList = getJsonVariable(notifyVariable.getVariableName() ,json ,notifyVariable.getJsonPath());
+            Object data;
+            String jsonPath = notifyVariable.getJsonPath();
+
+            if(jsonPath.equals("PAST_PARAMETER"))
+                data = parameters.get(notifyVariable.getVariableName());
+            else
+                data = JsonPath.read(json,jsonPath);
+
+            List<?> dataList = getJsonVariable(notifyVariable.getVariableName(), data);
 
             for (int i=0;i<dataList.size();i++) {
                 String s = dataList.get(i).toString();
@@ -100,11 +138,10 @@ public class RespondServiceImpl implements RespondService{
 
         return notifyConfigDto;
     }
-
     public MenuConfigDto getMenuConfigDto(MenuConfig menuConfig, String json){
         MenuConfigDto menuConfigDto = MenuConfigDto.builder().parameters(menuConfig.getParameters()).options(new ArrayList<>()).build();
         List<MenuOption> options = menuConfigDto.getOptions();
-        for(MenuVariable menuVariable :menuConfig.getVariables()){
+        for(MenuVariable menuVariable :menuConfig.getMenuVariables()){
             Map<String,String> replaceValue = menuVariable.getReplaceValue();
             if(menuVariable.isGlobal()){
                 String s = JsonPath.read(json,menuVariable.getJsonPath());
@@ -113,9 +150,18 @@ public class RespondServiceImpl implements RespondService{
                 menuConfigDto.getParameters().put(menuVariable.getVariableName(),s);
                 continue;
             }
-            setMenuOption(options,
+
+            Object data;
+            String jsonPath = menuVariable.getJsonPath();
+            if(jsonPath.equals("PAST_PARAMETER"))
+                data = menuConfigDto.getParameters().get(menuVariable.getVariableName());
+            else
+                data = JsonPath.read(json,jsonPath);
+
+            setMenuOption(
+                    options,
                     menuVariable.getVariableName(),
-                    getJsonVariable(menuVariable.getVariableName(),json,menuVariable.getJsonPath()),
+                    getJsonVariable(menuVariable.getVariableName(),data),
                     menuConfig.getNextEvent()
             );
         }
@@ -127,9 +173,20 @@ public class RespondServiceImpl implements RespondService{
 
         return menuConfigDto;
     }
-    public List<?> getJsonVariable(String variableName, String json, String jsonPath){
-        Object data = JsonPath.read(json,jsonPath);
+    public ExecuteEventDto getExecuteEventDto(String username, UnfinishedConfig unfinishedConfig, String json, Map<String,Object> parameters){
+        if(parameters==null) parameters = new HashMap<>();
+        for (UnfinishedVariable unfinishedVariable : unfinishedConfig.getUnfinishedVariables()){
+            Object o = JsonPath.read(json, unfinishedVariable.getJsonPath());
+            parameters.put(unfinishedVariable.getVariableName(), o);
+        }
 
+        return ExecuteEventDto.builder()
+                .eventName(unfinishedConfig.getNextEvent())
+                .executor(username)
+                .parameters(parameters)
+                .build();
+    }
+    public List<?> getJsonVariable(String variableName, Object data){
         List<?> dataList;
         if(variableName.startsWith("INT_")){
             if(data instanceof List<?> list && !list.isEmpty()) {
@@ -158,14 +215,11 @@ public class RespondServiceImpl implements RespondService{
         }
         return dataList;
     }
-
     public String setTemplate(String template, Map<String,Object> parameters){
         for (String s:parameters.keySet())
             template = template.replace(String.format("${%s}",s),parameters.get(s).toString());
         return template;
     }
-
-
     public void setMenuOption(List<MenuOption> options, String variableName, List<?> data, String nextEvent){
         for(int i=0;i<data.size();i++){
             if(i>=options.size())
