@@ -74,11 +74,16 @@ spec:
             configMapKeyRef:
               name: device-connector-configmap
               key: rabbitmq-port
-        - name: MQTT_HOST
+        - name: MQTT_HOST_IP
           valueFrom:
             configMapKeyRef:
               name: device-connector-configmap
-              key: mqtt-host
+              key: mqtt-host-ip
+        - name: MQTT_HOST_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: device-connector-configmap
+              key: mqtt-host-port
 ---
 apiVersion: v1
 kind: Service

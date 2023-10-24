@@ -25,4 +25,6 @@ spring:
 mqtt:
   username: ${MQTT_USERNAME}
   password: ${MQTT_PASSWORD}
-  host: ${MQTT_HOST}
+  host:
+    ip: ${MQTT_HOST_IP}
+    port: ${MQTT_HOST_PORT}
