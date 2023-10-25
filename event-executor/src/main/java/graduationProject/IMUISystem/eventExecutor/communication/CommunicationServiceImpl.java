@@ -32,9 +32,12 @@ public class CommunicationServiceImpl implements CommunicationService{
     @Override
     public void handleExecuteEvent(ExecuteEventDto executeEventDto) {
         if(!repositoryService.isCommConfigExist(executeEventDto.getEventName())){
-            log.info("event [{}] not exist!", executeEventDto.getEventName());
+            log.info("commConfig of event [{}] not exist!", executeEventDto.getEventName());
+            if (!repositoryService.isRespondConfigExist(executeEventDto.getEventName())) return;
+            respondService.respond(executeEventDto.getExecutor(), repositoryService.getRespondConfig(executeEventDto.getEventName()), executeEventDto.getParameters(), "");
             return;
         }
+
         CommConfig commConfig = repositoryService.getCommConfig(executeEventDto.getEventName());
         if (Objects.requireNonNull(commConfig.getMethodType()) == MethodType.MQ) {
             mqEventPublisher.publishCustomEvent(getCommConfigDto(commConfig, executeEventDto.getParameters()));
@@ -43,7 +46,7 @@ public class CommunicationServiceImpl implements CommunicationService{
                     restRequestService.sendEventRequest(getCommConfigDto(commConfig, executeEventDto.getParameters()));
 
             if (!repositoryService.isRespondConfigExist(executeEventDto.getEventName())) return;
-            respondService.respond(executeEventDto.getExecutor(), repositoryService.getRespondConfig(executeEventDto.getEventName()), executeEventDto.getParameters(),response.getBody());
+            respondService.respond(executeEventDto.getExecutor(), repositoryService.getRespondConfig(executeEventDto.getEventName()), executeEventDto.getParameters(), response.getBody());
         }
     }
 

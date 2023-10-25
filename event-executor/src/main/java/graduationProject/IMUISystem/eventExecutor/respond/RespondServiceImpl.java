@@ -34,13 +34,11 @@ public class RespondServiceImpl implements RespondService{
                     log.info("Map menuConfig error: {}",e.getMessage(),e);
                     return;
                 }
+                if(menuConfig.getParameters()==null)
+                    menuConfig.setParameters(new HashMap<>());
+                menuConfig.getParameters().putAll(parameters);
                 MenuConfigDto menuConfigDto = getMenuConfigDto(menuConfig,jsonData);
-                Map<String,Object> respondParameters = new HashMap<>();
-                if(parameters!=null&&!parameters.isEmpty())
-                    respondParameters.putAll(parameters);
-                if(menuConfigDto.getParameters()!=null&&!menuConfigDto.getParameters().isEmpty())
-                    respondParameters.putAll(menuConfigDto.getParameters());
-                mqEventPublisher.newMenu(username,menuConfigDto.getDescription(),menuConfigDto.getOptions(), respondParameters);
+                mqEventPublisher.newMenu(username,menuConfigDto.getDescription(),menuConfigDto.getOptions(), menuConfigDto.getParameters());
             }
             case NOTIFY -> {
                 NotifyConfig notifyConfig;
@@ -128,12 +126,12 @@ public class RespondServiceImpl implements RespondService{
                     formatString = notifyVariable.getMiddleFormat();
                 }
 
-                value = String.format(formatString==null?"%s":formatString,value,s);
+                value = String.format(formatString==null?"%s%s":formatString, value, s);
             }
-            parameters.put(notifyVariable.getVariableName(),value);
+            parameters.put(notifyVariable.getVariableName(), value);
         }
 
-        notifyConfigDto.setMessage(setTemplate(notifyConfig.getRespondTemplate(),parameters));
+        notifyConfigDto.setMessage(setTemplate(notifyConfig.getRespondTemplate(), parameters));
 
         return notifyConfigDto;
     }
