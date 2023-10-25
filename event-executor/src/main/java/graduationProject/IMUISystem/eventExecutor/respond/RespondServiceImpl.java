@@ -3,7 +3,6 @@ package graduationProject.IMUISystem.eventExecutor.respond;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
-import graduationProject.IMUISystem.eventExecutor.communication.CommunicationService;
 import graduationProject.IMUISystem.eventExecutor.dto.ExecuteEventDto;
 import graduationProject.IMUISystem.eventExecutor.dto.MenuConfigDto;
 import graduationProject.IMUISystem.eventExecutor.dto.NotifyConfigDto;
@@ -144,10 +143,17 @@ public class RespondServiceImpl implements RespondService{
         for(MenuVariable menuVariable :menuConfig.getMenuVariables()){
             Map<String,String> replaceValue = menuVariable.getReplaceValue();
             if(menuVariable.isGlobal()){
-                String s = JsonPath.read(json,menuVariable.getJsonPath());
-                if(replaceValue!=null&&replaceValue.containsKey(s))
-                    s = replaceValue.get(s);
-                menuConfigDto.getParameters().put(menuVariable.getVariableName(),s);
+                Object value = JsonPath.read(json,menuVariable.getJsonPath());
+                if(replaceValue!=null&&replaceValue.containsKey(value.toString()))
+                    value = replaceValue.get(value.toString());
+                if(menuVariable.getVariableName().equals("NEXT_EVENT")){
+                    menuConfig.setNextEvent(value.toString());
+                    for (MenuOption option:options)
+                        option.setNextEvent(value.toString());
+                }else{
+                    menuConfigDto.getParameters().put(menuVariable.getVariableName(),value);
+                }
+                menuConfigDto.getParameters().put(menuVariable.getVariableName(),value);
                 continue;
             }
 
@@ -161,6 +167,7 @@ public class RespondServiceImpl implements RespondService{
             setMenuOption(
                     options,
                     menuVariable.getVariableName(),
+                    replaceValue,
                     getJsonVariable(menuVariable.getVariableName(),data),
                     menuConfig.getNextEvent()
             );
@@ -220,7 +227,7 @@ public class RespondServiceImpl implements RespondService{
             template = template.replace(String.format("${%s}",s),parameters.get(s).toString());
         return template;
     }
-    public void setMenuOption(List<MenuOption> options, String variableName, List<?> data, String nextEvent){
+    public void setMenuOption(List<MenuOption> options, String variableName,Map<String,String> replaceValue, List<?> data, String nextEvent){
         for(int i=0;i<data.size();i++){
             if(i>=options.size())
                 options.add(
@@ -229,7 +236,15 @@ public class RespondServiceImpl implements RespondService{
                                 .optionParameters(new HashMap<>())
                                 .build()
                 );
-            options.get(i).getOptionParameters().put(variableName,data.get(i));
+
+            Object value = data.get(i);
+            if(replaceValue!=null&&replaceValue.containsKey(value.toString()))
+                value = replaceValue.get(value.toString());
+            if(variableName.equals("NEXT_EVENT")){
+                options.get(i).setNextEvent(value.toString());
+            }else{
+                options.get(i).getOptionParameters().put(variableName, value);
+            }
         }
     }
 
