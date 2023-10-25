@@ -4,7 +4,6 @@ import graduationProject.loginSystem.userDatabase.dto.*;
 import graduationProject.loginSystem.userDatabase.entity.User;
 import graduationProject.loginSystem.userDatabase.rabbitMQ.MQEventPublisher;
 import graduationProject.loginSystem.userDatabase.repository.UserRepositoryService;
-import graduationProject.loginSystem.userDatabase.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -62,7 +61,7 @@ public class UserDatabaseController {
                 ,addUserDto.getUserDisplayName()
         );
     }
-    @PatchMapping("/users/{username}/alter")
+    @PutMapping("/users/{username}/alter")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void alterUserData(@PathVariable String username, @RequestBody AlterUserDataDto alterUserDataDto){
         if(alterUserDataDto.getNewPassword()!=null)
@@ -71,7 +70,7 @@ public class UserDatabaseController {
             userRepositoryService.alterUserDisplayName(username, alterUserDataDto.getNewUserDisplayName());
     }
 
-    @PatchMapping("/users/{username}/delete")
+    @PutMapping("/users/{username}/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable String username){
         userRepositoryService.deleteUser(username);
