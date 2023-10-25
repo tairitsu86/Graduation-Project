@@ -7,9 +7,11 @@ import graduationProject.loginSystem.groupManager.dto.GroupDetailDto;
 import graduationProject.loginSystem.groupManager.dto.GroupDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RepositoryService {
-    List<String> getGroups(String username);
+    List<String> getGroupIdByUsername(String username);
+    List<Map<String,String>> getGroupByUsername(String username);
     List<String> getMembers(String groupId);
     GroupDetailDto getGroupDetail(String groupId);
     List<GroupDto> searchGroup(String keyword);
