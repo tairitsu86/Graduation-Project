@@ -24,16 +24,11 @@ spec:
         ports:
         - containerPort: 8080
         env:
-        - name: telegram_BOT_TOKEN
+        - name: TELEGRAM_BOT_TOKEN
           valueFrom: 
             secretKeyRef:
               name: telegram-service-secret
               key: telegram-bot-token
-        - name: telegram_BOT_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: telegram-service-secret
-              key: telegram-bot-secret
         - name: RABBITMQ_USERNAME
           valueFrom:
             secretKeyRef:
@@ -44,7 +39,7 @@ spec:
             secretKeyRef:
               name: telegram-service-secret
               key: rabbitmq-password
-        - name: telegram_WEBHOOK
+        - name: TELEGRAM_WEBHOOK
           valueFrom:
             configMapKeyRef:
               name: telegram-service-configmap

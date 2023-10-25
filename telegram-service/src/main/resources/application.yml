@@ -5,3 +5,6 @@ spring:
   activemq:
     user: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
+my_env:
+  telegramBotToken: ${TELEGRAM_BOT_TOKEN}
+  telegramWebHook: ${TELEGRAM_WEBHOOK}
