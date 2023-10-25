@@ -128,12 +128,12 @@ public class RespondServiceImpl implements RespondService{
                     formatString = notifyVariable.getMiddleFormat();
                 }
 
-                value = String.format(formatString==null?"%s":formatString,value,s);
+                value = String.format(formatString==null?"%s%s":formatString, value, s);
             }
-            parameters.put(notifyVariable.getVariableName(),value);
+            parameters.put(notifyVariable.getVariableName(), value);
         }
 
-        notifyConfigDto.setMessage(setTemplate(notifyConfig.getRespondTemplate(),parameters));
+        notifyConfigDto.setMessage(setTemplate(notifyConfig.getRespondTemplate(), parameters));
 
         return notifyConfigDto;
     }
