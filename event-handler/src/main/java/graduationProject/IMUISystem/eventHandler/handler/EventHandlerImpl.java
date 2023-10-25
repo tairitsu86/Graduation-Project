@@ -3,7 +3,6 @@ package graduationProject.IMUISystem.eventHandler.handler;
 import graduationProject.IMUISystem.eventHandler.dto.*;
 import graduationProject.IMUISystem.eventHandler.entity.CustomizeEventVariable;
 import graduationProject.IMUISystem.eventHandler.entity.IMUserData;
-import graduationProject.IMUISystem.eventHandler.entity.Menu;
 import graduationProject.IMUISystem.eventHandler.entity.MenuOption;
 import graduationProject.IMUISystem.eventHandler.rabbitMQ.MQEventPublisher;
 import graduationProject.IMUISystem.eventHandler.repository.RepositoryService;
