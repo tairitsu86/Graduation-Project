@@ -111,6 +111,28 @@ public class RespondServiceImpl implements RespondService{
 
                 notifyConfigDto.getGroupList().addAll((List<String>)getJsonVariable("GROUP_LIST", data));
                 continue;
+            }else if(notifyVariable.getVariableName().equals("USER")){
+                String data;
+                String jsonPath = notifyVariable.getJsonPath();
+
+                if(jsonPath.equals("PAST_PARAMETER"))
+                    data = parameters.get(notifyVariable.getVariableName()).toString();
+                else
+                    data = JsonPath.read(json,jsonPath);
+
+                notifyConfigDto.getUsernameList().add(data);
+                continue;
+            }else if(notifyVariable.getVariableName().equals("GROUP")){
+                String data;
+                String jsonPath = notifyVariable.getJsonPath();
+
+                if(jsonPath.equals("PAST_PARAMETER"))
+                    data = parameters.get(notifyVariable.getVariableName()).toString();
+                else
+                    data = JsonPath.read(json,jsonPath);
+
+                notifyConfigDto.getGroupList().add(data);
+                continue;
             }
 
             Object data;
