@@ -1,4 +1,4 @@
-package gradutionProject.IMIGSystem.telegramservice;
+package graduationProject.IMIGSystem.telegramService;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

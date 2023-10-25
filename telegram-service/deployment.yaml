@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telegram-service
+  labels:
+    app: telegram-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telegram-service
+  template:
+    metadata:
+      labels:
+        app: telegram-service
+    spec:
+      containers:
+      - name: telegram-service
+        image: tairitsu86/graduation-project_im-ig-system_telegram-service:latest
+        resources:
+            limits:
+              memory: "1024Mi"
+              cpu: "500m"
+        ports:
+        - containerPort: 8080
+        env:
+        - name: telegram_BOT_TOKEN
+          valueFrom: 
+            secretKeyRef:
+              name: telegram-service-secret
+              key: telegram-bot-token
+        - name: telegram_BOT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: telegram-service-secret
+              key: telegram-bot-secret
+        - name: RABBITMQ_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: telegram-service-secret
+              key: rabbitmq-username
+        - name: RABBITMQ_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: telegram-service-secret
+              key: rabbitmq-password
+        - name: telegram_WEBHOOK
+          valueFrom:
+            configMapKeyRef:
+              name: telegram-service-configmap
+              key: telegram-webhook
+        - name: RABBITMQ_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: telegram-service-configmap
+              key: rabbitmq-ip
+        - name: RABBITMQ_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: telegram-service-configmap
+              key: rabbitmq-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: telegram-service-service
+spec:
+  selector:
+    app: telegram-service
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8009
+      targetPort: 8080
+      nodePort: 30009
+
+

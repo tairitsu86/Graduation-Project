@@ -1,4 +1,4 @@
-package gradutionProject.IMIGSystem.telegramservice;
+package graduationProject.IMIGSystem.telegramService;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
