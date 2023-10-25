@@ -45,6 +45,21 @@ public class CommunicationServiceImpl implements CommunicationService{
             ResponseEntity<String> response =
                     restRequestService.sendEventRequest(getCommConfigDto(commConfig, executeEventDto.getParameters()));
 
+            if(!response.getStatusCode().is2xxSuccessful()){
+                String message;
+                if(response.getStatusCode().is4xxClientError()){
+                    message = String.format("%s", response.getBody());
+                }else if(response.getStatusCode().is5xxServerError()){
+                    message = String.format("System error: %s", response.getBody());
+                }else{
+                    message = String.format("Unknown error: %s\n%s", response.getStatusCode(), response.getBody());
+                }
+                log.info("API response code not 2xx, with status code: {}, with message: {}, respond to user : {}", response.getStatusCode(), response.getBody(), message);
+                respondService.respondTextMessage(executeEventDto.getExecutor(), message);
+                return;
+            }
+
+
             if (!repositoryService.isRespondConfigExist(executeEventDto.getEventName())) return;
             respondService.respond(executeEventDto.getExecutor(), repositoryService.getRespondConfig(executeEventDto.getEventName()), executeEventDto.getParameters(), response.getBody());
         }
