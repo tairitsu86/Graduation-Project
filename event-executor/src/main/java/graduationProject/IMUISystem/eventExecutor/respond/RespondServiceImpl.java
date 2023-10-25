@@ -34,9 +34,12 @@ public class RespondServiceImpl implements RespondService{
                     log.info("Map menuConfig error: {}",e.getMessage(),e);
                     return;
                 }
-                if(menuConfig.getParameters()==null)
-                    menuConfig.setParameters(new HashMap<>());
-                menuConfig.getParameters().putAll(parameters);
+                if(parameters==null)
+                    parameters = new HashMap<>();
+                if(menuConfig.getParameters()!=null&&!menuConfig.getParameters().isEmpty())
+                    parameters.putAll(menuConfig.getParameters());
+
+                menuConfig.setParameters(parameters);
                 MenuConfigDto menuConfigDto = getMenuConfigDto(menuConfig,jsonData);
                 mqEventPublisher.newMenu(username,menuConfigDto.getDescription(),menuConfigDto.getOptions(), menuConfigDto.getParameters());
             }
