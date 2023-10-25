@@ -71,6 +71,14 @@ public class RespondServiceImpl implements RespondService{
         }
     }
 
+    @Override
+    public void respondTextMessage(String username, String message) {
+        mqEventPublisher.notifyUser(
+                new ArrayList<>(){{add(username);}}
+                ,message
+        );
+    }
+
 
     public NotifyConfigDto getNotifyConfigDto(String username, NotifyConfig notifyConfig, String json,Map<String,Object> parameters){
         if(parameters==null)
