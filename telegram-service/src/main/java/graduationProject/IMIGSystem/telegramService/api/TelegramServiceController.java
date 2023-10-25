@@ -19,7 +19,7 @@ public class TelegramServiceController {
 
 
     @PostMapping("${my_env.telegramWebHook}")
-    public void telegramWebHook(@RequestBody String update) {
+    public void telegramWebhook(@RequestBody String update) {
         System.out.println(update);
         telegramBotHandler.handleUpdate(BotUtils.parseUpdate(update));
     }
