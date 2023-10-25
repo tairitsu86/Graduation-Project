@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -22,11 +23,16 @@ public class RepositoryServiceImpl implements RepositoryService{
     private final MemberRepository memberRepository;
 
     @Override
-    public List<String> getGroups(String username) {
+    public List<String> getGroupIdByUsername(String username) {
         List<String> groups = new ArrayList<>();
         for (Member member: memberRepository.getMemberByUsername(username))
             groups.add(member.getGroupId());
         return groups;
+    }
+
+    @Override
+    public List<Map<String, String>> getGroupByUsername(String username) {
+        return groupRepository.getGroupByUsername(username);
     }
 
     @Override

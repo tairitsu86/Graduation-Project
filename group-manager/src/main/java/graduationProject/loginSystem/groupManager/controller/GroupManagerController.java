@@ -25,9 +25,13 @@ public class GroupManagerController {
 
     @GetMapping("/users/{username}/groups")
     @ResponseStatus(HttpStatus.OK)
-    public List<String> getGroups(@PathVariable String username){
-        return repositoryService.getGroups(username);
+    public List<?> getGroups(@PathVariable String username,
+                                  @RequestParam(required = false, defaultValue = "false") String withGroupName){
+        if(withGroupName!=null&&withGroupName.equals("true"))
+            return repositoryService.getGroupByUsername(username);
+        return repositoryService.getGroupIdByUsername(username);
     }
+
 
     @GetMapping("/groups/{groupId}/members")
     @ResponseStatus(HttpStatus.OK)
