@@ -31,7 +31,7 @@ public class CommunicationServiceImpl implements CommunicationService{
 
     @Override
     public void handleExecuteEvent(ExecuteEventDto executeEventDto) {
-        if(repositoryService.isCommConfigExist(executeEventDto.getEventName())){
+        if(!repositoryService.isCommConfigExist(executeEventDto.getEventName())){
             log.info("commConfig of event [{}] not exist!", executeEventDto.getEventName());
             if (!repositoryService.isRespondConfigExist(executeEventDto.getEventName())) return;
             respondService.respond(executeEventDto.getExecutor(), repositoryService.getRespondConfig(executeEventDto.getEventName()), executeEventDto.getParameters(), "");
