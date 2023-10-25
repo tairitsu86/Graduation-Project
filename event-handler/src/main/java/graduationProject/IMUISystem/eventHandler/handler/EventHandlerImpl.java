@@ -144,7 +144,11 @@ public class EventHandlerImpl implements EventHandler{
             parameters.putAll(userStateDto.getParameters());
         if(option.getOptionParameters()!=null)
             parameters.putAll(option.getOptionParameters());
-        newUserEvent(imUserData, userStateDto.getUsername(), option.getNextEvent(), parameters);
+
+        if(option.getNextEvent().equals("EXIT"))
+            exitEvent(imUserData);
+        else
+            newUserEvent(imUserData, userStateDto.getUsername(), option.getNextEvent(), parameters);
     }
 
     public void continueCustomEvent(UserStateDto userStateDto, IMUserData imUserData, String message){
