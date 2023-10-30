@@ -21,7 +21,7 @@ public class EventHandlerImpl implements EventHandler{
 
     @Override
     public void newMessage(IMUserData imUserData, String message) {
-        if(message.trim().equalsIgnoreCase("EXIT")){
+        if(message.equals("EXIT_MENU_EVENT_NOW")){
             exitEvent(imUserData);
             return;
         }
@@ -47,7 +47,12 @@ public class EventHandlerImpl implements EventHandler{
 
     @Override
     public void menuEvent(IMUserData imUserData, String username, String description, List<MenuOption> menuOptions, Map<String,Object> parameters) {
-
+        menuOptions.add(
+                MenuOption.builder()
+                        .nextEvent("EXIT")
+                        .displayName("Exit")
+                        .build()
+        );
         newUserState(imUserData,username,"MENU",description, menuOptions, parameters);
         StringBuilder message = new StringBuilder(description);
         for(int i = 0; i< menuOptions.size(); i++)
