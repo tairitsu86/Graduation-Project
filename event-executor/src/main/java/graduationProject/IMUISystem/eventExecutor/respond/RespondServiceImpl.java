@@ -142,20 +142,6 @@ public class RespondServiceImpl implements RespondService{
         List<MenuOption> options = menuConfigDto.getOptions();
         for(MenuVariable menuVariable :menuConfig.getMenuVariables()){
             Map<String,String> replaceValue = menuVariable.getReplaceValue();
-            if(menuVariable.isGlobal()){
-                Object value = JsonPath.read(json,menuVariable.getJsonPath());
-                if(replaceValue!=null&&replaceValue.containsKey(value.toString()))
-                    value = replaceValue.get(value.toString());
-                if(menuVariable.getVariableName().equals("NEXT_EVENT")){
-                    menuConfig.setNextEvent(value.toString());
-                    for (MenuOption option:options)
-                        option.setNextEvent(value.toString());
-                }else{
-                    menuConfigDto.getParameters().put(menuVariable.getVariableName(),value);
-                }
-                menuConfigDto.getParameters().put(menuVariable.getVariableName(),value);
-                continue;
-            }
 
             Object data;
             String jsonPath = menuVariable.getJsonPath();
@@ -169,6 +155,22 @@ public class RespondServiceImpl implements RespondService{
             }else {
                 data = JsonPath.read(json, jsonPath);
             }
+
+            if(menuVariable.isGlobal()){
+                Object value = getJsonVariable(menuVariable.getVariableName(),data).get(0);
+                if(replaceValue!=null&&replaceValue.containsKey(value.toString()))
+                    value = replaceValue.get(value.toString());
+                if(menuVariable.getVariableName().equals("NEXT_EVENT")){
+                    menuConfig.setNextEvent(value.toString());
+                    for (MenuOption option:options)
+                        option.setNextEvent(value.toString());
+                }else{
+                    menuConfigDto.getParameters().put(menuVariable.getVariableName(),value);
+                }
+                menuConfigDto.getParameters().put(menuVariable.getVariableName(),value);
+                continue;
+            }
+
 
             setMenuOption(
                     options,
