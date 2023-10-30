@@ -89,59 +89,28 @@ public class RespondServiceImpl implements RespondService{
         for(NotifyVariable notifyVariable: notifyConfig.getNotifyVariables()){
             value = "";
             Map<String,String> replaceValue = notifyVariable.getReplaceValue();
-            if(notifyVariable.getVariableName().equals("USER_LIST")){
-                Object data;
-                String jsonPath = notifyVariable.getJsonPath();
-
-                if(jsonPath.equals("PAST_PARAMETER"))
-                    data = parameters.get(notifyVariable.getVariableName());
-                else
-                    data = JsonPath.read(json,jsonPath);
-
-                notifyConfigDto.getUsernameList().addAll((List<String>)getJsonVariable("USER_LIST", data));
-                continue;
-            }else if(notifyVariable.getVariableName().equals("GROUP_LIST")){
-                Object data;
-                String jsonPath = notifyVariable.getJsonPath();
-
-                if(jsonPath.equals("PAST_PARAMETER"))
-                    data = parameters.get(notifyVariable.getVariableName());
-                else
-                    data = JsonPath.read(json,jsonPath);
-
-                notifyConfigDto.getGroupList().addAll((List<String>)getJsonVariable("GROUP_LIST", data));
-                continue;
-            }else if(notifyVariable.getVariableName().equals("USER")){
-                String data;
-                String jsonPath = notifyVariable.getJsonPath();
-
-                if(jsonPath.equals("PAST_PARAMETER"))
-                    data = parameters.get(notifyVariable.getVariableName()).toString();
-                else
-                    data = JsonPath.read(json,jsonPath);
-
-                notifyConfigDto.getUsernameList().add(data);
-                continue;
-            }else if(notifyVariable.getVariableName().equals("GROUP")){
-                String data;
-                String jsonPath = notifyVariable.getJsonPath();
-
-                if(jsonPath.equals("PAST_PARAMETER"))
-                    data = parameters.get(notifyVariable.getVariableName()).toString();
-                else
-                    data = JsonPath.read(json,jsonPath);
-
-                notifyConfigDto.getGroupList().add(data);
-                continue;
-            }
 
             Object data;
             String jsonPath = notifyVariable.getJsonPath();
 
-            if(jsonPath.equals("PAST_PARAMETER"))
-                data = parameters.get(notifyVariable.getVariableName());
-            else
-                data = JsonPath.read(json,jsonPath);
+            if(jsonPath.startsWith("PAST_PARAMETER")) {
+                if(jsonPath.length()>14)
+                    jsonPath = jsonPath.substring(15);
+                else
+                    jsonPath = notifyVariable.getVariableName();
+                data = parameters.get(jsonPath);
+            }else {
+                data = JsonPath.read(json, jsonPath);
+            }
+
+            if(notifyVariable.getVariableName().equals("USER_LIST")){
+                notifyConfigDto.getUsernameList().addAll((List<String>)getJsonVariable("USER_LIST", data));
+                continue;
+            }else if(notifyVariable.getVariableName().equals("GROUP_LIST")){
+                notifyConfigDto.getGroupList().addAll((List<String>)getJsonVariable("GROUP_LIST", data));
+                continue;
+            }
+
 
             List<?> dataList = getJsonVariable(notifyVariable.getVariableName(), data);
 
@@ -190,10 +159,16 @@ public class RespondServiceImpl implements RespondService{
 
             Object data;
             String jsonPath = menuVariable.getJsonPath();
-            if(jsonPath.equals("PAST_PARAMETER"))
-                data = menuConfigDto.getParameters().get(menuVariable.getVariableName());
-            else
-                data = JsonPath.read(json,jsonPath);
+
+            if(jsonPath.startsWith("PAST_PARAMETER")) {
+                if(jsonPath.split(" ").length==2)
+                    jsonPath = jsonPath.split(" ")[1];
+                else
+                    jsonPath = menuVariable.getVariableName();
+                data = menuConfigDto.getParameters().get(jsonPath);
+            }else {
+                data = JsonPath.read(json, jsonPath);
+            }
 
             setMenuOption(
                     options,
@@ -234,7 +209,15 @@ public class RespondServiceImpl implements RespondService{
             }else{
                 throw new RuntimeException("getMenuConfigDto error!");
             }
-        } else if (variableName.startsWith("BOOL_")) {
+        } else if (variableName.startsWith("FLOAT_")) {
+            if(data instanceof List<?> list && !list.isEmpty()) {
+                dataList = (List<Double>) data;
+            }else if(data instanceof Double d){
+                dataList = new ArrayList<>(){{add(d);}};
+            }else{
+                throw new RuntimeException("getMenuConfigDto error!");
+            }
+        }else if (variableName.startsWith("BOOL_")) {
             if(data instanceof List<?> list && !list.isEmpty()) {
                 dataList = (List<Boolean>) data;
             }else if(data instanceof Boolean b){
