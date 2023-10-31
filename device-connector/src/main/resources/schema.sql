@@ -10,6 +10,16 @@ IF OBJECT_ID(N'device_state_history',N'U') IS NULL
 		)
 	END;
 
+IF OBJECT_ID(N'device_data',N'U') IS NULL
+	BEGIN
+		CREATE TABLE [device_data](
+			[device_id] [varchar](255) NOT NULL,
+			[states] [varchar](MAX) NULL,
+			[functions] [varchar](MAX) NULL,
+			CONSTRAINT [device_data_pk] PRIMARY KEY([device_id])
+		)
+	END;
+
 
 --SELECT d2.[state_name] AS stateName, d2.[state_value] AS stateValue, d2.[executor]
 --FROM device_state_history AS d2
