@@ -14,8 +14,8 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitmqConfig {
     public static final String DEVICE_INFO_QUEUE = "IoT-System.Device-Info";
     public static final String DEVICE_CONTROL_QUEUE = "IoT-System.Device-Control";
+    public static final String DEVICE_STATE_QUEUE = "IoT-System.Device-State";
     public static final String IoT_DBC_EXCHANGE = "IoT-System_Device-base-communication_Exchange";
-    public static final String SYS_NTF_EXCHANGE = "System_Notification_Exchange";
     @Bean
     public MessageConverter jsonMessageConverter(ObjectMapper objectMapper) {
         return new Jackson2JsonMessageConverter(objectMapper);
@@ -35,6 +35,11 @@ public class RabbitmqConfig {
     public Queue deviceControlQueue() {
         return new Queue(DEVICE_CONTROL_QUEUE,false);
     }
+
+    @Bean
+    public Queue deviceStateQueue() {
+        return new Queue(DEVICE_STATE_QUEUE,false);
+    }
     @Bean
     public Binding bindingDeviceInfoQueue(@Qualifier("IoT_DBC") TopicExchange exchange) {
         return BindingBuilder.bind(deviceInfoQueue()).to(exchange).with(DEVICE_INFO_QUEUE);
@@ -43,12 +48,12 @@ public class RabbitmqConfig {
     public Binding bindingDeviceControlQueue(@Qualifier("IoT_DBC") TopicExchange exchange) {
         return BindingBuilder.bind(deviceControlQueue()).to(exchange).with(DEVICE_CONTROL_QUEUE);
     }
-
-
-
-    @Bean("SYS_NTF")
-    public FanoutExchange exchangeSYS_NTF() {
-        return new FanoutExchange(SYS_NTF_EXCHANGE);
+    @Bean
+    public Binding bindingStateControlQueue(@Qualifier("IoT_DBC") TopicExchange exchange) {
+        return BindingBuilder.bind(deviceStateQueue()).to(exchange).with(DEVICE_STATE_QUEUE);
     }
+
+
+
 
 }
