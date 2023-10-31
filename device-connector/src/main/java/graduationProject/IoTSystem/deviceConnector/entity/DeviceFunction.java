@@ -11,9 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Data
-public class DeviceState {
-    private int stateId;
+public class DeviceFunction {
+    private int functionId;
+    private String functionName;
     private DeviceDataType dataType;
-    private String stateName;
-    private List<String> stateOptions;
+    private List<Object> functionOptions;
 }
