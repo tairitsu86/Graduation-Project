@@ -17,8 +17,6 @@ public class MQEventPublisherImpl implements MQEventPublisher{
     private final RabbitTemplate rabbitTemplate;
     @Override
     public void publishDeviceStateEvent(DeviceStateDto deviceStateDto) {
-        deviceStateDto.setNotificationType("device-state");
-        deviceStateDto.setFrom("device-connector");
         rabbitTemplate.convertAndSend(IoT_DBC_EXCHANGE, DEVICE_STATE_QUEUE, deviceStateDto);
         log.info("Send to exchange [{}] with routingKey [{}], event [{}]", IoT_DBC_EXCHANGE, DEVICE_STATE_QUEUE, deviceStateDto);
     }

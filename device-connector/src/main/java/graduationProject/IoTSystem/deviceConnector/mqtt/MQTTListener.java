@@ -9,6 +9,7 @@ import graduationProject.IoTSystem.deviceConnector.dto.DeviceInfoDto;
 import graduationProject.IoTSystem.deviceConnector.dto.DeviceStateDto;
 import graduationProject.IoTSystem.deviceConnector.entity.Device;
 import graduationProject.IoTSystem.deviceConnector.entity.DeviceStateHistory;
+import graduationProject.IoTSystem.deviceConnector.entity.DeviceStateType;
 import graduationProject.IoTSystem.deviceConnector.rabbitMQ.MQEventPublisher;
 import graduationProject.IoTSystem.deviceConnector.repository.DeviceStateHistoryRepository;
 import graduationProject.IoTSystem.deviceConnector.repository.RepositoryService;
@@ -26,7 +27,7 @@ import static graduationProject.IoTSystem.deviceConnector.mqtt.MQTTConfig.*;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class MQTTMessageListener implements MessageHandler {
+public class MQTTListener implements MessageHandler {
     private final ObjectMapper objectMapper;
     private final RepositoryService repositoryService;
     private final MQEventPublisher mqEventPublisher;
@@ -63,15 +64,16 @@ public class MQTTMessageListener implements MessageHandler {
                 );
             }
             case STATE_TOPIC-> {
-                DeviceStateDto deviceStateDto;
+                DeviceStateHistory deviceStateHistory;
                 try {
-                    deviceStateDto = objectMapper.readValue(payload,DeviceStateDto.class);
+                    deviceStateHistory = objectMapper.readValue(payload, DeviceStateHistory.class);
                 } catch (JsonProcessingException e) {
                     log.info("Error mapping with :{}, and exception:{}",payload,e.getMessage());
                     return;
                 }
-                mqEventPublisher.publishDeviceStateEvent(deviceStateDto);
-                repositoryService.saveDeviceStateHistory(DeviceStateHistory.mapByDto(deviceStateDto));
+                if(repositoryService.getDeviceStateType(deviceStateHistory.getDeviceId(),deviceStateHistory.getStateId()).equals(DeviceStateType.PASSIVE))
+                    mqEventPublisher.publishDeviceStateEvent(repositoryService.getDeviceStateDto(deviceStateHistory));
+                repositoryService.saveDeviceStateHistory(deviceStateHistory);
             }
         }
     }

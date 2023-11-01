@@ -14,6 +14,7 @@ import java.util.List;
 public class DeviceFunction {
     private int functionId;
     private String functionName;
+    private String valueUnit;
     private DeviceDataType dataType;
     private List<Object> functionOptions;
 }

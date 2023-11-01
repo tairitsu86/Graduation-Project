@@ -13,7 +13,9 @@ import java.util.List;
 @Data
 public class DeviceState {
     private int stateId;
+    private DeviceStateType stateType;
     private DeviceDataType dataType;
     private String stateName;
-    private List<String> stateOptions;
+    private String valueUnit;
+    private List<Object> stateOptions;
 }

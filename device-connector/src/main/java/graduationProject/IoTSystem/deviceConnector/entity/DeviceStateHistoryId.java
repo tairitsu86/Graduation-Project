@@ -14,6 +14,6 @@ import java.sql.Timestamp;
 @Builder
 public class DeviceStateHistoryId implements Serializable {
     private String deviceId;
-    private String stateName;
+    private int stateId;
     private Timestamp alterTime;
 }
