@@ -78,7 +78,7 @@ public class CommunicationServiceImpl implements CommunicationService{
                 url = url.replace(replaceValue,parameters.get(s).toString());
                 headerString = headerString.replace(replaceValue,parameters.get(s).toString());
 
-                if(s.startsWith("INT_")||s.startsWith("BOOL_"))
+                if(s.startsWith("INT_")||s.startsWith("FLOAT_")||s.startsWith("BOOL_"))
                     replaceValue = String.format("\"${%s}\"",s);
                 body = body.replace(replaceValue,parameters.get(s).toString());
             }
