@@ -24,3 +24,4 @@ spring:
       mode: always
 my_env:
   groupManagerUrl: ${GROUP_MANAGER_URL}
+  deviceConnectorUrl: ${DEVICE_CONNECTOR_URL}

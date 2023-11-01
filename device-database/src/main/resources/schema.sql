@@ -3,10 +3,8 @@ IF OBJECT_ID(N'device',N'U') IS NULL
 		CREATE TABLE [device](
 			[device_id] [varchar](255) NOT NULL,
 			[device_name] [varchar](255) NULL,
-			[description] [varchar](255) NULL,
+			[description] [varchar](MAX) NULL,
 			[owner] [varchar](255) NOT NULL,
-			[states] [varchar](MAX) NULL,
-			[functions] [varchar](MAX) NULL,
 			CONSTRAINT [device_pk] PRIMARY KEY(device_id)
 		)
 	END;

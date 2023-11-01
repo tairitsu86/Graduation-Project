@@ -1,16 +1,17 @@
 package graduationProject.IoTSystem.deviceDatabase.rabbitMQ;
 
+import graduationProject.IoTSystem.deviceDatabase.api.exception.NoPermissionException;
 import graduationProject.IoTSystem.deviceDatabase.dto.DeviceControlDto;
-import graduationProject.IoTSystem.deviceDatabase.dto.DeviceDto;
+import graduationProject.IoTSystem.deviceDatabase.dto.DeviceStateDto;
 import graduationProject.IoTSystem.deviceDatabase.dto.UserControlDto;
+import graduationProject.IoTSystem.deviceDatabase.entity.Device;
 import graduationProject.IoTSystem.deviceDatabase.repository.RepositoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
-import static graduationProject.IoTSystem.deviceDatabase.rabbitMQ.RabbitmqConfig.DEVICE_INFO_QUEUE;
-import static graduationProject.IoTSystem.deviceDatabase.rabbitMQ.RabbitmqConfig.USER_CONTROL_QUEUE;
+import static graduationProject.IoTSystem.deviceDatabase.rabbitMQ.RabbitmqConfig.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -19,50 +20,44 @@ public class MQEventListener {
     private final RepositoryService repositoryService;
     private final MQEventPublisher mqEventPublisher;
     @RabbitListener(queues={DEVICE_INFO_QUEUE})
-    public void receiveDeviceInfoEvent(DeviceDto deviceDto) {
-        log.info("Device info event: {}", deviceDto);
-        repositoryService.updateDeviceInfo(deviceDto);
+    public void receive(Device device) {
+        log.info("Device info event: {}", device);
+        repositoryService.updateDeviceInfo(device);
     }
 
     @RabbitListener(queues={USER_CONTROL_QUEUE})
-    public void receiveUserControlEvent(UserControlDto userControlDto) {
+    public void receive(UserControlDto userControlDto) {
         log.info("User control event: {}", userControlDto);
         try {
-            if(!repositoryService.checkPermission(userControlDto.getUsername(), userControlDto.getDeviceId())){
-                log.info("No permission!");
+            if(!repositoryService.checkPermission(userControlDto.getUsername(), userControlDto.getDeviceId()))
+                throw new NoPermissionException(userControlDto.getUsername(), userControlDto.getDeviceId());
+
+            if(userControlDto.getFunctionId()<0 && repositoryService.isOwner(userControlDto.getDeviceId(), userControlDto.getUsername())){
+                switch (userControlDto.getFunctionId()) {
+                    case -1 -> repositoryService.grantPermissionToUser(userControlDto.getDeviceId(), userControlDto.getParameter().toString());
+                    case -2 -> repositoryService.grantPermissionToGroup(userControlDto.getDeviceId(), userControlDto.getParameter().toString());
+                    case -3 -> repositoryService.removePermissionFromUser(userControlDto.getDeviceId(), userControlDto.getParameter().toString());
+                    case -4 -> repositoryService.removePermissionFromGroup(userControlDto.getDeviceId(), userControlDto.getParameter().toString());
+                }
                 return;
             }
 
-            if(userControlDto.getFunctionId()<0 && repositoryService.isOwner(userControlDto.getDeviceId(), userControlDto.getUsername())){
-                if(userControlDto.getFunctionId()==-1){
-                    repositoryService.grantPermissionToUser(userControlDto.getDeviceId(), userControlDto.getParameters().get("USERNAME"));
-                    return;
-                }
-                if (userControlDto.getFunctionId()==-2) {
-                    repositoryService.grantPermissionToGroup(userControlDto.getDeviceId(), userControlDto.getParameters().get("GROUP_ID"));
-                    return;
-                }
-                if (userControlDto.getFunctionId()==-3) {
-                    repositoryService.removePermissionFromUser(userControlDto.getDeviceId(), userControlDto.getParameters().get("USERNAME"));
-                    return;
-                }
-                if (userControlDto.getFunctionId()==-4) {
-                    repositoryService.removePermissionFromGroup(userControlDto.getDeviceId(), userControlDto.getParameters().get("GROUP_ID"));
-                    return;
-                }
-            }
             mqEventPublisher.publishDeviceControl(
                     DeviceControlDto.builder()
                             .executor(userControlDto.getUsername())
                             .deviceId(userControlDto.getDeviceId())
                             .functionId(userControlDto.getFunctionId())
-                            .parameters(userControlDto.getParameters())
+                            .parameter(userControlDto.getParameter())
                             .build()
             );
         }catch (Exception e){
             log.info("Something go wrong: {}",e.getMessage(),e);
         }
-
-
+    }
+    @RabbitListener(queues={DEVICE_STATE_QUEUE})
+    public void receive(DeviceStateDto deviceStateDto) {
+        log.info("Device state event: {}", deviceStateDto);
+        deviceStateDto.setDeviceName(repositoryService.getDevice(deviceStateDto.getDeviceId()).getDeviceName());
+        mqEventPublisher.publishDeviceStateEvent(deviceStateDto);
     }
 }

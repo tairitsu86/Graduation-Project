@@ -69,6 +69,11 @@ spec:
             configMapKeyRef:
               name: device-database-configmap
               key: group-manager-url
+        - name: DEVICE_CONNECTOR_URL
+          valueFrom:
+            configMapKeyRef:
+              name: device-database-configmap
+              key: device-connector-url
 ---
 apiVersion: v1
 kind: Service

@@ -12,10 +12,10 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class DeviceFunction {
-
     private int functionId;
-
     private String functionName;
-
-    private List<DeviceFunctionParameter> parameters;
+    private String parameterName;
+    private String valueUnit;
+    private DeviceDataType dataType;
+    private List<Object> functionOptions;
 }
