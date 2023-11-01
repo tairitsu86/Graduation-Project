@@ -16,6 +16,7 @@ import java.util.List;
 public class DeviceInfoDto {
     private String deviceId;
     private String deviceName;
+    private String description;
     private String owner;
     private List<DeviceState> states;
     private List<DeviceFunction> functions;

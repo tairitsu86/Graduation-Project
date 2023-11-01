@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class DeviceBasicDataDto {
     private String deviceId;
     private String deviceName;
+    private String description;
     private String owner;
 }

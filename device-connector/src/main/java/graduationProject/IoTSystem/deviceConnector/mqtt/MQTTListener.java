@@ -52,6 +52,7 @@ public class MQTTListener implements MessageHandler {
                         DeviceBasicDataDto.builder()
                                 .deviceId(deviceInfoDto.getDeviceId())
                                 .deviceName(deviceInfoDto.getDeviceName())
+                                .description(deviceInfoDto.getDescription())
                                 .owner(deviceInfoDto.getOwner())
                                 .build()
                 );

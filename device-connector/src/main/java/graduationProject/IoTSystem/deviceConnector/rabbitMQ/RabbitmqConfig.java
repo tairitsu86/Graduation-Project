@@ -35,7 +35,6 @@ public class RabbitmqConfig {
     public Queue deviceControlQueue() {
         return new Queue(DEVICE_CONTROL_QUEUE,false);
     }
-
     @Bean
     public Queue deviceStateQueue() {
         return new Queue(DEVICE_STATE_QUEUE,false);
