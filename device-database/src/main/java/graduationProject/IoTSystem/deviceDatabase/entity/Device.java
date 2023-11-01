@@ -28,12 +28,6 @@ public class Device {
     @Column(name = "owner")
     private String owner;
 
-    @Column(name = "states")
-    private String states;
-
-    @Column(name = "functions")
-    private String functions;
-
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "device_permission_groups", joinColumns = @JoinColumn(name = "device_id"))
     @Column(name = "group_id")

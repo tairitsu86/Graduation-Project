@@ -1,15 +1,9 @@
 package graduationProject.IoTSystem.deviceDatabase.repository;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import graduationProject.IoTSystem.deviceDatabase.api.exception.DeviceNotExistException;
-import graduationProject.IoTSystem.deviceDatabase.dto.DeviceDto;
-import graduationProject.IoTSystem.deviceDatabase.dto.GetDeviceDetailDto;
 import graduationProject.IoTSystem.deviceDatabase.entity.Device;
+import graduationProject.IoTSystem.deviceDatabase.entity.DeviceDataType;
 import graduationProject.IoTSystem.deviceDatabase.entity.DeviceFunction;
-import graduationProject.IoTSystem.deviceDatabase.entity.DeviceFunctionParameter;
-import graduationProject.IoTSystem.deviceDatabase.entity.DeviceState;
 import graduationProject.IoTSystem.deviceDatabase.request.RestRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +15,6 @@ import java.util.*;
 public class RepositoryServiceImpl implements RepositoryService {
     private final DeviceRepository deviceRepository;
     private final RestRequestService restRequestService;
-    private final ObjectMapper objectMapper;
     @Override
     public Set<Map<String,String>> getDeviceByUsername(String username) {
         Set<Map<String,String>> result = new HashSet<>();
@@ -65,48 +58,17 @@ public class RepositoryServiceImpl implements RepositoryService {
         return result;
     }
 
-    @Override
-    public GetDeviceDetailDto getDeviceDetail(String deviceId, String username) {
-        DeviceDto deviceDto = getDevice(deviceId);
-        GetDeviceDetailDto getDeviceDetailDto = GetDeviceDetailDto.builder()
-                .deviceId(deviceDto.getDeviceId())
-                .deviceName(deviceDto.getDeviceName())
-                .owner(deviceDto.getOwner())
-                .description(deviceDto.getDescription())
-                .functions(deviceDto.getFunctions())
-                .build();
-        if(isOwner(deviceId,username))
-            addPermissionFunction(getDeviceDetailDto.getFunctions());
-        return getDeviceDetailDto;
-    }
-
 
     @Override
-    public void updateDeviceInfo(DeviceDto deviceDto) {
-        Device device = Device.builder()
-                .deviceId(deviceDto.getDeviceId())
-                .deviceName(deviceDto.getDeviceName())
-                .description(deviceDto.getDescription())
-                .owner(deviceDto.getOwner())
-                .build();
-        String states,functions;
-        try{
-            states = objectMapper.writeValueAsString(deviceDto.getStates());
-            functions = objectMapper.writeValueAsString(deviceDto.getFunctions());
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("updateDeviceInfo mapping error with\n"+deviceDto);
-        }
-        device.setStates(states);
-        device.setFunctions(functions);
-
+    public void updateDeviceInfo(Device device) {
         if(deviceRepository.existsById(device.getDeviceId())){
             Device oldDevice = deviceRepository.getReferenceById(device.getDeviceId());
             device.setGroups(oldDevice.getGroups());
             device.setUsers(oldDevice.getUsers());
         }else{
-            device.setUsers(new HashSet<>(){{add(deviceDto.getOwner());}});
+            device.setUsers(new HashSet<>(){{add(device.getOwner());}});
         }
-        deviceRepository.save(device);
+        setDevice(device);
     }
 
     @Override
@@ -116,81 +78,42 @@ public class RepositoryServiceImpl implements RepositoryService {
     }
 
     @Override
-    public void setDevice(DeviceDto deviceDto) {
-        Device device = Device.builder()
-                .deviceId(deviceDto.getDeviceId())
-                .deviceName(deviceDto.getDeviceName())
-                .description(deviceDto.getDescription())
-                .owner(deviceDto.getOwner())
-                .users(deviceDto.getUsers())
-                .groups(deviceDto.getGroups())
-                .build();
-        String states,functions;
-        try{
-            states = objectMapper.writeValueAsString(deviceDto.getStates());
-            functions = objectMapper.writeValueAsString(deviceDto.getFunctions());
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("setDevice mapping error with\n"+deviceDto);
-        }
-        device.setStates(states);
-        device.setFunctions(functions);
-
+    public void setDevice(Device device) {
         deviceRepository.save(device);
     }
 
     @Override
-    public DeviceDto getDevice(String deviceId) {
+    public Device getDevice(String deviceId) {
         if(!deviceRepository.existsById(deviceId)) throw new DeviceNotExistException(deviceId);
-        Device device = deviceRepository.getReferenceById(deviceId);
-        DeviceDto deviceDto = DeviceDto.builder()
-                .deviceId(deviceId)
-                .deviceName(device.getDeviceName())
-                .description(device.getDescription())
-                .owner(device.getOwner())
-                .users(device.getUsers())
-                .groups(device.getGroups())
-                .build();
-
-        List<DeviceState> states;
-        List<DeviceFunction> functions;
-        try{
-            states = objectMapper.readValue(device.getStates(), new TypeReference<>(){});
-            functions = objectMapper.readValue(device.getFunctions(), new TypeReference<>(){});
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("getDevice mapping error with\n"+device);
-        }
-
-        deviceDto.setStates(states);
-        deviceDto.setFunctions(functions);
-        return deviceDto;
+        return deviceRepository.getReferenceById(deviceId);
     }
 
     @Override
     public void grantPermissionToGroup(String deviceId, String groupId) {
-        DeviceDto deviceDto = getDevice(deviceId);
-        deviceDto.getGroups().add(groupId);
-        setDevice(deviceDto);
+        Device device = getDevice(deviceId);
+        device.getGroups().add(groupId);
+        setDevice(device);
     }
 
     @Override
     public void grantPermissionToUser(String deviceId, String username) {
-        DeviceDto deviceDto = getDevice(deviceId);
-        deviceDto.getUsers().add(username);
-        setDevice(deviceDto);
+        Device device = getDevice(deviceId);
+        device.getUsers().add(username);
+        setDevice(device);
     }
 
     @Override
     public void removePermissionFromGroup(String deviceId, String groupId) {
-        DeviceDto deviceDto = getDevice(deviceId);
-        deviceDto.getGroups().remove(groupId);
-        setDevice(deviceDto);
+        Device device = getDevice(deviceId);
+        device.getGroups().remove(groupId);
+        setDevice(device);
     }
 
     @Override
     public void removePermissionFromUser(String deviceId, String username) {
-        DeviceDto deviceDto = getDevice(deviceId);
-        deviceDto.getUsers().remove(username);
-        setDevice(deviceDto);
+        Device device = getDevice(deviceId);
+        device.getUsers().remove(username);
+        setDevice(device);
     }
 
 
@@ -199,70 +122,5 @@ public class RepositoryServiceImpl implements RepositoryService {
         return  getDeviceIdByUsername(username).contains(deviceId);
     }
 
-    public void addPermissionFunction(List<DeviceFunction> functions){
-        functions.add(
-                DeviceFunction.builder()
-                        .functionId(-1)
-                        .functionName("Grant device permission to user")
-                        .parameters(
-                                new ArrayList<>(){{
-                                    add(
-                                            DeviceFunctionParameter.builder()
-                                                    .parameterName("USERNAME")
-                                                    .parameterRange("ANY")
-                                                    .build()
-                                    );
-                                }}
-                        )
-                        .build()
-        );
-        functions.add(
-                DeviceFunction.builder()
-                        .functionId(-2)
-                        .functionName("Grant device permission to group")
-                        .parameters(
-                                new ArrayList<>(){{
-                                    add(
-                                            DeviceFunctionParameter.builder()
-                                                    .parameterName("GROUP_ID")
-                                                    .parameterRange("ANY")
-                                                    .build()
-                                    );
-                                }}
-                        )
-                        .build()
-        );
-        functions.add(
-                DeviceFunction.builder()
-                        .functionId(-3)
-                        .functionName("Remove device permission from user")
-                        .parameters(
-                                new ArrayList<>(){{
-                                    add(
-                                            DeviceFunctionParameter.builder()
-                                                    .parameterName("USERNAME")
-                                                    .parameterRange("ANY")
-                                                    .build()
-                                    );
-                                }}
-                        )
-                        .build()
-        );
-        functions.add(
-                DeviceFunction.builder()
-                        .functionId(-4)
-                        .functionName("Remove device permission from group")
-                        .parameters(
-                                new ArrayList<>(){{
-                                    add(
-                                            DeviceFunctionParameter.builder()
-                                                    .parameterName("GROUP_ID")
-                                                    .parameterRange("ANY")
-                                                    .build()
-                                    );
-                                }}
-                        )
-                        .build()
-        );
-    }
+
 }
