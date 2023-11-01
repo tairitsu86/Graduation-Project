@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Builder
-public class DeviceControlDto {
+@Data
+public class DeviceBasicDataDto {
     private String deviceId;
-    private String executor;
-    private int functionId;
-    private Object parameter;
+    private String deviceName;
+    private String description;
+    private String owner;
 }

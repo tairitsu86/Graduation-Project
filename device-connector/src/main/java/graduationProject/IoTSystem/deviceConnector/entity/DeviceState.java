@@ -5,15 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.List;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DeviceStateHistoryId implements Serializable {
-    private String deviceId;
+@Data
+public class DeviceState {
     private int stateId;
-    private Timestamp alterTime;
+    private DeviceStateType stateType;
+    private DeviceDataType dataType;
+    private String stateName;
+    private String valueUnit;
+    private List<Object> stateOptions;
 }

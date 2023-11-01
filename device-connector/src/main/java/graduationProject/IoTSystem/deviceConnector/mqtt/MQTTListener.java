@@ -3,10 +3,16 @@ package graduationProject.IoTSystem.deviceConnector.mqtt;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import graduationProject.IoTSystem.deviceConnector.dto.DeviceBasicDataDto;
+import graduationProject.IoTSystem.deviceConnector.dto.DeviceDto;
+import graduationProject.IoTSystem.deviceConnector.dto.DeviceInfoDto;
 import graduationProject.IoTSystem.deviceConnector.dto.DeviceStateDto;
+import graduationProject.IoTSystem.deviceConnector.entity.Device;
 import graduationProject.IoTSystem.deviceConnector.entity.DeviceStateHistory;
+import graduationProject.IoTSystem.deviceConnector.entity.DeviceStateType;
 import graduationProject.IoTSystem.deviceConnector.rabbitMQ.MQEventPublisher;
 import graduationProject.IoTSystem.deviceConnector.repository.DeviceStateHistoryRepository;
+import graduationProject.IoTSystem.deviceConnector.repository.RepositoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
@@ -14,7 +20,6 @@ import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
 import java.util.Objects;
 
 import static graduationProject.IoTSystem.deviceConnector.mqtt.MQTTConfig.*;
@@ -22,9 +27,9 @@ import static graduationProject.IoTSystem.deviceConnector.mqtt.MQTTConfig.*;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class MQTTMessageListener implements MessageHandler {
+public class MQTTListener implements MessageHandler {
     private final ObjectMapper objectMapper;
-    private final DeviceStateHistoryRepository deviceStateHistoryRepository;
+    private final RepositoryService repositoryService;
     private final MQEventPublisher mqEventPublisher;
 
     @Override
@@ -35,25 +40,41 @@ public class MQTTMessageListener implements MessageHandler {
         switch (Objects.requireNonNull(message.getHeaders().get("mqtt_receivedTopic"),"Mqtt topic is null").toString()){
             case TEST_TOPIC -> log.info("test topic!");
             case INFO_TOPIC -> {
-                Map<String,Object> deviceInfoDto;
+                DeviceInfoDto deviceInfoDto;
                 try {
-                    deviceInfoDto = objectMapper.readValue(payload, new TypeReference<Map<String, Object>>() {});
+                    deviceInfoDto = objectMapper.readValue(payload, new TypeReference<>() {});
                 } catch (JsonProcessingException e) {
                     log.info("Error mapping with :{}",payload);
                     return;
                 }
-                mqEventPublisher.publishDeviceInfoEvent(deviceInfoDto);
+
+                mqEventPublisher.publishDeviceInfoEvent(
+                        DeviceBasicDataDto.builder()
+                                .deviceId(deviceInfoDto.getDeviceId())
+                                .deviceName(deviceInfoDto.getDeviceName())
+                                .description(deviceInfoDto.getDescription())
+                                .owner(deviceInfoDto.getOwner())
+                                .build()
+                );
+                repositoryService.saveDevice(
+                        DeviceDto.builder()
+                                .deviceId(deviceInfoDto.getDeviceId())
+                                .states(deviceInfoDto.getStates())
+                                .functions(deviceInfoDto.getFunctions())
+                                .build()
+                );
             }
             case STATE_TOPIC-> {
-                DeviceStateDto deviceStateDto;
+                DeviceStateHistory deviceStateHistory;
                 try {
-                    deviceStateDto = objectMapper.readValue(payload,DeviceStateDto.class);
+                    deviceStateHistory = objectMapper.readValue(payload, DeviceStateHistory.class);
                 } catch (JsonProcessingException e) {
                     log.info("Error mapping with :{}, and exception:{}",payload,e.getMessage());
                     return;
                 }
-                mqEventPublisher.publishDeviceStateEvent(deviceStateDto);
-                deviceStateHistoryRepository.save(DeviceStateHistory.mapByDto(deviceStateDto));
+                if(repositoryService.getDeviceStateType(deviceStateHistory.getDeviceId(),deviceStateHistory.getStateId()).equals(DeviceStateType.PASSIVE))
+                    mqEventPublisher.publishDeviceStateEvent(repositoryService.getDeviceStateDto(deviceStateHistory));
+                repositoryService.saveDeviceStateHistory(deviceStateHistory);
             }
         }
     }
