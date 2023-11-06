@@ -22,7 +22,8 @@ public class TestConsoleController {
     private final MQEventPublisher mqEventPublisher;
     public static String consoleText = null;
     public static void show(String text){
-        text = String.format("[%s] %s", ZonedDateTime.now(ZoneId.of("UTC+8")).format(DateTimeFormatter.ofPattern("[yyyy-MM-dd HH:mm:ss]")), text);
+        String time = ZonedDateTime.now(ZoneId.of("UTC+8")).format(DateTimeFormatter.ofPattern("[yyyy-MM-dd HH:mm:ss]"));
+        text = String.format("[%s] %s", time, text.replace("\n",String.format("\n[%s] ",time)));
         if(consoleText==null)
             consoleText = text;
         else
