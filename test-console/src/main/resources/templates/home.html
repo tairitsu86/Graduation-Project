@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Test console</title>
+</head>
+<body>
+<h3>Hello! This is test console!</h3>
+<label for="console"></label><textarea id="console" th:text="${consoleText}" disabled="disabled"></textarea>
+<form method="post">
+    <label for="userId">Enter user id:</label>
+    <input type="text" name="userId" id="userId">
+    <br>
+    <label for="message">Enter message:</label>
+    <input type="text" name="message" id="message">
+    <br>
+    <input type="submit" value="Send message">
+</form>
+</body>
+</html>

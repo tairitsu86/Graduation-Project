@@ -1,4 +1,4 @@
-package graduationProject.IMIGSystem.testconsole;
+package graduationProject.IMIGSystem.testConsole;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
