@@ -18,6 +18,18 @@
 </form>
 
 <script>
+        // Restore form input values from local storage when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            var userIdInput = document.getElementById('userId');
+
+            userIdInput.value = localStorage.getItem('userIdInputValue') || '';
+
+            // Add input event listeners to save the input values to local storage
+            userIdInput.addEventListener('input', function() {
+                localStorage.setItem('userIdInputValue', userIdInput.value);
+            });
+
+        });
         // Function to periodically update the textarea with data from the server
         function updateConsoleText() {
             // Make an AJAX request to the server to fetch the updated console text
