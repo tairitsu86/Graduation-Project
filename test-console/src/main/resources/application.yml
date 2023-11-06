@@ -1,0 +1,11 @@
+spring:
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+  activemq:
+    user: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
