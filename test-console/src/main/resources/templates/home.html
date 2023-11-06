@@ -9,10 +9,10 @@
 <textarea id="console" disabled="disabled" th:text="${consoleText}" style="height: 200px; width: 900px;"></textarea>
 <form method="post">
     <label for="userId">Enter user id:</label>
-    <input type="text" name="userId" id="userId">
+    <input type="text" name="userId" id="userId" th:value="${userId}" autocomplete="off">
     <br>
     <label for="message">Enter message:</label>
-    <input type="text" name="message" id="message">
+    <input type="text" name="message" id="message" autocomplete="off">
     <br>
     <input type="submit" value="Send message">
 </form>
