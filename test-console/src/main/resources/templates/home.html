@@ -4,8 +4,9 @@
     <title>Test console</title>
 </head>
 <body>
-<h3>Hello! This is test console!</h3>
-<label for="console"></label><textarea id="console" th:text="${consoleText}" disabled="disabled"></textarea>
+<h3>Hello! This is the test console!</h3>
+<label for="console"></label>
+<textarea id="console" disabled="disabled" th:text="${consoleText}" style="height: 200px; width: 900px;"></textarea>
 <form method="post">
     <label for="userId">Enter user id:</label>
     <input type="text" name="userId" id="userId">
@@ -15,5 +16,22 @@
     <br>
     <input type="submit" value="Send message">
 </form>
+
+<script>
+        // Function to periodically update the textarea with data from the server
+        function updateConsoleText() {
+            // Make an AJAX request to the server to fetch the updated console text
+            fetch('/fetch-console-text')
+                .then(response => response.text())
+                .then(data => {
+                    // Update the textarea with the fetched text
+                    document.getElementById('console').value = data;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Update the textarea every 2 seconds (you can adjust the interval as needed)
+        setInterval(updateConsoleText, 2000);
+    </script>
 </body>
 </html>

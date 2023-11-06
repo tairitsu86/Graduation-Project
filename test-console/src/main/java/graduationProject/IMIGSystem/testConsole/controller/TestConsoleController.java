@@ -11,11 +11,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Controller
 @RequiredArgsConstructor
 @Slf4j
 public class TestConsoleController {
     private final MQEventPublisher mqEventPublisher;
+    public static String consoleText = null;
+    public static void show(String text){
+        text = String.format("[%s] %s", ZonedDateTime.now(ZoneId.of("UTC+8")).format(DateTimeFormatter.ofPattern("[yyyy-MM-dd HH:mm:ss]")), text);
+        if(consoleText==null)
+            consoleText = text;
+        else
+            consoleText = String.format("%s\n%s",consoleText, text);
+    }
+
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
     public String home(Model model){
@@ -24,21 +37,20 @@ public class TestConsoleController {
     @PostMapping("/")
     @ResponseStatus(HttpStatus.OK)
     public String processForm(@RequestParam String message, @RequestParam String userId, Model model) {
-        String newMessage = String.format("User [%s]: %s",userId, message);
+        show(String.format("User[%s] send: %s",userId, message));
+        model.addAttribute("consoleText", consoleText);
         newMessage(
                 WebhookDto.builder()
                         .userId(userId)
                         .message(message)
                         .build()
         );
-        model.addAttribute("consoleText", newMessage);
         return "home";
     }
 
     @PostMapping("/webhook")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void newMessage(@RequestBody WebhookDto webhookDto){
-        log.info("user [{}] send: {}", webhookDto.getUserId(), webhookDto.getMessage());
         mqEventPublisher.publishEvent(
                 MessageEventDto.builder()
                         .imUserData(
@@ -51,4 +63,10 @@ public class TestConsoleController {
                         .build()
         );
     }
+    @GetMapping("/fetch-console-text")
+    @ResponseBody
+    public String fetchConsoleText() {
+        return consoleText;
+    }
+
 }
