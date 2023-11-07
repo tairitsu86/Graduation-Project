@@ -65,6 +65,8 @@ public class RestRequestServiceImpl implements RestRequestService {
             ResponseEntity<String> response = restTemplate.postForEntity(String.format("%s/login",USER_DATABASE_URL),userLoginDto,String.class);
             if(response.getStatusCode().is2xxSuccessful()) return "Login success!";
         }catch (HttpClientErrorException e){
+            if(e.getStatusCode().is4xxClientError()) return "Login failed!\nWrong username or password!";
+            if(e.getStatusCode().is5xxServerError()) return "Server error, please try again after few minutes!";
             log.info("Login Error: {}", e.getMessage());
         }
         return "Something go wrong, please try again after few minutes!";
@@ -76,6 +78,8 @@ public class RestRequestServiceImpl implements RestRequestService {
             ResponseEntity<String> response = restTemplate.postForEntity(String.format("%s/users/new",USER_DATABASE_URL), userSignUpDto,String.class);
             if(response.getStatusCode().is2xxSuccessful()) return "Sign up success! Now you can login!";
         }catch (HttpClientErrorException e){
+            if(e.getStatusCode().is4xxClientError()) return "Sign up failed!\nUsername has already been taken!";
+            if(e.getStatusCode().is5xxServerError()) return "Server error, please try again after few minutes!";
             log.info("Sign up Error: {}", e.getMessage());
         }
         return "Something go wrong, please try again after few minutes!";
