@@ -147,8 +147,8 @@ public class RespondServiceImpl implements RespondService{
             String jsonPath = menuVariable.getJsonPath();
 
             if(jsonPath.startsWith("PAST_PARAMETER")) {
-                if(jsonPath.split(" ").length==2)
-                    jsonPath = jsonPath.split(" ")[1];
+                if(jsonPath.length()>14)
+                    jsonPath = jsonPath.substring(15);
                 else
                     jsonPath = menuVariable.getVariableName();
                 data = menuConfigDto.getParameters().get(jsonPath);
