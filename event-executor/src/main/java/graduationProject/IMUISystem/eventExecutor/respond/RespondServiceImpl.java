@@ -203,38 +203,10 @@ public class RespondServiceImpl implements RespondService{
     }
     public List<?> getJsonVariable(String variableName, Object data){
         List<?> dataList;
-        if(variableName.startsWith("INT_")){
-            if(data instanceof List<?> list && !list.isEmpty()) {
-                dataList = (List<Integer>) data;
-            }else if(data instanceof Integer i){
-                dataList = new ArrayList<>(){{add(i);}};
-            }else{
-                throw new RuntimeException("getMenuConfigDto error!");
-            }
-        } else if (variableName.startsWith("FLOAT_")) {
-            if(data instanceof List<?> list && !list.isEmpty()) {
-                dataList = (List<Double>) data;
-            }else if(data instanceof Double d){
-                dataList = new ArrayList<>(){{add(d);}};
-            }else{
-                throw new RuntimeException("getMenuConfigDto error!");
-            }
-        }else if (variableName.startsWith("BOOL_")) {
-            if(data instanceof List<?> list && !list.isEmpty()) {
-                dataList = (List<Boolean>) data;
-            }else if(data instanceof Boolean b){
-                dataList = new ArrayList<>(){{add(b);}};
-            }else{
-                throw new RuntimeException("getMenuConfigDto error!");
-            }
-        } else {
-            if(data instanceof List<?> list && !list.isEmpty()) {
-                dataList = (List<String>) data;
-            }else if(data instanceof String s){
-                dataList = new ArrayList<>(){{add(s);}};
-            }else{
-                throw new RuntimeException("getMenuConfigDto error!");
-            }
+        if(data instanceof List<?> list && !list.isEmpty()) {
+            dataList = list;
+        }else{
+            dataList = new ArrayList<>(){{add(data);}};
         }
         return dataList;
     }
