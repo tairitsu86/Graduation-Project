@@ -85,7 +85,7 @@ public class RespondServiceImpl implements RespondService{
             parameters = new HashMap<>();
         String value;
         String formatString;
-        NotifyConfigDto notifyConfigDto = NotifyConfigDto.builder().usernameList(new ArrayList<>(){{add(username);}}).groupList(new ArrayList<>()).build();
+        NotifyConfigDto notifyConfigDto = NotifyConfigDto.builder().usernameList(new ArrayList<>()).groupList(new ArrayList<>()).build();
         for(NotifyVariable notifyVariable: notifyConfig.getNotifyVariables()){
             value = "";
             Map<String,String> replaceValue = notifyVariable.getReplaceValue();
@@ -147,8 +147,8 @@ public class RespondServiceImpl implements RespondService{
             String jsonPath = menuVariable.getJsonPath();
 
             if(jsonPath.startsWith("PAST_PARAMETER")) {
-                if(jsonPath.split(" ").length==2)
-                    jsonPath = jsonPath.split(" ")[1];
+                if(jsonPath.length()>14)
+                    jsonPath = jsonPath.substring(15);
                 else
                     jsonPath = menuVariable.getVariableName();
                 data = menuConfigDto.getParameters().get(jsonPath);
@@ -203,7 +203,7 @@ public class RespondServiceImpl implements RespondService{
     }
     public List<?> getJsonVariable(String variableName, Object data){
         List<?> dataList;
-        if(data instanceof List<?> list && !list.isEmpty()) {
+        if(data instanceof List<?> list) {
             dataList = list;
         }else{
             dataList = new ArrayList<>(){{add(data);}};
