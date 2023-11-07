@@ -7,29 +7,54 @@
 <h3>Hello! This is the test console!</h3>
 <label for="console"></label>
 <textarea id="console" disabled="disabled" th:text="${consoleText}" style="height: 200px; width: 900px;"></textarea>
-<form method="post">
+<form id="dataFrom" method="post">
     <label for="userId">Enter user id:</label>
     <input type="text" name="userId" id="userId" th:value="${userId}" autocomplete="off">
     <br>
     <label for="message">Enter message:</label>
-    <input type="text" name="message" id="message" autocomplete="off">
+    <input type="text" name="message" id="message" th:value="${message}" autocomplete="off">
     <br>
     <input type="submit" value="Send message">
 </form>
 
 <script>
-        // Restore form input values from local storage when the page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            var userIdInput = document.getElementById('userId');
+        document.addEventListener('DOMContentLoaded', function () {
+            // Find the form by its ID
+            const form = document.getElementById('dataFrom');
 
-            userIdInput.value = localStorage.getItem('userIdInputValue') || '';
+            // Add a submit event listener to the form
+            form.addEventListener('submit', function (event) {
+                // Prevent the default form submission
+                event.preventDefault();
 
-            // Add input event listeners to save the input values to local storage
-            userIdInput.addEventListener('input', function() {
-                localStorage.setItem('userIdInputValue', userIdInput.value);
+                // Get the user id and message from the form
+                const userId = document.getElementById('userId').value;
+                const messageInput = document.getElementById('message');
+                const message = messageInput.value;
+
+                // Perform an AJAX POST request to send the data to the server
+                fetch('/', {
+                    method: 'POST',
+                    body: new URLSearchParams({
+                        userId: userId,
+                        message: message,
+                    }),
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                    },
+                })
+                    .then(response => {
+                        // Handle the response as needed (e.g., update the console)
+                        messageInput.value = '';
+                    })
+                    .catch(error => console.error('Error:', error));
             });
-
         });
+
+        function scrollToBottom(element) {
+            element.scrollTop = element.scrollHeight;
+        }
+
         // Function to periodically update the textarea with data from the server
         function updateConsoleText() {
             // Make an AJAX request to the server to fetch the updated console text
@@ -38,12 +63,14 @@
                 .then(data => {
                     // Update the textarea with the fetched text
                     document.getElementById('console').value = data;
+                    // Scroll to the bottom after updating the text
+                    scrollToBottom(document.getElementById('console'));
                 })
                 .catch(error => console.error('Error:', error));
         }
 
-        // Update the textarea every 2 seconds (you can adjust the interval as needed)
-        setInterval(updateConsoleText, 2000);
+        // Update the textarea every 0.1 seconds (you can adjust the interval as needed)
+        setInterval(updateConsoleText, 100);
     </script>
 </body>
 </html>

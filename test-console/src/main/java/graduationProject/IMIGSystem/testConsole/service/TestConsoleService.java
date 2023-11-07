@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class TestConsoleService implements IMService {
     @Override
     public void SendTextMessage(String userId, String message) {
-        TestConsoleController.show(String.format("System to user[%s]: %s", userId, message));
+        TestConsoleController.show(false ,userId, message);
     }
 
 }
