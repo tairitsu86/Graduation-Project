@@ -40,7 +40,7 @@ public class RestRequestServiceImpl implements RestRequestService {
             );
             return Objects.requireNonNull(response.getBody()).getUsername();
         }catch (HttpClientErrorException e){
-            log.info("getUsername got error: {}", e.getMessage(), e);
+            log.info("getUsername got error: {}", e.getMessage());
             return null;
         }
     }
@@ -54,7 +54,7 @@ public class RestRequestServiceImpl implements RestRequestService {
             );
             return Objects.requireNonNull(response.getBody()).getImUserData();
         }catch (HttpClientErrorException e){
-            log.info("getIMUserData got error: {}", e.getMessage(),e);
+            log.info("getIMUserData got error: {}", e.getMessage());
             return null;
         }
     }
