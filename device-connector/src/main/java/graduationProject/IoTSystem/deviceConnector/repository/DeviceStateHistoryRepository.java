@@ -6,24 +6,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public interface DeviceStateHistoryRepository extends JpaRepository<DeviceStateHistory, DeviceStateHistoryId> {
 
-    @Query(value = "SELECT d2.[state_name] AS stateName, d2.[state_value] AS stateValue, d2.[executor]\n" +
-            "FROM device_state_history AS d2\n" +
-            "JOIN (\n" +
-            "\tSELECT DISTINCT [device_id], [state_name], MAX([alter_time]) AS max_time\n" +
-            "\tFROM device_state_history\n" +
-            "\tWHERE device_id = ?1\n" +
-            "\tGROUP BY [device_id], [state_name]\n" +
-            ") AS d1\n" +
-            "ON d1.device_id = d2.device_id AND d1.state_name = d2.state_name AND d1.max_time = d2.alter_time"
-            ,nativeQuery = true
-    )
-    List<Map<String,String>> getDeviceAllStates(String deviceId);
+    @Query(value = "SELECT TOP(1) * FROM [device_state_history]\n" +
+            "WHERE [device_id] = ?1 AND [state_id] = ?2\n" +
+            "ORDER BY [alter_time] DESC", nativeQuery = true)
+    Optional<DeviceStateHistory> getLatestState(String deviceId, int stateId);
 
 
 

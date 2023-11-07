@@ -38,7 +38,7 @@ public class MQTTConfig {
     public static final String INFO_TOPIC = "devices/info";
     public static final String STATE_TOPIC = "devices/state";
 
-    private final MQTTMessageListener mqttMessageListener;
+    private final MQTTListener mqttListener;
     @Bean
     public MqttConnectOptions getMqttConnectOptions(){
         MqttConnectOptions options = new MqttConnectOptions();
@@ -80,7 +80,7 @@ public class MQTTConfig {
     @Bean
     @ServiceActivator(inputChannel = "mqttReceiveChannel")
     public MessageHandler mqttReceiveMessageHandler() {
-        return mqttMessageListener;
+        return mqttListener;
     }
 
     @Bean
