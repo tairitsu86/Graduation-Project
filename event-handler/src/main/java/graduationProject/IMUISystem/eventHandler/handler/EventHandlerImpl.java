@@ -149,6 +149,8 @@ public class EventHandlerImpl implements EventHandler{
         if(option.getOptionParameters()!=null)
             parameters.putAll(option.getOptionParameters());
 
+        parameters.put("LAST_SELECTED", index);
+
         if(option.getNextEvent().equals("EXIT"))
             exitEvent(imUserData);
         else
