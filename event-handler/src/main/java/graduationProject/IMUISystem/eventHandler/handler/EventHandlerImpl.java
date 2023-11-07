@@ -3,7 +3,6 @@ package graduationProject.IMUISystem.eventHandler.handler;
 import graduationProject.IMUISystem.eventHandler.dto.*;
 import graduationProject.IMUISystem.eventHandler.entity.CustomizeEventVariable;
 import graduationProject.IMUISystem.eventHandler.entity.IMUserData;
-import graduationProject.IMUISystem.eventHandler.entity.Menu;
 import graduationProject.IMUISystem.eventHandler.entity.MenuOption;
 import graduationProject.IMUISystem.eventHandler.rabbitMQ.MQEventPublisher;
 import graduationProject.IMUISystem.eventHandler.repository.RepositoryService;
@@ -22,7 +21,7 @@ public class EventHandlerImpl implements EventHandler{
 
     @Override
     public void newMessage(IMUserData imUserData, String message) {
-        if(message.trim().equalsIgnoreCase("EXIT")){
+        if(message.equals("EXIT_MENU_EVENT_NOW")){
             exitEvent(imUserData);
             return;
         }
@@ -48,7 +47,12 @@ public class EventHandlerImpl implements EventHandler{
 
     @Override
     public void menuEvent(IMUserData imUserData, String username, String description, List<MenuOption> menuOptions, Map<String,Object> parameters) {
-
+        menuOptions.add(
+                MenuOption.builder()
+                        .nextEvent("EXIT")
+                        .displayName("Exit")
+                        .build()
+        );
         newUserState(imUserData,username,"MENU",description, menuOptions, parameters);
         StringBuilder message = new StringBuilder(description);
         for(int i = 0; i< menuOptions.size(); i++)
@@ -144,6 +148,8 @@ public class EventHandlerImpl implements EventHandler{
             parameters.putAll(userStateDto.getParameters());
         if(option.getOptionParameters()!=null)
             parameters.putAll(option.getOptionParameters());
+
+        parameters.put("INT_LAST_SELECTED", index);
 
         if(option.getNextEvent().equals("EXIT"))
             exitEvent(imUserData);
