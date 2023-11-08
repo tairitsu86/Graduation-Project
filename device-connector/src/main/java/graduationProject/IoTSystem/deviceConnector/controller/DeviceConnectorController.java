@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 @RestController
 @RequiredArgsConstructor
 public class DeviceConnectorController {
@@ -37,10 +35,23 @@ public class DeviceConnectorController {
     @GetMapping("/devices/new")
     public NewDeviceDto newDevice(){
         return NewDeviceDto.builder()
-                .id(UUID.randomUUID().toString())
+                .id(newDeviceId())
                 .mqttHostIp(mqttConfig.getMQTT_HOST_IP())
                 .mqttHostPort(mqttConfig.getMQTT_HOST_PORT())
                 .build();
+    }
+    public String newDeviceId(){
+        char[] newId = new char[6];
+        for(int i=0,random;i<6;i++){
+            random = (int)(Math.random()*62);
+            if(random<10)
+                newId[i] = (char)(random+48);
+            else if (random<36)
+                newId[i] = (char)(random-10+65);
+            else
+                newId[i] = (char)(random-36+97);
+        }
+        return String.copyValueOf(newId);
     }
 }
 
