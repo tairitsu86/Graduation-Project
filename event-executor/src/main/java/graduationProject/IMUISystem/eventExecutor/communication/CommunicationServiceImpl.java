@@ -74,6 +74,8 @@ public class CommunicationServiceImpl implements CommunicationService{
         if(body==null) body = "";
         if(parameters!=null)
             for(String s:parameters.keySet()){
+                if(parameters.get(s)==null) continue;
+
                 String replaceValue = String.format("${%s}",s);
                 url = url.replace(replaceValue,parameters.get(s).toString());
                 headerString = headerString.replace(replaceValue,parameters.get(s).toString());

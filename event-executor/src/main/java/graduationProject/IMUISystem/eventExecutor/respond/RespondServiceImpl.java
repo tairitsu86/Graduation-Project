@@ -85,7 +85,7 @@ public class RespondServiceImpl implements RespondService{
             parameters = new HashMap<>();
         String value;
         String formatString;
-        NotifyConfigDto notifyConfigDto = NotifyConfigDto.builder().usernameList(new ArrayList<>()).groupList(new ArrayList<>()).build();
+        NotifyConfigDto notifyConfigDto = NotifyConfigDto.builder().usernameList(new ArrayList<>(){{add(username);}}).groupList(new ArrayList<>()).build();
         for(NotifyVariable notifyVariable: notifyConfig.getNotifyVariables()){
             value = "";
             Map<String,String> replaceValue = notifyVariable.getReplaceValue();
@@ -104,15 +104,15 @@ public class RespondServiceImpl implements RespondService{
             }
 
             if(notifyVariable.getVariableName().equals("USER_LIST")){
-                notifyConfigDto.getUsernameList().addAll((List<String>)getJsonVariable("USER_LIST", data));
+                notifyConfigDto.getUsernameList().addAll((List<String>)getJsonVariable(data));
                 continue;
             }else if(notifyVariable.getVariableName().equals("GROUP_LIST")){
-                notifyConfigDto.getGroupList().addAll((List<String>)getJsonVariable("GROUP_LIST", data));
+                notifyConfigDto.getGroupList().addAll((List<String>)getJsonVariable(data));
                 continue;
             }
 
 
-            List<?> dataList = getJsonVariable(notifyVariable.getVariableName(), data);
+            List<?> dataList = getJsonVariable(data);
 
             for (int i=0;i<dataList.size();i++) {
                 String s = dataList.get(i).toString();
@@ -157,7 +157,7 @@ public class RespondServiceImpl implements RespondService{
             }
 
             if(menuVariable.isGlobal()){
-                Object value = getJsonVariable(menuVariable.getVariableName(),data).get(0);
+                Object value = getJsonVariable(data).get(0);
                 if(replaceValue!=null&&replaceValue.containsKey(value.toString()))
                     value = replaceValue.get(value.toString());
                 if(menuVariable.getVariableName().equals("NEXT_EVENT")){
@@ -176,7 +176,7 @@ public class RespondServiceImpl implements RespondService{
                     options,
                     menuVariable.getVariableName(),
                     replaceValue,
-                    getJsonVariable(menuVariable.getVariableName(),data),
+                    getJsonVariable(data),
                     menuConfig.getNextEvent()
             );
         }
@@ -201,7 +201,7 @@ public class RespondServiceImpl implements RespondService{
                 .parameters(parameters)
                 .build();
     }
-    public List<?> getJsonVariable(String variableName, Object data){
+    public List<?> getJsonVariable(Object data){
         List<?> dataList;
         if(data instanceof List<?> list) {
             dataList = list;
@@ -212,7 +212,8 @@ public class RespondServiceImpl implements RespondService{
     }
     public String setTemplate(String template, Map<String,Object> parameters){
         for (String s:parameters.keySet())
-            template = template.replace(String.format("${%s}",s),parameters.get(s).toString());
+            if(parameters.get(s)!=null)
+                template = template.replace(String.format("${%s}",s), parameters.get(s).toString());
         return template;
     }
     public void setMenuOption(List<MenuOption> options, String variableName,Map<String,String> replaceValue, List<?> data, String nextEvent){
