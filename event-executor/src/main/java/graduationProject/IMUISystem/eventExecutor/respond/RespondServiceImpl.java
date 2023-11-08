@@ -212,7 +212,8 @@ public class RespondServiceImpl implements RespondService{
     }
     public String setTemplate(String template, Map<String,Object> parameters){
         for (String s:parameters.keySet())
-            template = template.replace(String.format("${%s}",s),parameters.get(s).toString());
+            if(parameters.get(s)!=null)
+                template = template.replace(String.format("${%s}",s), parameters.get(s).toString());
         return template;
     }
     public void setMenuOption(List<MenuOption> options, String variableName,Map<String,String> replaceValue, List<?> data, String nextEvent){
