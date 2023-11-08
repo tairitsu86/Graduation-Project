@@ -114,7 +114,8 @@ public class EventHandlerImpl implements EventHandler{
     }
     public String getDisplayName(String displayNameTemplate, Map<String, Object> parameters){
         for (String s:parameters.keySet())
-            displayNameTemplate = displayNameTemplate.replace(String.format("${%s}",s),parameters.get(s).toString());
+            if(parameters.get(s)!=null)
+                displayNameTemplate = displayNameTemplate.replace(String.format("${%s}",s), parameters.get(s).toString());
         return displayNameTemplate;
     }
 
