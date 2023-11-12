@@ -56,7 +56,7 @@ public class RepositoryServiceImpl implements RepositoryService{
             customizeEventRepository.save(
                     CustomizeEvent.builder()
                             .eventName("LOGIN")
-                            .descriptionTemplate("Please enter your %s!")
+                            .descriptionTemplate("Please enter your ${VARIABLE_DISPLAY_NAME}!")
                             .variables(temp)
                             .build()
             );
@@ -92,7 +92,7 @@ public class RepositoryServiceImpl implements RepositoryService{
             customizeEventRepository.save(
                     CustomizeEvent.builder()
                             .eventName("SIGN_UP")
-                            .descriptionTemplate("Please enter your %s!")
+                            .descriptionTemplate("Please enter your ${VARIABLE_DISPLAY_NAME}!")
                             .variables(temp)
                             .build()
             );
