@@ -32,16 +32,6 @@ public class MQEventListener {
             if(!repositoryService.checkPermission(userControlDto.getUsername(), userControlDto.getDeviceId()))
                 throw new NoPermissionException(userControlDto.getUsername(), userControlDto.getDeviceId());
 
-            if(userControlDto.getFunctionId()<0 && repositoryService.isOwner(userControlDto.getDeviceId(), userControlDto.getUsername())){
-                switch (userControlDto.getFunctionId()) {
-                    case -1 -> repositoryService.grantPermissionToUser(userControlDto.getDeviceId(), userControlDto.getParameter().toString());
-                    case -2 -> repositoryService.grantPermissionToGroup(userControlDto.getDeviceId(), userControlDto.getParameter().toString());
-                    case -3 -> repositoryService.removePermissionFromUser(userControlDto.getDeviceId(), userControlDto.getParameter().toString());
-                    case -4 -> repositoryService.removePermissionFromGroup(userControlDto.getDeviceId(), userControlDto.getParameter().toString());
-                }
-                return;
-            }
-
             mqEventPublisher.publishDeviceControl(
                     DeviceControlDto.builder()
                             .executor(userControlDto.getUsername())
