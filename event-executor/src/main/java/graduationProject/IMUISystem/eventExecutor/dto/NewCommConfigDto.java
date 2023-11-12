@@ -17,4 +17,5 @@ public class NewCommConfigDto {
     private String urlTemplate;
     private Map<String,String> headerTemplate;
     private Object bodyTemplate;
+    private Map<Integer, String> errorTemplate;
 }
