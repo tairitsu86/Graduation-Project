@@ -49,6 +49,7 @@ public class MQTTConfig {
         options.setConnectionTimeout(10);
         options.setMaxInflight(50);
         options.setKeepAliveInterval(20);
+        options.setAutomaticReconnect(true);
         return options;
     }
 
