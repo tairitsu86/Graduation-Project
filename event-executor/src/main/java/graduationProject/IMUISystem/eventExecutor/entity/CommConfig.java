@@ -31,5 +31,8 @@ public class CommConfig {
     @Column(name = "body_template")
     private String bodyTemplate;
 
+    @Column(name = "error_template")
+    private String errorTemplate;
+
 
 }

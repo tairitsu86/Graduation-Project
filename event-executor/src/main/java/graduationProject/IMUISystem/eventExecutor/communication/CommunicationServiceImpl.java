@@ -42,20 +42,15 @@ public class CommunicationServiceImpl implements CommunicationService{
         if (Objects.requireNonNull(commConfig.getMethodType()) == MethodType.MQ) {
             mqEventPublisher.publishCustomEvent(getCommConfigDto(commConfig, executeEventDto.getParameters()));
         } else {
-            ResponseEntity<String> response =
-                    restRequestService.sendEventRequest(getCommConfigDto(commConfig, executeEventDto.getParameters()));
+            CommConfigDto commConfigDto = getCommConfigDto(commConfig, executeEventDto.getParameters());
+            ResponseEntity<String> response = restRequestService.sendEventRequest(commConfigDto);
 
             if(!response.getStatusCode().is2xxSuccessful()){
-                String message;
-                if(response.getStatusCode().is4xxClientError()){
-                    message = String.format("%s", response.getBody());
-                }else if(response.getStatusCode().is5xxServerError()){
-                    message = String.format("System error: %s", response.getBody());
-                }else{
-                    message = String.format("Unknown error: %s\n%s", response.getStatusCode(), response.getBody());
-                }
-                log.info("API response code not 2xx, with status code: {}, with message: {}, respond to user : {}", response.getStatusCode(), response.getBody(), message);
+                String message = String.format("Unexpected api error: \n%s", response.getBody());
+                if(commConfigDto.getError().containsKey(response.getStatusCode().value()))
+                    message = commConfigDto.getError().get(response.getStatusCode().value());
                 respondService.respondTextMessage(executeEventDto.getExecutor(), message);
+                log.info("API response code: {}", response.getStatusCode());
                 return;
             }
 
@@ -68,25 +63,29 @@ public class CommunicationServiceImpl implements CommunicationService{
 
     public CommConfigDto getCommConfigDto(CommConfig commConfig, Map<String, Object> parameters){
         String url = commConfig.getUrlTemplate();
-        String headerString = commConfig.getHeaderTemplate();
-        if(headerString==null) headerString = "";
-        String body = commConfig.getBodyTemplate();
-        if(body==null) body = "";
+        String headerString = Objects.requireNonNullElse(commConfig.getHeaderTemplate(), "");
+        String body = Objects.requireNonNullElse(commConfig.getBodyTemplate(), "");
+        String errorString = Objects.requireNonNullElse(commConfig.getErrorTemplate(), "");
+
         if(parameters!=null)
             for(String s:parameters.keySet()){
                 if(parameters.get(s)==null) continue;
 
-                String replaceValue = String.format("${%s}",s);
-                url = url.replace(replaceValue,parameters.get(s).toString());
-                headerString = headerString.replace(replaceValue,parameters.get(s).toString());
+                String replaceVariable = String.format("${%s}",s);
+                String replaceValue = parameters.get(s).toString();
+                url = url.replace(replaceVariable, replaceValue);
+                headerString = headerString.replace(replaceVariable, replaceValue);
+                errorString = errorString.replace(replaceVariable, replaceValue);
 
                 if(s.startsWith("INT_")||s.startsWith("FLOAT_")||s.startsWith("BOOL_"))
-                    replaceValue = String.format("\"${%s}\"",s);
-                body = body.replace(replaceValue,parameters.get(s).toString());
+                    replaceVariable = String.format("\"${%s}\"",s);
+                body = body.replace(replaceVariable,parameters.get(s).toString());
             }
         Map<String, String> header;
+        Map<Integer,String> error;
         try{
             header = objectMapper.readValue(headerString, new TypeReference<>() {});
+            error = objectMapper.readValue(errorString, new TypeReference<>() {});
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -96,6 +95,7 @@ public class CommunicationServiceImpl implements CommunicationService{
                 .url(url)
                 .header(header)
                 .body(body)
+                .error(error)
                 .build();
     }
 }
