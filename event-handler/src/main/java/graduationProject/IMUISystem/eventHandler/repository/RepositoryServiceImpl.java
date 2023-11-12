@@ -56,7 +56,7 @@ public class RepositoryServiceImpl implements RepositoryService{
             customizeEventRepository.save(
                     CustomizeEvent.builder()
                             .eventName("LOGIN")
-                            .description("Please enter your %s!")
+                            .descriptionTemplate("Please enter your %s!")
                             .variables(temp)
                             .build()
             );
@@ -92,7 +92,7 @@ public class RepositoryServiceImpl implements RepositoryService{
             customizeEventRepository.save(
                     CustomizeEvent.builder()
                             .eventName("SIGN_UP")
-                            .description("Please enter your %s!")
+                            .descriptionTemplate("Please enter your %s!")
                             .variables(temp)
                             .build()
             );
@@ -230,7 +230,7 @@ public class RepositoryServiceImpl implements RepositoryService{
         CustomizeEventDto customizeEventDto =
                 CustomizeEventDto.builder()
                         .eventName(customizeEvent.getEventName())
-                        .description(customizeEvent.getDescription())
+                        .descriptionTemplate(customizeEvent.getDescriptionTemplate())
                         .build();
         List<CustomizeEventVariable> variables;
         try {
@@ -254,7 +254,7 @@ public class RepositoryServiceImpl implements RepositoryService{
         customizeEventRepository.save(
                 CustomizeEvent.builder()
                         .eventName(customizeEventDto.getEventName())
-                        .description(customizeEventDto.getDescription()==null?"%s":customizeEventDto.getDescription())
+                        .descriptionTemplate(customizeEventDto.getDescriptionTemplate()==null?"%s":customizeEventDto.getDescriptionTemplate())
                         .variables(variables)
                         .build()
         );

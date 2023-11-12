@@ -19,8 +19,8 @@ public class CustomizeEvent{
     @Column(name = "event_name")
     private String eventName;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "description_template")
+    private String descriptionTemplate;
 
     @Column(name = "variables")
     private String variables;
