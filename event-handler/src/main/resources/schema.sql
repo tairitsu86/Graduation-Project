@@ -2,7 +2,7 @@ IF OBJECT_ID(N'customize_event', N'U') IS NULL
     BEGIN
         CREATE TABLE [customize_event](
             [event_name] [varchar](255) NOT NULL,
-            [description] [varchar](255) NULL,
+            [description_template] [varchar](255) NULL,
             [variables] [varchar](MAX) NULL,
             CONSTRAINT [customize_event_pk] PRIMARY KEY([event_name])
         )
