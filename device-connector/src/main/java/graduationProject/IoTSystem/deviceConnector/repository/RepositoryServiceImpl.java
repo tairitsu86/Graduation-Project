@@ -26,6 +26,7 @@ public class RepositoryServiceImpl implements RepositoryService{
     @Override
     public void saveDeviceStateHistory(DeviceStateHistory deviceStateHistory) {
         deviceStateHistory.setAlterTime(Timestamp.from(Instant.now()));
+        if(deviceStateHistory.getStateValue()==null) return;
         deviceStateHistoryRepository.save(deviceStateHistory);
     }
 
