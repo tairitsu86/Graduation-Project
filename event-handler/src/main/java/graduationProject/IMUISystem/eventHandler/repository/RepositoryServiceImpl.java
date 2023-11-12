@@ -122,7 +122,7 @@ public class RepositoryServiceImpl implements RepositoryService{
             menuRepository.save(
                     Menu.builder()
                             .menuName("LOGIN_OR_SIGN_UP_MENU")
-                            .description("Login or Sign up!")
+                            .description("Login or Sign up!\n")
                             .options(temp)
                             .parameters("{}")
                             .build()
@@ -134,7 +134,7 @@ public class RepositoryServiceImpl implements RepositoryService{
                 menuRepository.save(
                         Menu.builder()
                                 .menuName("DEFAULT_MENU")
-                                .description("Hello!\nWhat are you looking for?")
+                                .description("Hello!\nWhat are you looking for?\n")
                                 .options("[]")
                                 .parameters("{}")
                                 .build()
