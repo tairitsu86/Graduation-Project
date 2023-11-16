@@ -66,7 +66,7 @@ public class RepositoryServiceImpl implements RepositoryService{
         CommConfig commConfig = getCommConfig(eventName);
         Map<String,String> headerTemplate;
         Object bodyTemplate;
-        Map<Integer,String> errorTemplate;
+        Map<String,String> errorTemplate;
         try {
             headerTemplate = objectMapper.readValue(commConfig.getHeaderTemplate(), new TypeReference<>() {});
             bodyTemplate = objectMapper.readValue(commConfig.getBodyTemplate(),Object.class);

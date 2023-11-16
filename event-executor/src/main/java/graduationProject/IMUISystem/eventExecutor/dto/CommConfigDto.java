@@ -17,5 +17,5 @@ public class CommConfigDto {
     private String url;
     private Map<String, String> header;
     private String body;
-    private Map<Integer, String> error;
+    private Map<String, String> error;
 }
