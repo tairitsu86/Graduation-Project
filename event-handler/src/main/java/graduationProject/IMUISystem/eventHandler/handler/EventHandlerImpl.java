@@ -102,9 +102,9 @@ public class EventHandlerImpl implements EventHandler{
             executeEvent(eventName, parameters);
             return;
         }
-        newUserState(imUserData, username, eventName, customizeEventDto.getDescription(), data, parameters);
+        newUserState(imUserData, username, eventName, customizeEventDto.getDescriptionTemplate(), data, parameters);
 
-        sendMessage(imUserData, String.format(customizeEventDto.getDescription(), getDisplayName(data.get(0).getDisplayNameTemplate(), parameters)));
+        sendMessage(imUserData, getDescription(customizeEventDto.getDescriptionTemplate(), data.get(0).getDisplayNameTemplate(), parameters));
     }
 
     @Override
@@ -112,11 +112,16 @@ public class EventHandlerImpl implements EventHandler{
         MenuDto menu = repositoryService.getMenuDto("DEFAULT_MENU");
         menuEvent(imUserData, username, menu.getDescription(), menu.getOptions(),menu.getParameters());
     }
-    public String getDisplayName(String displayNameTemplate, Map<String, Object> parameters){
+    public String getDescription(String descriptionTemplate, String displayNameTemplate, Map<String, Object> parameters){
         for (String s:parameters.keySet())
-            if(parameters.get(s)!=null)
+            if(parameters.get(s)!=null){
                 displayNameTemplate = displayNameTemplate.replace(String.format("${%s}",s), parameters.get(s).toString());
-        return displayNameTemplate;
+                descriptionTemplate = descriptionTemplate.replace(String.format("${%s}",s), parameters.get(s).toString());
+            }
+        if(descriptionTemplate!=null)
+            descriptionTemplate = descriptionTemplate.replace("${VARIABLE_DISPLAY_NAME}", displayNameTemplate);
+
+        return descriptionTemplate;
     }
 
     public void continueUserEvent(IMUserData imUserData, String message){
@@ -173,7 +178,7 @@ public class EventHandlerImpl implements EventHandler{
         if(!(userStateDto.getData().get(0) instanceof CustomizeEventVariable nextVar))
             throw new RuntimeException("userStateDto.getData().get(0) not a CustomizeEventVariable!");
 
-        sendMessage(imUserData,String.format(userStateDto.getDescription(), getDisplayName(nextVar.getDisplayNameTemplate(), userStateDto.getParameters())));
+        sendMessage(imUserData, getDescription(userStateDto.getDescription(), nextVar.getDisplayNameTemplate(), userStateDto.getParameters()));
         repositoryService.newUserStateDto(userStateDto);
     }
 
