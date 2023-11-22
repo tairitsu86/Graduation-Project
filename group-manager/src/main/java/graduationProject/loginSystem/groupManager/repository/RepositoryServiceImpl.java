@@ -111,7 +111,7 @@ public class RepositoryServiceImpl implements RepositoryService{
         );
     }
     public String newGroupId(){
-        char newId[] = new char[6];
+        char[] newId = new char[6];
         for(int i=0,random;i<6;i++){
             random = (int)(Math.random()*62);
             if(random<10)
