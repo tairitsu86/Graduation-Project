@@ -4,7 +4,6 @@ import graduationProject.IoTSystem.deviceDatabase.api.exception.NoPermissionExce
 import graduationProject.IoTSystem.deviceDatabase.dto.DeviceDto;
 import graduationProject.IoTSystem.deviceDatabase.dto.DevicePermissionDto;
 import graduationProject.IoTSystem.deviceDatabase.entity.Device;
-import graduationProject.IoTSystem.deviceDatabase.entity.DeviceDataType;
 import graduationProject.IoTSystem.deviceDatabase.entity.DeviceFunction;
 import graduationProject.IoTSystem.deviceDatabase.rabbitMQ.MQEventPublisher;
 import graduationProject.IoTSystem.deviceDatabase.repository.RepositoryService;
@@ -79,11 +78,17 @@ public class DeviceDatabaseController {
         return restRequestService.getDeviceStateData(deviceId, stateId);
     }
 
-    @GetMapping("/devices/{deviceId}/permissions")
+    @PutMapping("/devices/{deviceId}/permissions/grant/group")
     @ResponseStatus(HttpStatus.OK)
-    public List<DeviceFunction> getDevicePermissions(@PathVariable String deviceId, @RequestParam String executor){
+    public void grantPermissionToGroup(@PathVariable String deviceId, @RequestParam String executor, @RequestParam String groupId){
         if(!repositoryService.isOwner(deviceId,executor)) throw new NoPermissionException(executor, deviceId);
-        return getPermissionFunctions();
+        repositoryService.grantPermissionToGroup(deviceId,groupId);
+    }
+    @PutMapping("/devices/{deviceId}/permissions/remove/group")
+    @ResponseStatus(HttpStatus.OK)
+    public void removePermissionFromGroup(@PathVariable String deviceId, @RequestParam String executor, @RequestParam String groupId){
+        if(!repositoryService.isOwner(deviceId,executor)) throw new NoPermissionException(executor, deviceId);
+        repositoryService.removePermissionFromGroup(deviceId,groupId);
     }
 
     @GetMapping("/devices/{deviceId}/permissions/list")
@@ -96,42 +101,7 @@ public class DeviceDatabaseController {
                 .build();
     }
 
-    public List<DeviceFunction> getPermissionFunctions(){
-        List<DeviceFunction> functions = new ArrayList<>();
-//        functions.add(
-//                DeviceFunction.builder()
-//                        .functionId(-1)
-//                        .functionName("Grant device permission to user")
-//                        .parameterName("username")
-//                        .dataType(DeviceDataType.ANY)
-//                        .build()
-//        );
-        functions.add(
-                DeviceFunction.builder()
-                        .functionId(-2)
-                        .functionName("Grant device permission to group")
-                        .parameterName("GROUP_ID")
-                        .dataType(DeviceDataType.ANY)
-                        .build()
-        );
-//        functions.add(
-//                DeviceFunction.builder()
-//                        .functionId(-3)
-//                        .functionName("Remove device permission from user")
-//                        .parameterName("username")
-//                        .dataType(DeviceDataType.ANY)
-//                        .build()
-//        );
-        functions.add(
-                DeviceFunction.builder()
-                        .functionId(-4)
-                        .functionName("Remove device permission from group")
-                        .parameterName("GROUP_ID")
-                        .dataType(DeviceDataType.ANY)
-                        .build()
-        );
-        return functions;
-    }
+
 
 }
 
