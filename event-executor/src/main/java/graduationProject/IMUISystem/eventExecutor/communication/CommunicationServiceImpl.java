@@ -47,8 +47,8 @@ public class CommunicationServiceImpl implements CommunicationService{
 
             if(!response.getStatusCode().is2xxSuccessful()){
                 String message = String.format("Unexpected api error: \n%s", response.getBody());
-                if(commConfigDto.getError().containsKey(response.getStatusCode().value()))
-                    message = commConfigDto.getError().get(response.getStatusCode().value());
+                if(commConfigDto.getError().containsKey(response.getStatusCode().toString()))
+                    message = commConfigDto.getError().get(response.getStatusCode().toString());
                 respondService.respondTextMessage(executeEventDto.getExecutor(), message);
                 log.info("API response code: {}", response.getStatusCode());
                 return;
@@ -82,7 +82,7 @@ public class CommunicationServiceImpl implements CommunicationService{
                 body = body.replace(replaceVariable,parameters.get(s).toString());
             }
         Map<String, String> header;
-        Map<Integer,String> error;
+        Map<String, String> error;
         try{
             header = objectMapper.readValue(headerString, new TypeReference<>() {});
             error = objectMapper.readValue(errorString, new TypeReference<>() {});
