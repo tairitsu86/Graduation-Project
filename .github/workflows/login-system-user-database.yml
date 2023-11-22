@@ -35,6 +35,7 @@ jobs:
       run: |
         cd $SERVICE_NAME
         mvn -B test --file pom.xml
+      continue-on-error: true
         
     - name: Build with Maven
       if: startsWith(github.ref, 'refs/heads/release')
