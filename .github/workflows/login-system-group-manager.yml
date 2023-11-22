@@ -1,0 +1,54 @@
+name: Login-System Group-Manager CI&CD
+
+on:
+  push:
+    branches: [ "develop-login-system-group-manager","release-login-system-group-manager" ]
+    
+env:
+  PROJECT_NAME: "graduation-project"
+  SUB_SYSTEM_NAME: "login-system"
+  SERVICE_NAME: "group-manager"
+  DATABASE_IP_PORT: ${{ secrets.DATABASE_IP_PORT }}
+  DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+  DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+  DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+  RABBITMQ_HOST: ${{ secrets.RABBITMQ_HOST }}
+  RABBITMQ_PORT: ${{ secrets.RABBITMQ_PORT }}
+  RABBITMQ_USERNAME: ${{ secrets.RABBITMQ_USERNAME }}
+  RABBITMQ_PASSWORD: ${{ secrets.RABBITMQ_PASSWORD }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+        
+    - name: Test with Maven
+      run: |
+        cd $SERVICE_NAME
+        mvn -B test --file pom.xml
+      continue-on-error: true
+      
+    - name: Build with Maven
+      if: startsWith(github.ref, 'refs/heads/release')
+      run: |  
+        cd $SERVICE_NAME
+        mvn -B clean package --file pom.xml -Dmaven.test.skip
+      
+    - name: Build and push Docker image
+      if: startsWith(github.ref, 'refs/heads/release')
+      shell: bash
+      run: |
+        cd $SERVICE_NAME
+        docker build -t ${PROJECT_NAME}_${SUB_SYSTEM_NAME}_${SERVICE_NAME}:latest .
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        docker tag ${PROJECT_NAME}_${SUB_SYSTEM_NAME}_${SERVICE_NAME} tairitsu86/${PROJECT_NAME}_${SUB_SYSTEM_NAME}_${SERVICE_NAME}
+        docker push tairitsu86/${PROJECT_NAME}_${SUB_SYSTEM_NAME}_${SERVICE_NAME}:latest

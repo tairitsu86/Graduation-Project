@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://${DATABASE_IP_PORT};databaseName=${DATABASE_NAME};sslProtocol=TLS;Encrypt=false
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  jpa:
+    show-aql: true
+    #not good, need to change to liquibase?
+    hibernate.ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+        #maybe not a good choose?
+        enable_lazy_load_no_trans: true
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+  activemq:
+    user: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+  sql:
+    init:
+      mode: always
+my_env:
+  loginTrackerUrl: ${LOGIN_TRACKER_URL}
+  eventExecutorUrl: ${EVENT_EXECUTOR_URL}
+  userDatabaseUrl: ${USER_DATABASE_URL}

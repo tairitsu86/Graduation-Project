@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Test console</title>
+</head>
+<body>
+<h3>Hello! This is the test console!</h3>
+<label for="console"></label>
+<textarea id="console" disabled="disabled" th:text="${consoleText}" style="height: 200px; width: 900px;"></textarea>
+<form id="dataFrom" method="post">
+    <label for="userId">Enter user id:</label>
+    <input type="text" name="userId" id="userId" th:value="${userId}" autocomplete="off">
+    <br>
+    <label for="message">Enter message:</label>
+    <input type="text" name="message" id="message" th:value="${message}" autocomplete="off">
+    <br>
+    <input type="submit" value="Send message">
+</form>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Find the form by its ID
+            const form = document.getElementById('dataFrom');
+
+            // Add a submit event listener to the form
+            form.addEventListener('submit', function (event) {
+                // Prevent the default form submission
+                event.preventDefault();
+
+                // Get the user id and message from the form
+                const userId = document.getElementById('userId').value;
+                const messageInput = document.getElementById('message');
+                const message = messageInput.value;
+
+                // Perform an AJAX POST request to send the data to the server
+                fetch('/', {
+                    method: 'POST',
+                    body: new URLSearchParams({
+                        userId: userId,
+                        message: message,
+                    }),
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                    },
+                })
+                    .then(response => {
+                        // Handle the response as needed (e.g., update the console)
+                        messageInput.value = '';
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+        });
+
+        function scrollToBottom(element) {
+            element.scrollTop = element.scrollHeight;
+        }
+
+        // Function to periodically update the textarea with data from the server
+        function updateConsoleText() {
+            // Make an AJAX request to the server to fetch the updated console text
+            fetch('/fetch-console-text')
+                .then(response => response.text())
+                .then(data => {
+                    // Update the textarea with the fetched text
+                    document.getElementById('console').value = data;
+                    // Scroll to the bottom after updating the text
+                    scrollToBottom(document.getElementById('console'));
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Update the textarea every 0.1 seconds (you can adjust the interval as needed)
+        setInterval(updateConsoleText, 100);
+    </script>
+</body>
+</html>

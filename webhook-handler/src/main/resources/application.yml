@@ -1,0 +1,11 @@
+line.bot:
+  channel-token: '${LINE_BOT_TOKEN}'
+  channel-secret: '${LINE_BOT_SECRET}'
+  handler.path: ${LINE_WEBHOOK}
+spring:
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+  activemq:
+    user: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}

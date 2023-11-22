@@ -1,0 +1,10 @@
+spring:
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+  activemq:
+    user: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+my_env:
+  telegramBotToken: ${TELEGRAM_BOT_TOKEN}
+  telegramWebHook: ${TELEGRAM_WEBHOOK}

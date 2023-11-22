@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webhook-handler
+  labels:
+    app: webhook-handler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webhook-handler
+  template:
+    metadata:
+      labels:
+        app: webhook-handler
+    spec:
+      containers:
+      - name: webhook-handler
+        image: tairitsu86/graduation-project_im-ui-system_webhook-handler:latest
+        resources:
+            limits:
+              memory: "1024Mi"
+              cpu: "500m"
+        ports:
+        - containerPort: 8080
+        env:
+        - name: LINE_BOT_TOKEN
+          valueFrom: 
+            secretKeyRef:
+              name: webhook-handler-secret
+              key: line-bot-token
+        - name: LINE_BOT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: webhook-handler-secret
+              key: line-bot-secret
+        - name: RABBITMQ_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: webhook-handler-secret
+              key: rabbitmq-username
+        - name: RABBITMQ_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: webhook-handler-secret
+              key: rabbitmq-password
+        - name: LINE_WEBHOOK
+          valueFrom:
+            configMapKeyRef:
+              name: webhook-handler-configmap
+              key: line-webhook
+        - name: RABBITMQ_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: webhook-handler-configmap
+              key: rabbitmq-ip
+        - name: RABBITMQ_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: webhook-handler-configmap
+              key: rabbitmq-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webhook-handler-service
+spec:
+  selector:
+    app: webhook-handler
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8001
+      targetPort: 8080
+      nodePort: 30001
+
+
