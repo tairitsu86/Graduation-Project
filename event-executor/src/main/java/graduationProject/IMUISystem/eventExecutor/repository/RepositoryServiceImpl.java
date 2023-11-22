@@ -8,7 +8,6 @@ import graduationProject.IMUISystem.eventExecutor.entity.CommConfig;
 import graduationProject.IMUISystem.eventExecutor.entity.RespondConfig;
 import graduationProject.IMUISystem.eventExecutor.controller.exception.CommConfigAlreadyExistException;
 import graduationProject.IMUISystem.eventExecutor.controller.exception.RespondConfigAlreadyExistException;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +24,11 @@ public class RepositoryServiceImpl implements RepositoryService{
     public void newCommConfig(String eventName, NewCommConfigDto newCommConfigDto) {
         if(commConfigRepository.existsById(eventName))
             throw new CommConfigAlreadyExistException(eventName);
-        String headerTemplate, bodyTemplate;
+        String headerTemplate, bodyTemplate, errorTemplate;
         try {
             headerTemplate = objectMapper.writeValueAsString(newCommConfigDto.getHeaderTemplate());
             bodyTemplate = objectMapper.writeValueAsString(newCommConfigDto.getBodyTemplate());
+            errorTemplate = objectMapper.writeValueAsString(newCommConfigDto.getErrorTemplate());
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -40,6 +40,7 @@ public class RepositoryServiceImpl implements RepositoryService{
                         .methodType(newCommConfigDto.getMethodType())
                         .headerTemplate(headerTemplate)
                         .bodyTemplate(bodyTemplate)
+                        .errorTemplate(errorTemplate)
                         .build()
         );
     }
@@ -65,9 +66,11 @@ public class RepositoryServiceImpl implements RepositoryService{
         CommConfig commConfig = getCommConfig(eventName);
         Map<String,String> headerTemplate;
         Object bodyTemplate;
+        Map<String,String> errorTemplate;
         try {
             headerTemplate = objectMapper.readValue(commConfig.getHeaderTemplate(), new TypeReference<>() {});
             bodyTemplate = objectMapper.readValue(commConfig.getBodyTemplate(),Object.class);
+            errorTemplate = objectMapper.readValue(commConfig.getErrorTemplate(), new TypeReference<>() {});
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -76,6 +79,7 @@ public class RepositoryServiceImpl implements RepositoryService{
                 .methodType(commConfig.getMethodType())
                 .headerTemplate(headerTemplate)
                 .bodyTemplate(bodyTemplate)
+                .errorTemplate(errorTemplate)
                 .build();
     }
 

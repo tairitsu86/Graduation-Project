@@ -1,6 +1,5 @@
 package graduationProject.IMUISystem.eventExecutor.request;
 
-import graduationProject.IMUISystem.eventExecutor.dto.GetGroupUsersDto;
 import graduationProject.IMUISystem.eventExecutor.dto.CommConfigDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +52,6 @@ public class RestRequestServiceImpl implements RestRequestService {
     @Override
     public List<String> getGroupUsers(List<String> groups) {
         Set<String> userList = new HashSet<>();
-        GetGroupUsersDto getGroupUsersDto;
         for(String group:groups){
             try{
                 log.info("URL : {}", String.format("%s/groups/%s/members",GROUP_MANAGER_URL,group));

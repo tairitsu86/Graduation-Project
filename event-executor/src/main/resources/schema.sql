@@ -6,6 +6,7 @@ IF OBJECT_ID(N'communication_config', N'U') IS NULL
             [url_template] [varchar](255) NOT NULL,
             [header_template] [varchar](255) NULL,
             [body_template] [varchar](MAX) NULL,
+            [error_template] [varchar](MAX) NULL,
             CONSTRAINT [communication_config_pk] PRIMARY KEY([event_name]),
             CONSTRAINT [communication_config_method_type_check] CHECK (([method_type]='DELETE' OR [method_type]='PATCH' OR [method_type]='PUT' OR [method_type]='POST' OR [method_type]='GET' OR [method_type]='MQ'))
         )
