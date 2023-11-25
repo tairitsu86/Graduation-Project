@@ -31,6 +31,8 @@ public class LoginUserRepositoryServiceImpl implements LoginUserRepositoryServic
 
     @Override
     public void login(IMUserData imUserData, String username) {
+        if(loginUserRepository.existsByUsername(username))
+            loginUserRepository.deleteByUsername(username);
         loginUserRepository.save(
                 LoginUser.builder()
                         .imUserData(imUserData)
